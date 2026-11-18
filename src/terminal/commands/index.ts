@@ -2,6 +2,7 @@ import type { CommandDefinition } from "./shared";
 import buy from "./buy";
 import cat from "./cat";
 import cd from "./cd";
+import clear from "./clear";
 import crack from "./crack";
 import download from "./download";
 import createHelp from "./help";
@@ -37,6 +38,13 @@ export const commands: readonly CommandDefinition[] = [
     description: "Cambiar de directorio virtual; sin ruta vuelve a /home/user.",
     example: "cd /etc",
     run: cd,
+  },
+  {
+    name: "clear",
+    usage: "clear",
+    description: "Limpiar la pantalla de la terminal.",
+    example: "clear",
+    run: clear,
   },
   {
     name: "crack",
