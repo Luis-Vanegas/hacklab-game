@@ -6,16 +6,16 @@
 
 ### Fase 1 — MVP
 - [x] Crear repo, CLAUDE.md, AGENTS.md, TASKS.md
-- [ ] Inicializar package.json, tsconfig, vite.config, ESLint
-- [ ] Crear estructura de carpetas con archivos barrel (index.ts)
-- [ ] Implementar `src/lib/types.ts` — tipos compartidos (CommandContext, CommandResult, GameState, etc.)
-- [ ] Implementar `src/lib/events.ts` — event bus
-- [ ] Implementar `src/lib/logger.ts` — trazabilidad
-- [ ] Implementar `src/lib/persistence.ts` — localStorage versionado
-- [ ] Implementar `src/engine/state/GameStateMachine.ts` — estados: menu → playing → in_contract → completed
-- [ ] Implementar `src/engine/filesystem/VirtualFS.ts` — filesystem en memoria
-- [ ] Implementar `src/engine/contracts/ContractSystem.ts` — carga y gestión de contratos
-- [ ] Implementar `src/engine/reputation/ReputationSystem.ts` — XP, niveles, desbloqueos
+- [x] Inicializar package.json, tsconfig, vite.config
+- [x] Crear estructura de carpetas con archivos barrel (index.ts)
+- [x] Implementar `src/lib/types.ts` — tipos compartidos
+- [x] Implementar `src/lib/events.ts` — event bus
+- [x] Implementar `src/lib/logger.ts` — trazabilidad
+- [x] Implementar `src/lib/persistence.ts` — localStorage versionado
+- [x] Implementar `src/engine/state/GameStateMachine.ts` — state machine del juego
+- [x] Implementar `src/engine/filesystem/VirtualFS.ts` — filesystem en memoria
+- [x] Implementar `src/engine/contracts/ContractSystem.ts` — carga y gestión de contratos
+- [x] Implementar `src/engine/reputation/ReputationSystem.ts` — XP, niveles, desbloqueos
 - [ ] Implementar `src/story/StoryEngine.ts` — motor de narrativa
 - [ ] Implementar `src/ai/AiProvider.ts` + `src/ai/providers/NoopProvider.ts` — stub de IA
 - [ ] Crear `src/App.tsx` — integración de todo
