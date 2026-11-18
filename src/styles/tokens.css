@@ -1,0 +1,41 @@
+/* Tokens de diseño — Antigravity los completa.
+   Variables CSS para todo el juego. */
+
+:root {
+  /* Colores base */
+  --color-bg: #0a0a0f;
+  --color-surface: #12121a;
+  --color-border: #1a1a2e;
+
+  /* Terminal */
+  --color-terminal-bg: #0d0d14;
+  --color-terminal-text: #00ff41;
+  --color-terminal-prompt: #00bfff;
+  --color-terminal-error: #ff3e3e;
+  --color-terminal-warning: #ffaa00;
+  --color-terminal-success: #00ff41;
+  --color-terminal-info: #00bfff;
+  --color-terminal-hint: #888;
+
+  /* UI */
+  --color-primary: #00ff41;
+  --color-accent: #00bfff;
+  --color-danger: #ff3e3e;
+  --color-xp: #ffd700;
+  --color-credits: #00ff88;
+
+  /* Texto */
+  --color-text: #e0e0e0;
+  --color-text-muted: #666;
+
+  /* Fuentes */
+  --font-mono: "Share Tech Mono", "Fira Code", "Consolas", monospace;
+  --font-ui: "Inter", "Segoe UI", sans-serif;
+
+  /* Espaciado */
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+}

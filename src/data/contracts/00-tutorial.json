@@ -1,0 +1,119 @@
+{
+  "id": "00-tutorial",
+  "title": "Iniciación en la Red",
+  "description": "Tu primer contacto con el sistema. Alguien te está observando...",
+  "difficulty": "beginner",
+  "requiredReputation": "script_kiddie",
+  "reward": {
+    "credits": 200,
+    "xp": 100,
+    "partialMultiplier": 1.0
+  },
+  "objectives": [
+    {
+      "id": "tut-01",
+      "description": "Explora tu sistema — usa 'ls' para ver qué hay",
+      "trigger": { "command": "ls" },
+      "completed": false,
+      "hint": "Escribe 'ls' y presiona Enter. Así ves los archivos de tu directorio."
+    },
+    {
+      "id": "tut-02",
+      "description": "Lee el archivo 'notes' — usa 'cat notes'",
+      "trigger": { "command": "cat", "args": ["notes"] },
+      "completed": false,
+      "hint": "'cat' muestra el contenido de un archivo. Como 'abrir' un documento."
+    },
+    {
+      "id": "tut-03",
+      "description": "Navega al directorio /etc — usa 'cd /etc'",
+      "trigger": { "command": "cd", "args": ["/etc"] },
+      "completed": false,
+      "hint": "'cd' cambia de directorio. Es como entrar a una carpeta."
+    },
+    {
+      "id": "tut-04",
+      "description": "Lee el archivo passwd — información de usuarios del sistema",
+      "trigger": { "command": "cat", "args": ["passwd"] },
+      "completed": false,
+      "hint": "/etc/passwd contiene la lista de usuarios. En sistemas reales esto es público."
+    },
+    {
+      "id": "tut-05",
+      "description": "Verifica quién eres — usa 'whoami'",
+      "trigger": { "command": "whoami" },
+      "completed": false,
+      "hint": "'whoami' muestra tu usuario actual. Fundamental para saber con qué permisos operas."
+    }
+  ],
+  "target": {
+    "hostname": "localhost",
+    "ip": "127.0.0.1",
+    "ports": [
+      { "port": 22, "service": "ssh", "version": "OpenSSH 8.9" }
+    ],
+    "filesystem": {}
+  },
+  "story": {
+    "intro": [
+      {
+        "character": "CIPHER",
+        "text": "...",
+        "delay": 500
+      },
+      {
+        "character": "CIPHER",
+        "text": "¿Puedes leerme? Bien.",
+        "delay": 1000
+      },
+      {
+        "character": "CIPHER",
+        "text": "No preguntes quién soy. No importa. Lo que importa es que estás aquí.",
+        "delay": 1500
+      },
+      {
+        "character": "CIPHER",
+        "text": "Vamos a empezar con lo básico. Primero necesitas aprender a moverte por el sistema.",
+        "delay": 1000
+      },
+      {
+        "character": "CIPHER",
+        "text": "Escribe 'help' si te pierdes. Yo estaré observando.",
+        "delay": 800
+      }
+    ],
+    "onComplete": [
+      {
+        "character": "CIPHER",
+        "text": "Nada mal para ser tu primer día.",
+        "delay": 500
+      },
+      {
+        "character": "CIPHER",
+        "text": "Ya conoces lo básico: navegar, leer archivos, identificarte. Es más de lo que sabe el 90% de la gente.",
+        "delay": 1200
+      },
+      {
+        "character": "CIPHER",
+        "text": "Tengo algo para ti. Revisa el Darknet Board cuando estés listo. Tu primer trabajo real.",
+        "delay": 1000
+      }
+    ],
+    "hints": {
+      "tut-01": [
+        {
+          "character": "CIPHER",
+          "text": "El primer paso es siempre mirar dónde estás. Escribe 'ls'.",
+          "delay": 500
+        }
+      ],
+      "tut-03": [
+        {
+          "character": "CIPHER",
+          "text": "'/etc' es donde los sistemas Linux guardan la configuración. Navega ahí con 'cd /etc'.",
+          "delay": 500
+        }
+      ]
+    }
+  }
+}
