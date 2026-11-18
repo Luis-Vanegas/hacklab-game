@@ -1,5 +1,6 @@
 {
   "id": "01-first-hack",
+  "channel": "darknet",
   "title": "El relevo de Acme",
   "description": "El equipo de Acme autorizó una revisión en su entorno de entrenamiento. Recupera la nota del turno y confirma qué servicio figura en el inventario.",
   "difficulty": "beginner",

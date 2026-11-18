@@ -1,5 +1,6 @@
 {
   "id": "00-tutorial",
+  "channel": "darknet",
   "title": "Iniciación en la Red",
   "description": "Tu primer contacto con el sistema. Alguien te está observando...",
   "difficulty": "beginner",
