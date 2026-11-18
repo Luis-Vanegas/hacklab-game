@@ -4,6 +4,31 @@ Registro corto de decisiones importantes. La más reciente va arriba.
 
 ---
 
+## ADR-005 — Historia de doble vida y escena 3D pixelada
+
+**Fecha:** 2026-11-18
+
+**Contexto.** El MVP era una terminal sin contexto. Luis pidió que el juego se sienta como un
+videojuego, que cuente una historia más cercana a la vida real y que tenga una escena con
+personajes, pero que siga siendo liviano en el navegador.
+
+**Decisión.**
+
+- **Historia:** el jugador es practicante en una empresa de ciberseguridad (canal `work`) y de
+  noche recibe encargos de CIPHER (canal `darknet`). Los contratos existentes pasan al canal `darknet`.
+- **Escena:** 3D low-poly con modelos CC0, renderizada a baja resolución (`dpr` bajo) y escalada
+  con `image-rendering: pixelated`. No se usa pixel art dibujado ni librerías de postprocesado.
+- **Objetivos ficticios:** solo IPs privadas o de documentación (RFC 5737) y dominios `.test` o `.example`.
+
+**Consecuencias.**
+
+- Se reutilizan Three.js, React Three Fiber y drei: cero dependencias nuevas.
+- El look pixelado además reduce el costo de render en equipos modestos.
+- Los modelos deben ser CC0 y quedar registrados en `public/models/CREDITS.md`.
+- Python con sandbox en Web Workers queda para la Fase 3.
+
+---
+
 ## ADR-004 — El store Zustand es la única capa con efectos
 
 **Fecha:** 2026-11-18
