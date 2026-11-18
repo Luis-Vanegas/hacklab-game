@@ -6,6 +6,7 @@ import clear from "./clear";
 import crack from "./crack";
 import download from "./download";
 import createHelp from "./help";
+import history from "./history";
 import ls from "./ls";
 import createMan from "./man";
 import nmap from "./nmap";
@@ -66,6 +67,13 @@ export const commands: readonly CommandDefinition[] = [
     description: "Listar los comandos registrados.",
     example: "help",
     run: help,
+  },
+  {
+    name: "history",
+    usage: "history",
+    description: "Listar los comandos ejecutados en la sesión.",
+    example: "history",
+    run: history,
   },
   {
     name: "ls",
