@@ -29,34 +29,35 @@ xterm.js, el fondo es Three.js, todo profesional.
 
 ## Dónde buscar
 
-| Qué necesitas saber | Archivo |
-|---|---|
-| Arquitectura, stack, convenciones, patrones, comandos | `CLAUDE.md` |
-| Roles de cada agente, modelos, zonas exclusivas | `AGENTS.md` |
-| Backlog completo, estado de tareas, mensajes entre agentes | `TASKS.md` |
-| Tipos compartidos (el contrato entre agentes) | `src/lib/types.ts` |
-| Decisiones de arquitectura (ADR) | `docs/decisions.md` |
+| Qué necesitas saber                                        | Archivo             |
+| ---------------------------------------------------------- | ------------------- |
+| Arquitectura, stack, convenciones, patrones, comandos      | `CLAUDE.md`         |
+| Roles de cada agente, modelos, zonas exclusivas            | `AGENTS.md`         |
+| Backlog completo, estado de tareas, mensajes entre agentes | `TASKS.md`          |
+| Tipos compartidos (el contrato entre agentes)              | `src/lib/types.ts`  |
+| Decisiones de arquitectura (ADR)                           | `docs/decisions.md` |
 
 **Orden de lectura**: CLAUDE.md → AGENTS.md → TASKS.md → types.ts
 
 ## Estado actual del código
 
-Ya implementado (en `main` y `develop`):
+Ya implementado (en `develop`):
+
 - **Engine completo** (`src/engine/`): GameStateMachine, VirtualFS, ContractSystem, ReputationSystem
 - **Tipos** (`src/lib/types.ts`): GameState, CommandContext, CommandResult, Contract, etc.
 - **Utilidades** (`src/lib/`): event bus, logger, persistencia con localStorage versionado
 - **IA** (`src/ai/`): NoopProvider (stub), AiProvider (interfaz)
 - **Contrato tutorial** (`src/data/contracts/00-tutorial.json`): 5 objetivos con CIPHER
-- **Config**: Vite, tsconfig strict, tokens CSS, licencia MIT, .gitignore, .env.example
+- **Config**: Vite, tsconfig strict, tokens CSS, licencia MIT, .gitignore, .env.example, ESLint, Prettier, Vitest, CI de GitHub Actions
 
 Aún NO hecho:
-- `npm install` (las dependencias no están instaladas)
+
 - Repo en GitHub (no creado todavía)
 - Los 16 comandos de terminal
 - La UI (HUD, paneles, tienda, guías)
 - Las escenas Three.js
 - La integración de xterm.js
-- Tests del engine
+- Tests del engine completos (hay una base en `tests/engine/`)
 - Store Zustand
 - StoryEngine
 
@@ -64,11 +65,11 @@ Aún NO hecho:
 
 3 agentes trabajan en paralelo, cada uno en su zona exclusiva:
 
-| Agente | Modelo | Zona |
-|---|---|---|
-| **Claude Code** (tú si lees esto en Claude Code) | Opus | `engine/`, `story/`, `ai/`, `lib/`, `App.tsx`, configs |
-| **Codex** (OpenAI CLI) | Sol 6.2 medio | `terminal/commands/`, `CommandParser.ts`, `data/` |
-| **Antigravity** | Argon (diseño) / Gemini Flash (docs) | `ui/`, `scenes/`, `styles/`, `Terminal.tsx`, `themes/`, `public/` |
+| Agente                                           | Modelo                               | Zona                                                              |
+| ------------------------------------------------ | ------------------------------------ | ----------------------------------------------------------------- |
+| **Claude Code** (tú si lees esto en Claude Code) | Opus                                 | `engine/`, `story/`, `ai/`, `lib/`, `App.tsx`, configs            |
+| **Codex** (OpenAI CLI)                           | Sol 6.2 medio                        | `terminal/commands/`, `CommandParser.ts`, `data/`                 |
+| **Antigravity**                                  | Argon (diseño) / Gemini Flash (docs) | `ui/`, `scenes/`, `styles/`, `Terminal.tsx`, `themes/`, `public/` |
 
 **Nadie toca archivos de otra zona.** Comunicación solo vía TASKS.md.
 Solo Claude Code modifica `package.json`.

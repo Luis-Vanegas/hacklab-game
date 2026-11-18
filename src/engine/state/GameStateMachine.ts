@@ -21,7 +21,7 @@ export function transition(state: GameState, to: GamePhase): GameState {
   if (!canTransition(state.phase, to)) {
     throw new Error(
       `Transición inválida: ${state.phase} → ${to}. ` +
-      `Permitidas: ${VALID_TRANSITIONS[state.phase].join(", ")}`,
+        `Permitidas: ${VALID_TRANSITIONS[state.phase].join(", ")}`,
     );
   }
   logStateChange("phase", state.phase, to);

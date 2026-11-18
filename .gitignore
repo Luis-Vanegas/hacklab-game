@@ -9,3 +9,8 @@ dist/
 Thumbs.db
 coverage/
 *.tsbuildinfo
+
+# Herramientas locales de agentes
+.atl/
+.claude/settings.local.json
+CLAUDE.local.md

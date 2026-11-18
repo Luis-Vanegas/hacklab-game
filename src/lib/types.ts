@@ -4,11 +4,11 @@
 // --- State Machine del juego ---
 
 export type GamePhase =
-  | "boot"        // Secuencia de arranque
-  | "menu"        // Menú principal
-  | "playing"     // Jugando (sin contrato activo)
+  | "boot" // Secuencia de arranque
+  | "menu" // Menú principal
+  | "playing" // Jugando (sin contrato activo)
   | "in_contract" // Dentro de un contrato
-  | "game_over";  // Partida terminada
+  | "game_over"; // Partida terminada
 
 export type GameDifficulty = "beginner" | "normal" | "elite" | "anonymous";
 
@@ -41,7 +41,13 @@ export type CommandHandler = (
 // --- Filesystem virtual ---
 
 export type FileSystemNode =
-  | { type: "dir"; name: string; children: Record<string, FileSystemNode>; permissions: string }
+  | {
+      type: "dir";
+      name: string;
+      children: Record<string, FileSystemNode>;
+      permissions: string;
+      hidden?: boolean;
+    }
   | { type: "file"; name: string; content: string; permissions: string; hidden?: boolean };
 
 export interface FileSystemChange {
@@ -65,10 +71,7 @@ export interface GameState {
 }
 
 // Campos que un comando puede mutar (a través de stateChanges)
-export type MutableGameFields = Pick<
-  GameState,
-  "traceLevel" | "connectedTo" | "storyFlags"
-> & {
+export type MutableGameFields = Pick<GameState, "traceLevel" | "connectedTo" | "storyFlags"> & {
   playerCredits?: number;
   playerXp?: number;
   completeObjective?: string;
@@ -85,12 +88,7 @@ export interface PlayerState {
 
 // --- Reputación ---
 
-export type ReputationTier =
-  | "script_kiddie"
-  | "hacker"
-  | "elite_hacker"
-  | "l33t"
-  | "anonymous";
+export type ReputationTier = "script_kiddie" | "hacker" | "elite_hacker" | "l33t" | "anonymous";
 
 export interface ReputationConfig {
   readonly tier: ReputationTier;
@@ -130,7 +128,7 @@ export interface Objective {
 
 // Qué acción completa un objetivo
 export interface ObjectiveTrigger {
-  readonly command: string;        // Comando que dispara
+  readonly command: string; // Comando que dispara
   readonly args?: readonly string[]; // Args específicos (opcional)
   readonly requiresConnection?: boolean;
 }
@@ -171,8 +169,8 @@ export interface ToolDefinition {
   readonly name: string;
   readonly description: string;
   readonly price: number;
-  readonly command: string;         // Comando que habilita
-  readonly traceModifier: number;   // Cambio al trace level al usar
+  readonly command: string; // Comando que habilita
+  readonly traceModifier: number; // Cambio al trace level al usar
   readonly requiredLevel: number;
 }
 

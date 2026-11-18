@@ -1,0 +1,6 @@
+# Normaliza finales de línea: evita diffs fantasma entre Windows y Linux (CI)
+* text=auto eol=lf
+*.png binary
+*.jpg binary
+*.woff2 binary
+*.glb binary

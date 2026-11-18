@@ -5,7 +5,8 @@ import { logStateChange } from "@/lib/logger";
 // Determinista: dado un XP, siempre retorna el mismo tier.
 // Los tiers desbloquean contratos y herramientas.
 
-const TIERS: readonly ReputationConfig[] = [
+// Tupla no vacía: el tipo garantiza que TIERS[0] existe
+const TIERS: readonly [ReputationConfig, ...ReputationConfig[]] = [
   {
     tier: "script_kiddie",
     label: "Script Kiddie",
@@ -45,10 +46,7 @@ const TIERS: readonly ReputationConfig[] = [
 
 export function getTierForXp(xp: number): ReputationConfig {
   // Recorrer de mayor a menor para encontrar el tier más alto alcanzado
-  for (let i = TIERS.length - 1; i >= 0; i--) {
-    if (xp >= TIERS[i]!.minXp) return TIERS[i]!;
-  }
-  return TIERS[0]!;
+  return TIERS.findLast((t) => xp >= t.minXp) ?? TIERS[0];
 }
 
 export function getLevelForXp(xp: number): number {
@@ -88,10 +86,10 @@ export function getAllTiers(): readonly ReputationConfig[] {
 }
 
 export function getTierConfig(tier: ReputationTier): ReputationConfig {
-  return TIERS.find((t) => t.tier === tier) ?? TIERS[0]!;
+  return TIERS.find((t) => t.tier === tier) ?? TIERS[0];
 }
 
 export function getNextTier(current: ReputationTier): ReputationConfig | null {
   const idx = TIERS.findIndex((t) => t.tier === current);
-  return idx < TIERS.length - 1 ? TIERS[idx + 1]! : null;
+  return TIERS[idx + 1] ?? null;
 }

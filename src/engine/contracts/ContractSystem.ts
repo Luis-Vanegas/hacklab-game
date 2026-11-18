@@ -1,6 +1,5 @@
-import type { Contract, GameState, Objective, ReputationTier } from "@/lib/types";
+import type { Contract, GameState, ReputationTier } from "@/lib/types";
 import { emit } from "@/lib/events";
-import { getTierConfig } from "@/engine/reputation";
 
 // Sistema de contratos.
 // Atómico: activar un contrato cambia el estado completo o no cambia nada.
@@ -13,7 +12,11 @@ export function canAcceptContract(state: GameState, contract: Contract): boolean
   if (state.completedContracts.includes(contract.id)) return false;
   // Verificar reputación mínima
   const tierOrder: readonly ReputationTier[] = [
-    "script_kiddie", "hacker", "elite_hacker", "l33t", "anonymous",
+    "script_kiddie",
+    "hacker",
+    "elite_hacker",
+    "l33t",
+    "anonymous",
   ];
   const playerIdx = tierOrder.indexOf(state.player.reputation);
   const requiredIdx = tierOrder.indexOf(contract.requiredReputation);
@@ -46,9 +49,8 @@ export function completeObjective(state: GameState, objectiveId: string): GameSt
   );
 
   // Si ya estaba completado, idempotente
-  const changed = objectives.some(
-    (obj, i) => obj.completed !== state.activeContract!.objectives[i]!.completed,
-  );
+  const previous = state.activeContract.objectives;
+  const changed = objectives.some((obj, i) => obj.completed !== previous[i]?.completed);
   if (!changed) return state;
 
   emit("objective.completed", { objectiveId }, "ContractSystem");
@@ -77,12 +79,16 @@ export function submitContract(state: GameState): GameState {
   const credits = Math.floor(contract.reward.credits * ratio * contract.reward.partialMultiplier);
   const xp = Math.floor(contract.reward.xp * ratio);
 
-  emit("contract.submitted", {
-    contractId: contract.id,
-    completionRatio: ratio,
-    credits,
-    xp,
-  }, "ContractSystem");
+  emit(
+    "contract.submitted",
+    {
+      contractId: contract.id,
+      completionRatio: ratio,
+      credits,
+      xp,
+    },
+    "ContractSystem",
+  );
 
   return {
     ...state,

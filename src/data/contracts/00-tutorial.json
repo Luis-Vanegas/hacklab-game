@@ -49,9 +49,7 @@
   "target": {
     "hostname": "localhost",
     "ip": "127.0.0.1",
-    "ports": [
-      { "port": 22, "service": "ssh", "version": "OpenSSH 8.9" }
-    ],
+    "ports": [{ "port": 22, "service": "ssh", "version": "OpenSSH 8.9" }],
     "filesystem": {}
   },
   "story": {
