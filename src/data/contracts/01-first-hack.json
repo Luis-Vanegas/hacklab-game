@@ -1,0 +1,103 @@
+{
+  "id": "01-first-hack",
+  "title": "El relevo de Acme",
+  "description": "El equipo de Acme autorizó una revisión en su entorno de entrenamiento. Recupera la nota del turno y confirma qué servicio figura en el inventario.",
+  "difficulty": "beginner",
+  "requiredReputation": "script_kiddie",
+  "reward": {
+    "credits": 320,
+    "xp": 500,
+    "partialMultiplier": 1
+  },
+  "objectives": [
+    {
+      "id": "acme-01",
+      "description": "Consulta el inventario virtual de Acme.",
+      "trigger": {
+        "command": "nmap",
+        "args": ["acme.example"]
+      },
+      "completed": false,
+      "hint": "Compra el visor con buy nmap y escribe nmap acme.example."
+    },
+    {
+      "id": "acme-02",
+      "description": "Abre la sesión virtual de Acme.",
+      "trigger": {
+        "command": "ssh",
+        "args": ["acme.example"]
+      },
+      "completed": false,
+      "hint": "Compra la sesión virtual con buy ssh. Este escenario usa un acceso de práctica sin ficha."
+    },
+    {
+      "id": "acme-03",
+      "description": "Copia la nota del turno a tu carpeta virtual.",
+      "trigger": {
+        "command": "download",
+        "args": ["/entrega/turno.txt"],
+        "requiresConnection": true
+      },
+      "completed": false,
+      "hint": "Desde la sesión virtual usa download /entrega/turno.txt."
+    }
+  ],
+  "target": {
+    "hostname": "acme.example",
+    "ip": "192.0.2.11",
+    "ports": [
+      {
+        "port": 22,
+        "service": "ssh",
+        "version": "simulación Acme"
+      },
+      {
+        "port": 443,
+        "service": "https",
+        "version": "simulación Acme"
+      }
+    ],
+    "filesystem": {
+      "type": "dir",
+      "name": "/",
+      "permissions": "drwxr-xr-x",
+      "children": {
+        "entrega": {
+          "type": "dir",
+          "name": "entrega",
+          "permissions": "drwxr-xr-x",
+          "children": {
+            "turno.txt": {
+              "type": "file",
+              "name": "turno.txt",
+              "content": "Relevo 14. El inventario registra una sesión de mantenimiento y un panel de estado.\nCaso de entrenamiento AC-14.",
+              "permissions": "-rw-r--r--"
+            }
+          }
+        }
+      }
+    }
+  },
+  "story": {
+    "intro": [
+      {
+        "character": "CIPHER",
+        "text": "El equipo de Acme dejó listo su entorno de práctica. Revisa el inventario y recupera la nota de mantenimiento."
+      }
+    ],
+    "onComplete": [
+      {
+        "character": "CIPHER",
+        "text": "El relevo ya tiene su nota. Guarda el caso AC-14 como referencia."
+      }
+    ],
+    "hints": {
+      "acme-03": [
+        {
+          "character": "CIPHER",
+          "text": "La entrega está en /entrega/turno.txt. Tu copia queda en el directorio virtual donde empezaste."
+        }
+      ]
+    }
+  }
+}

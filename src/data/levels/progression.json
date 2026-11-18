@@ -1,0 +1,40 @@
+{
+  "xpPerLevel": 100,
+  "tiers": [
+    {
+      "tier": "script_kiddie",
+      "label": "Script Kiddie",
+      "minXp": 0,
+      "unlocksContracts": ["00-tutorial", "01-first-hack"],
+      "unlocksTools": ["nmap", "ssh"]
+    },
+    {
+      "tier": "hacker",
+      "label": "Hacker",
+      "minXp": 500,
+      "unlocksContracts": ["02-data-heist"],
+      "unlocksTools": ["hydra", "sqlmap"]
+    },
+    {
+      "tier": "elite_hacker",
+      "label": "Elite Hacker",
+      "minXp": 2000,
+      "unlocksContracts": [],
+      "unlocksTools": ["metasploit", "proxychains"]
+    },
+    {
+      "tier": "l33t",
+      "label": "1337",
+      "minXp": 5000,
+      "unlocksContracts": [],
+      "unlocksTools": ["zero_day"]
+    },
+    {
+      "tier": "anonymous",
+      "label": "Anonymous",
+      "minXp": 10000,
+      "unlocksContracts": [],
+      "unlocksTools": []
+    }
+  ]
+}

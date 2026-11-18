@@ -1,0 +1,112 @@
+{
+  "id": "02-data-heist",
+  "title": "La bitácora del apagón",
+  "description": "En un simulacro de continuidad, recupera la bitácora sin modificar el servidor de entrenamiento.",
+  "difficulty": "normal",
+  "requiredReputation": "hacker",
+  "reward": {
+    "credits": 650,
+    "xp": 600,
+    "partialMultiplier": 1
+  },
+  "objectives": [
+    {
+      "id": "apag-01",
+      "description": "Recupera la ficha del simulacro.",
+      "trigger": {
+        "command": "crack",
+        "args": ["ficha"]
+      },
+      "completed": false,
+      "hint": "Compra el lector con buy hydra y escribe crack ficha."
+    },
+    {
+      "id": "apag-02",
+      "description": "Usa la ficha para abrir una sesión virtual.",
+      "trigger": {
+        "command": "ssh",
+        "args": ["archivo.example", "FICHA-39"]
+      },
+      "completed": false,
+      "hint": "Escribe ssh archivo.example y agrega la ficha que mostró el desafío."
+    },
+    {
+      "id": "apag-03",
+      "description": "Recupera una copia virtual de la bitácora.",
+      "trigger": {
+        "command": "download",
+        "args": ["/archivo/bitacora.txt"],
+        "requiresConnection": true
+      },
+      "completed": false,
+      "hint": "Con la sesión abierta, escribe download /archivo/bitacora.txt."
+    },
+    {
+      "id": "apag-04",
+      "description": "Lee la copia de la bitácora desde tu carpeta.",
+      "trigger": {
+        "command": "cat",
+        "args": ["bitacora.txt"]
+      },
+      "completed": false,
+      "hint": "Usa cat bitacora.txt en el directorio donde guardaste la copia."
+    }
+  ],
+  "target": {
+    "hostname": "archivo.example",
+    "ip": "198.51.100.22",
+    "ports": [
+      {
+        "port": 22,
+        "service": "ssh",
+        "version": "simulación de continuidad"
+      }
+    ],
+    "filesystem": {
+      "type": "dir",
+      "name": "/",
+      "permissions": "drwxr-xr-x",
+      "children": {
+        "archivo": {
+          "type": "dir",
+          "name": "archivo",
+          "permissions": "drwxr-xr-x",
+          "children": {
+            "bitacora.txt": {
+              "type": "file",
+              "name": "bitacora.txt",
+              "content": "Simulacro 39. El servicio de respaldo inició a las 02:17.\nLa copia del archivo coincide con el inventario de continuidad.",
+              "permissions": "-rw-r--r--"
+            }
+          }
+        }
+      }
+    },
+    "credentials": {
+      "username": "operador",
+      "password": "FICHA-39"
+    }
+  },
+  "story": {
+    "intro": [
+      {
+        "character": "CIPHER",
+        "text": "El equipo de continuidad perdió de vista la bitácora del simulacro. La sala de entrenamiento contiene una copia."
+      }
+    ],
+    "onComplete": [
+      {
+        "character": "CIPHER",
+        "text": "La bitácora confirma cuándo arrancó el respaldo. Entrega el hallazgo al equipo de continuidad."
+      }
+    ],
+    "hints": {
+      "apag-02": [
+        {
+          "character": "CIPHER",
+          "text": "La ficha es una pieza del escenario. Escríbela exactamente como salió en la terminal."
+        }
+      ]
+    }
+  }
+}
