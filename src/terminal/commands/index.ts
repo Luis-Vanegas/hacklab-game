@@ -1,9 +1,12 @@
 import type { CommandDefinition } from "./shared";
 import buy from "./buy";
 import cat from "./cat";
+import cd from "./cd";
+import clear from "./clear";
 import crack from "./crack";
 import download from "./download";
 import createHelp from "./help";
+import history from "./history";
 import ls from "./ls";
 import createMan from "./man";
 import nmap from "./nmap";
@@ -31,6 +34,20 @@ export const commands: readonly CommandDefinition[] = [
     run: cat,
   },
   {
+    name: "cd",
+    usage: "cd [ruta]",
+    description: "Cambiar de directorio virtual; sin ruta vuelve a /home/user.",
+    example: "cd /etc",
+    run: cd,
+  },
+  {
+    name: "clear",
+    usage: "clear",
+    description: "Limpiar la pantalla de la terminal.",
+    example: "clear",
+    run: clear,
+  },
+  {
     name: "crack",
     usage: "crack ficha",
     description: "Resolver el desafío de ficha escrito para la misión.",
@@ -50,6 +67,13 @@ export const commands: readonly CommandDefinition[] = [
     description: "Listar los comandos registrados.",
     example: "help",
     run: help,
+  },
+  {
+    name: "history",
+    usage: "history",
+    description: "Listar los comandos ejecutados en la sesión.",
+    example: "history",
+    run: history,
   },
   {
     name: "ls",

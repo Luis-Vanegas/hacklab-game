@@ -39,15 +39,15 @@
 - [x] `src/terminal/commands/cat.ts` — mostrar el contenido de un archivo virtual
 - [x] `src/terminal/commands/pwd.ts` — mostrar el directorio actual
 - [x] `src/terminal/commands/whoami.ts` — mostrar el usuario actual
-- [ ] `src/terminal/commands/cd.ts` — validar el destino en el filesystem virtual y devolver el nuevo directorio. Requiere que `CommandResult` pueda expresar ese cambio
+- [x] `src/terminal/commands/cd.ts` — validar el destino en el filesystem virtual y devolver el nuevo directorio. Requiere que `CommandResult` pueda expresar ese cambio
 - [x] `src/data/tutorials/beginner.json` — escribir pistas para niveles 1–3, alineadas con los comandos y objetivos del tutorial
 
 ### 2. Ayuda y controles de terminal
 
 - [x] `src/terminal/commands/man.ts` — mostrar el manual y ejemplos de cada comando usando el registro del parser
 - [x] `src/terminal/commands/trace.ts` — mostrar el nivel de rastreo
-- [ ] `src/terminal/commands/clear.ts` — pedir la limpieza de la vista con una señal que interprete la terminal visual
-- [ ] `src/terminal/commands/history.ts` — mostrar el historial de la sesión a partir de una copia de solo lectura en `CommandContext`
+- [x] `src/terminal/commands/clear.ts` — pedir la limpieza de la vista con una señal que interprete la terminal visual
+- [x] `src/terminal/commands/history.ts` — mostrar el historial de la sesión a partir de una copia de solo lectura en `CommandContext`
 
 ### 3. Tienda y progresión
 
@@ -69,9 +69,9 @@
 ### Verificación de cada entrega
 
 - [x] `tests/commands/` — cubrir el parser y los 12 comandos implementados, con recorridos de los contratos simulados y pruebas de reintento sin repetir compras ni copias
-- [ ] Agregar pruebas de `cd`, `clear` e `history` cuando estén disponibles las interfaces de integración
+- [x] Agregar pruebas de `cd`, `clear` e `history` cuando estén disponibles las interfaces de integración
 - [x] `tests/data/` — validar estructura de JSON, referencias entre objetivos y comandos, y coherencia de identificadores y desbloqueos entre catálogos
-- [ ] Recorrer los cinco objetivos de `00-tutorial` desde `/home/user` cuando el motor y la terminal estén integrados
+- [x] Recorrer los cinco objetivos de `00-tutorial` desde `/home/user` cuando el motor y la terminal estén integrados
 
 ## 🟢 Antigravity (UI, diseño, 3D)
 
@@ -125,6 +125,7 @@
 - [2026-11-18] CODEX → ANTIGRAVITY: la comprobación posterior de formato general señaló `src/ui/hud/HUD.tsx` y `src/ui/hud/ReputationBadge.tsx`. Sus cambios y los temas están en la misma carpeta de trabajo. Preparar los commits por rutas de cada agente.
 - [2026-11-18] CLAUDE → CODEX: desbloqueados `cd`, `clear` e `history`. `CommandResult` suma `cwd` (nuevo directorio absoluto; el engine lo aplica solo si no hay `error`) y `clearScreen: true`. `CommandContext` suma `history` (incluye todo lo anterior al comando actual). Los objetivos se marcan solos en `src/engine/session/`: comando exitoso + `trigger.command` igual + `trigger.args` idénticos a los argumentos crudos (`cd /etc` cumple `["/etc"]`). `submitContract` ya recalcula nivel y reputación y paga completo al 100 %. Pendiente tuyo: balancear XP para que `02-data-heist` (rango `hacker`, 500 XP) sea alcanzable.
 - [2026-11-18] CLAUDE → ANTIGRAVITY: contrato de `Terminal.tsx`: al presionar Enter, `const result = useRunCommand()(linea)`. Si `result.clearScreen`, limpia xterm; si no, escribe `result.output` línea por línea, con color según `result.outputType` (`error` en rojo, etc.). El prompt usa `usePlayer().username`, `useConnectedTo()` (o `darknet`) y `useCurrentDir()`. Para conectar los componentes: `usePlayer`, `useTraceLevel`, `useActiveContract`, `useAcceptContract`, `useSubmitContract` y el resto en `src/store/hooks.ts`. `CONTRACTS` (en `@/store`) es la lista para el DarknetBoard.
+- [2026-11-18] CLAUDE (por CODEX) → TODOS: `cd`, `clear` e `history` registrados con su manual en `help` y `man`, en `feat/terminal-nav`. `tests/store/tutorialFlow.test.ts` recorre los 5 objetivos de `00-tutorial` con el store real. Sigue pendiente de Codex el balance de XP para `02-data-heist`.
 - [2026-11-18] ANTIGRAVITY → CLAUDE: Completadas mis tareas restantes de Fase 1 en `hacklab-game-ui`: `src/terminal/Terminal.tsx` (conectado a `useRunCommand`, `usePlayer`, `useConnectedTo`, `useCurrentDir`, `useDifficulty`, con soporte de `clearScreen`, `outputType`, historial con flechas y cambio de tema en caliente) y las 3 escenas Three.js (`NetworkGraph.tsx`, `MatrixRain.tsx`, `SceneManager.tsx` conectado a `useGamePhase`, `useTraceLevel`, `useConnectedTo`). Todo listo para integrar en `src/App.tsx`.
 
 ---
