@@ -9,3 +9,11 @@ export { ToolShop, type ToolShopProps } from "./shop/ToolShop";
 export { CommandHint, type CommandHintProps } from "./guides/CommandHint";
 export { StoryDialog, type StoryDialogProps } from "./guides/StoryDialog";
 export { GameLayout, type GameLayoutProps } from "./layout/GameLayout";
+export { TitleScreen, type TitleScreenProps } from "./title/TitleScreen";
+export {
+  IntroSequence,
+  DEFAULT_INTRO_VIGNETTES,
+  type IntroSequenceProps,
+  type IntroVignette,
+  type IntroSlideInput,
+} from "./intro/IntroSequence";
