@@ -19,7 +19,7 @@ rompes sistemas simulados mientras aprendes seguridad, scripting e ingeniería d
 
 ## Inicio rápido
 
-Requisitos: **Node.js 22.22+** (recomendado 24, ver `.nvmrc`).
+Requisitos: **Node.js 26 LTS** (ver `.nvmrc`). También funciona con Node 24.15+.
 
 ```bash
 git clone <url-del-repo> hacklab-game

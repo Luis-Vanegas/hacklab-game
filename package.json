@@ -6,7 +6,7 @@
   "description": "Juego de terminal hacker en el navegador. Enseña ciberseguridad, scripting y conceptos de ingeniería.",
   "license": "MIT",
   "engines": {
-    "node": ">=22.22"
+    "node": ">=24.15"
   },
   "scripts": {
     "dev": "vite",
@@ -35,7 +35,7 @@
     "@eslint/js": "^10.0.1",
     "@testing-library/jest-dom": "^7.0.1",
     "@testing-library/react": "^16.3.3",
-    "@types/node": "^22",
+    "@types/node": "^26.6.6",
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
     "@types/three": "^0.187.0",
@@ -45,7 +45,7 @@
     "eslint-plugin-react-hooks": "^7.1.1",
     "globals": "^17.14.0",
     "jsdom": "^31.0.1",
-    "prettier": "^3",
+    "prettier": "^3.10.1",
     "typescript": "~6.0.3",
     "typescript-eslint": "^8.73.0",
     "vite": "^8.3.8",

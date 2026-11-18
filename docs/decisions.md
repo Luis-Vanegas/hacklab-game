@@ -4,6 +4,23 @@ Registro corto de decisiones importantes. La más reciente va arriba.
 
 ---
 
+## ADR-003 — Node.js 26 LTS como versión base
+
+**Fecha:** 2026-11-18
+
+**Contexto.** Node 26 es LTS activa desde octubre de 2026. Con Node 22.20, `jsdom` 31 mostraba
+advertencias `EBADENGINE` al instalar (pide `^22.22.2 || ^24.15.0 || >=26`).
+
+**Decisión.** `.nvmrc` fija Node 26 y el CI lo usa. `engines` acepta `>=24.15` para no dejar
+fuera a quien siga en la LTS anterior. Se usa el npm que trae Node, que es el que se prueba
+junto con cada versión.
+
+**Consecuencias.** `npm install` corre sin advertencias. Política: usar siempre la LTS activa
+más reciente y las versiones estables más nuevas de cada dependencia, salvo que rompan la
+compatibilidad entre herramientas (ver ADR-001).
+
+---
+
 ## ADR-002 — Reglas de capas aplicadas con ESLint
 
 **Fecha:** 2026-11-18
