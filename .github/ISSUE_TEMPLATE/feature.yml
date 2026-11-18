@@ -1,0 +1,16 @@
+name: Idea o mejora
+description: Propón un comando, contrato o mejora del juego
+labels: [enhancement]
+body:
+  - type: textarea
+    id: idea
+    attributes:
+      label: Idea
+      description: Qué quieres agregar y qué aprendería el jugador con ello.
+    validations:
+      required: true
+  - type: dropdown
+    id: area
+    attributes:
+      label: Área
+      options: [Engine, Comandos, Contratos e historia, UI y 3D, IA opcional, Documentación]
