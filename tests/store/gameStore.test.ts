@@ -59,4 +59,39 @@ describe("gameStore", () => {
     expect(session.game.phase).toBe("playing");
     expect(session.history).toEqual([]);
   });
+
+  it("descarta un guardado con contrato activo mal formado o jugador incompleto", () => {
+    const base = JSON.parse(JSON.stringify(store().game)) as Record<string, unknown>;
+    for (const gameState of [
+      { ...base, activeContract: {} },
+      { ...base, player: { xp: 0, credits: 1 } },
+      { ...base, phase: "zzz" },
+    ]) {
+      localStorage.setItem(
+        "hacklab-game-save",
+        JSON.stringify({ version: 1, gameState, commandHistory: [] }),
+      );
+      const session = loadSession();
+      expect(session.game.activeContract).toBeNull();
+      expect(session.game.player.reputation).toBe("script_kiddie");
+      expect(session.game.phase).toBe("playing");
+    }
+  });
+
+  it("en game_over no deja aceptar ni entregar contratos", () => {
+    useGameStore.setState({ game: { ...store().game, phase: "game_over", traceLevel: 100 } });
+    expect(store().acceptContract("00-tutorial")).toBe(false);
+
+    const credits = store().game.player.credits;
+    store().submitContract();
+    expect(store().game.phase).toBe("game_over");
+    expect(store().game.player.credits).toBe(credits);
+  });
+
+  it("al entregar cierra la sesión remota", () => {
+    store().acceptContract("00-tutorial");
+    useGameStore.setState({ game: { ...store().game, connectedTo: "acme.example" } });
+    store().submitContract();
+    expect(store().game.connectedTo).toBeNull();
+  });
 });

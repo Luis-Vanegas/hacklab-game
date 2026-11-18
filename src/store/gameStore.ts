@@ -10,7 +10,16 @@ import {
 import { applyCommandResult, createSession, type GameSession } from "@/engine/session";
 import { emit } from "@/lib/events";
 import { load, save } from "@/lib/persistence";
-import type { CommandContext, CommandResult, Contract, GameState } from "@/lib/types";
+import { getAllTiers } from "@/engine/reputation";
+import type {
+  CommandContext,
+  CommandResult,
+  Contract,
+  GameDifficulty,
+  GamePhase,
+  GameState,
+  ReputationTier,
+} from "@/lib/types";
 import { executeCommand, parseCommand } from "@/terminal/CommandParser";
 
 // Capa de integración: une parser, comandos y engine, y es lo único con efectos
@@ -71,7 +80,8 @@ export const useGameStore = create<GameStore>()((set, get) => {
 
     submitContract() {
       const session = currentSession(get());
-      if (!session.game.activeContract) return;
+      // Perder (game_over) no permite cobrar el contrato en curso
+      if (session.game.phase !== "in_contract" || !session.game.activeContract) return;
       commit({ ...session, game: submitInEngine(session.game) }, "store.contract.submitted", {});
     },
 
@@ -116,16 +126,52 @@ function buildContext(session: GameSession): CommandContext {
   };
 }
 
-// localStorage es una entrada no confiable: el jugador puede editarlo
+// localStorage es una entrada no confiable: el jugador puede editarlo.
+// Se valida todo lo que el engine lee; ante la duda, partida nueva.
+const PHASES: readonly GamePhase[] = ["boot", "menu", "playing", "in_contract", "game_over"];
+const DIFFICULTIES: readonly GameDifficulty[] = ["beginner", "normal", "elite", "anonymous"];
+const TIERS: readonly ReputationTier[] = getAllTiers().map((t) => t.tier);
+
 function isGameState(value: unknown): value is GameState {
-  if (typeof value !== "object" || value === null) return false;
-  const state = value as Partial<GameState>;
+  if (!isRecord(value)) return false;
+  const { player, activeContract } = value;
   return (
-    typeof state.phase === "string" &&
-    typeof state.traceLevel === "number" &&
-    Array.isArray(state.completedContracts) &&
-    Array.isArray(state.unlockedTools) &&
-    typeof state.player?.xp === "number" &&
-    typeof state.player.credits === "number"
+    PHASES.includes(value.phase as GamePhase) &&
+    DIFFICULTIES.includes(value.difficulty as GameDifficulty) &&
+    typeof value.traceLevel === "number" &&
+    (value.connectedTo === null || typeof value.connectedTo === "string") &&
+    isRecord(value.storyFlags) &&
+    isStringArray(value.completedContracts) &&
+    isStringArray(value.unlockedTools) &&
+    isRecord(player) &&
+    typeof player.username === "string" &&
+    typeof player.xp === "number" &&
+    typeof player.credits === "number" &&
+    typeof player.level === "number" &&
+    TIERS.includes(player.reputation as ReputationTier) &&
+    (activeContract === null || isContract(activeContract))
   );
+}
+
+function isContract(value: unknown): boolean {
+  if (!isRecord(value) || typeof value.id !== "string" || !isRecord(value.target)) return false;
+  return (
+    Array.isArray(value.objectives) &&
+    value.objectives.every(
+      (o: unknown) =>
+        isRecord(o) &&
+        typeof o.id === "string" &&
+        typeof o.completed === "boolean" &&
+        isRecord(o.trigger) &&
+        typeof o.trigger.command === "string",
+    )
+  );
+}
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null && !Array.isArray(value);
+}
+
+function isStringArray(value: unknown): value is string[] {
+  return Array.isArray(value) && value.every((v) => typeof v === "string");
 }

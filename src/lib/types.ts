@@ -26,6 +26,8 @@ export interface CommandContext {
   readonly history: readonly string[];
 }
 
+// Contrato: si `error` está presente, el engine ignora TODOS los cambios
+// (stateChanges, filesystemChanges, cwd). Un comando fallido nunca cambia el juego.
 export interface CommandResult {
   readonly output: string[];
   readonly stateChanges?: Partial<MutableGameFields>;
