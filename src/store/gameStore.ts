@@ -2,6 +2,7 @@ import { create } from "zustand";
 import tutorial from "@/data/contracts/00-tutorial.json";
 import firstHack from "@/data/contracts/01-first-hack.json";
 import dataHeist from "@/data/contracts/02-data-heist.json";
+import shopData from "@/data/tools/shop.json";
 import {
   acceptContract as acceptInEngine,
   canAcceptContract,
@@ -19,6 +20,7 @@ import type {
   GamePhase,
   GameState,
   ReputationTier,
+  ToolDefinition,
 } from "@/lib/types";
 import { executeCommand, parseCommand } from "@/terminal/CommandParser";
 
@@ -27,6 +29,7 @@ import { executeCommand, parseCommand } from "@/terminal/CommandParser";
 
 // Los JSON pasan por tests/data, que valida su estructura contra estos tipos
 export const CONTRACTS: readonly Contract[] = [tutorial, firstHack, dataHeist] as Contract[];
+export const TOOLS: readonly ToolDefinition[] = shopData;
 
 // ponytail: tope fijo para que localStorage no crezca sin límite
 const MAX_HISTORY = 500;

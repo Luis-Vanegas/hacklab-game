@@ -3,6 +3,7 @@
 // dificultad y ejecutar cada línea de comando respetando clearScreen y outputType.
 
 import { useEffect, useRef } from "react";
+import { FitAddon } from "@xterm/addon-fit";
 import { Terminal as XTerm } from "@xterm/xterm";
 import "@xterm/xterm/css/xterm.css";
 import type { CommandResult, GameDifficulty } from "@/lib/types";
@@ -37,8 +38,8 @@ const OUTPUT_COLOR: Record<NonNullable<CommandResult["outputType"]>, string> = {
 };
 
 const DEFAULT_WELCOME: readonly string[] = [
-  "HACKLAB OS v2.6 // TACTICAL TERMINAL ENVIRONMENT",
-  "Type 'help' to list available commands or select a contract from the Darknet Board.",
+  "HACKLAB OS v2.6 // ENTORNO TÁCTICO DE TERMINAL",
+  "Escribe 'help' para ver los comandos o elige un contrato en el Darknet Board.",
 ];
 
 export function formatPrompt(username: string, host: string, currentDir: string): string {
@@ -107,12 +108,11 @@ export function Terminal({
         theme: getTerminalTheme(promptStateRef.current.difficulty),
       });
 
+      // FitAddon ajusta columnas y filas al tamaño real del panel
+      const fitAddon = new FitAddon();
+      term.loadAddon(fitAddon);
       term.open(container);
       termRef.current = term;
-
-      for (const bannerLine of welcomeBanner) {
-        term.writeln(bannerLine);
-      }
 
       const writeCurrentPrompt = () => {
         const { username: u, host: h, currentDir: dir } = promptStateRef.current;
@@ -131,7 +131,17 @@ export function Terminal({
         }
       };
 
-      writeCurrentPrompt();
+      // El saludo se escribe tras el primer ajuste real de tamaño: si se escribe antes,
+      // el panel aún no tiene ancho y el prompt queda partido en varias líneas
+      let greeted = false;
+      const resizeObserver = new ResizeObserver(() => {
+        fitAddon.fit();
+        if (greeted || !term) return;
+        greeted = true;
+        for (const bannerLine of welcomeBanner) term.writeln(bannerLine);
+        writeCurrentPrompt();
+      });
+      resizeObserver.observe(container);
 
       const disposable = term.onData((data) => {
         if (!term) return;
@@ -239,6 +249,7 @@ export function Terminal({
       });
 
       return () => {
+        resizeObserver.disconnect();
         disposable.dispose();
         term?.dispose();
         termRef.current = null;

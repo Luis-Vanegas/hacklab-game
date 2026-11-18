@@ -13,6 +13,9 @@ export default defineConfig({
     // Deploy estático (GitHub Pages o Vercel)
     outDir: "dist",
     sourcemap: true,
+    // Three.js minificado ronda 900 kB y no se puede partir más. Las escenas ya se
+    // cargan en diferido (React.lazy en App.tsx), así que el límite de 500 kB no aplica.
+    chunkSizeWarningLimit: 1000,
   },
   test: {
     environment: "jsdom",
