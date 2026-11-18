@@ -1,5 +1,6 @@
 import type { Contract, GameState, ReputationTier } from "@/lib/types";
 import { emit } from "@/lib/events";
+import { addCredits, addXp } from "@/engine/reputation";
 
 // Sistema de contratos.
 // Atómico: activar un contrato cambia el estado completo o no cambia nada.
@@ -76,7 +77,9 @@ export function submitContract(state: GameState): GameState {
 
   const contract = state.activeContract;
   const ratio = getCompletionRatio(contract);
-  const credits = Math.floor(contract.reward.credits * ratio * contract.reward.partialMultiplier);
+  // El multiplicador penaliza solo las entregas incompletas
+  const multiplier = ratio === 1 ? 1 : ratio * contract.reward.partialMultiplier;
+  const credits = Math.floor(contract.reward.credits * multiplier);
   const xp = Math.floor(contract.reward.xp * ratio);
 
   emit(
@@ -95,11 +98,8 @@ export function submitContract(state: GameState): GameState {
     phase: "playing",
     activeContract: null,
     completedContracts: [...state.completedContracts, contract.id],
-    player: {
-      ...state.player,
-      credits: state.player.credits + credits,
-      xp: state.player.xp + xp,
-    },
+    // addXp recalcula nivel y reputación: sin esto el jugador nunca sube de tier
+    player: addXp(addCredits(state.player, credits), xp),
     traceLevel: 0, // Resetear trace al entregar contrato
   };
 }

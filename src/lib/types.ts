@@ -22,6 +22,8 @@ export interface CommandContext {
   readonly hostname: string;
   readonly connectedTo: string | null;
   readonly difficulty: GameDifficulty;
+  // Copia de solo lectura del historial de la sesión (para `history`)
+  readonly history: readonly string[];
 }
 
 export interface CommandResult {
@@ -31,6 +33,10 @@ export interface CommandResult {
   readonly error?: string;
   // Señal para la UI: qué tipo de output es
   readonly outputType?: "info" | "success" | "warning" | "error" | "hint";
+  // Nuevo directorio actual (absoluto). Lo usa `cd`; el engine lo aplica.
+  readonly cwd?: string;
+  // Pide a la terminal visual que limpie la pantalla. Lo usa `clear`.
+  readonly clearScreen?: boolean;
 }
 
 export type CommandHandler = (
