@@ -21,6 +21,8 @@ npm run build        # Build de producción
 npm run test         # Vitest
 npm run lint         # ESLint
 npm run typecheck    # tsc --noEmit
+npm run format       # Prettier
+npm run check        # Todo lo anterior + tests: lo mismo que corre el CI
 ```
 
 ## Stack

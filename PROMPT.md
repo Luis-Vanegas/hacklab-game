@@ -41,24 +41,23 @@ xterm.js, el fondo es Three.js, todo profesional.
 
 ## Estado actual del código
 
-Ya implementado (en `main` y `develop`):
+Ya implementado (en `develop`):
 
 - **Engine completo** (`src/engine/`): GameStateMachine, VirtualFS, ContractSystem, ReputationSystem
 - **Tipos** (`src/lib/types.ts`): GameState, CommandContext, CommandResult, Contract, etc.
 - **Utilidades** (`src/lib/`): event bus, logger, persistencia con localStorage versionado
 - **IA** (`src/ai/`): NoopProvider (stub), AiProvider (interfaz)
 - **Contrato tutorial** (`src/data/contracts/00-tutorial.json`): 5 objetivos con CIPHER
-- **Config**: Vite, tsconfig strict, tokens CSS, licencia MIT, .gitignore, .env.example
+- **Config**: Vite, tsconfig strict, tokens CSS, licencia MIT, .gitignore, .env.example, ESLint, Prettier, Vitest, CI de GitHub Actions
 
 Aún NO hecho:
 
-- `npm install` (las dependencias no están instaladas)
 - Repo en GitHub (no creado todavía)
 - Los 16 comandos de terminal
 - La UI (HUD, paneles, tienda, guías)
 - Las escenas Three.js
 - La integración de xterm.js
-- Tests del engine
+- Tests del engine completos (hay una base en `tests/engine/`)
 - Store Zustand
 - StoryEngine
 
