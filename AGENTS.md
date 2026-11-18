@@ -66,6 +66,7 @@ src/engine/          # Toda la lógica pura del juego
 src/story/           # Narrativa, personajes, diálogos
 src/ai/              # Módulo opcional de IA
 src/lib/             # Utilidades transversales
+src/store/           # Store Zustand y hooks públicos para la UI
 src/App.tsx          # Punto de entrada
 CLAUDE.md
 AGENTS.md
@@ -161,7 +162,7 @@ README.md                # Con Gemini Flash para redacción
 **Reglas para Antigravity**:
 
 - Componentes presentacionales: reciben props, no acceden al store directamente
-- Para estado, importar solo los hooks de Zustand que Claude Code exponga
+- Para estado, importar solo los hooks de `@/store` (ESLint bloquea importar `engine/` desde `ui/` y `scenes/`)
 - NO tocar `engine/`, `lib/`, ni `data/`
 - Si necesita un hook o dato nuevo, anotarlo en TASKS.md
 - Los componentes 3D siguen la spec que Claude Code deje en TASKS.md

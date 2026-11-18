@@ -49,6 +49,7 @@ export function makeContext(overrides: Partial<CommandContext> = {}): CommandCon
     hostname: "darknet",
     connectedTo: null,
     difficulty: "beginner",
+    history: [],
     ...overrides,
   };
 }

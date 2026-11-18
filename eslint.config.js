@@ -42,6 +42,23 @@ export default tseslint.config(
     },
   },
   {
+    // La UI lee y cambia el estado solo a través de los hooks de src/store
+    files: ["src/ui/**/*.{ts,tsx}", "src/scenes/**/*.{ts,tsx}"],
+    rules: {
+      "no-restricted-imports": [
+        "error",
+        {
+          patterns: [
+            {
+              group: ["**/engine/**", "@/engine", "@/engine/*"],
+              message: "La UI usa los hooks de @/store, no el engine directo.",
+            },
+          ],
+        },
+      ],
+    },
+  },
+  {
     // Los comandos solo hablan con el engine a través de CommandContext
     files: ["src/terminal/commands/**/*.ts"],
     rules: {
