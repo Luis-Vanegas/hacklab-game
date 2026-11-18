@@ -34,6 +34,12 @@ export const TOOLS: readonly ToolDefinition[] = shopData;
 // ponytail: tope fijo para que localStorage no crezca sin límite
 const MAX_HISTORY = 500;
 
+// Deben declararse antes de crear el store: create() llama a loadSession() al importar
+// el módulo, y con una partida guardada isGameState las usa en ese mismo momento.
+const PHASES: readonly GamePhase[] = ["boot", "menu", "playing", "in_contract", "game_over"];
+const DIFFICULTIES: readonly GameDifficulty[] = ["beginner", "normal", "elite", "anonymous"];
+const TIERS: readonly ReputationTier[] = getAllTiers().map((t) => t.tier);
+
 export interface GameStore extends GameSession {
   runCommand(input: string): CommandResult;
   acceptContract(contractId: string): boolean;
@@ -131,9 +137,6 @@ function buildContext(session: GameSession): CommandContext {
 
 // localStorage es una entrada no confiable: el jugador puede editarlo.
 // Se valida todo lo que el engine lee; ante la duda, partida nueva.
-const PHASES: readonly GamePhase[] = ["boot", "menu", "playing", "in_contract", "game_over"];
-const DIFFICULTIES: readonly GameDifficulty[] = ["beginner", "normal", "elite", "anonymous"];
-const TIERS: readonly ReputationTier[] = getAllTiers().map((t) => t.tier);
 
 function isGameState(value: unknown): value is GameState {
   if (!isRecord(value)) return false;
