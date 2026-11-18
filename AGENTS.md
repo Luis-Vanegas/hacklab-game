@@ -49,7 +49,7 @@ package.json         # Solo Claude Code modifica dependencias
 
 ## 🟠 Codex (OpenAI) — Implementador de lógica
 
-**Modelo**: GPT-4o / o3 (lo que traiga Codex)
+**Modelo**: Sol 6.2 medio
 **Para documentación**: Gemini 2.5 Flash (si se necesita generar docs largos)
 **Rol**: Implementa comandos, datos, y lógica de juego bien acotada.
 Investiga si es necesario antes de implementar.
