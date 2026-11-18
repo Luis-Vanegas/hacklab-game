@@ -76,6 +76,7 @@ src/
 │   ├── logger.ts         # Trazabilidad de acciones
 │   ├── persistence.ts    # localStorage versionado
 │   └── types.ts          # Tipos compartidos
+├── store/               # Zustand: integra parser, comandos y engine; hooks para la UI
 └── App.tsx
 ```
 

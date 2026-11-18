@@ -4,6 +4,28 @@ Registro corto de decisiones importantes. La más reciente va arriba.
 
 ---
 
+## ADR-004 — El store Zustand es la única capa con efectos
+
+**Fecha:** 2026-11-18
+
+**Contexto.** Los comandos son funciones puras que devuelven cambios, y el engine también es
+puro. Alguien tiene que aplicar esos cambios, guardar la partida y publicar eventos.
+
+**Decisión.** `src/engine/session/` aplica un `CommandResult` completo de una vez (estado,
+filesystem, directorio e historial) y registra los objetivos del contrato. `src/store/` es la
+capa de integración: arma el `CommandContext`, ejecuta, aplica, guarda en `localStorage` y emite
+eventos. La UI solo usa los hooks de `src/store/hooks.ts`; ESLint le bloquea importar `engine/`.
+
+**Consecuencias.**
+
+- Si un comando devuelve `error`, solo se registra en el historial: nada cambia a medias.
+- Solo se persiste el progreso (`GameState` e historial). El filesystem del jugador vuelve al
+  inicial en cada carga; si un contrato necesita archivos persistentes, hay que versionar el
+  esquema de guardado.
+- La partida guardada se valida al cargar: si está corrupta o editada a mano, empieza una nueva.
+
+---
+
 ## ADR-003 — Node.js 26 LTS como versión base
 
 **Fecha:** 2026-11-18
