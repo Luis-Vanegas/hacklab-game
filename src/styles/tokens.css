@@ -1,11 +1,15 @@
-/* Tokens de diseño — Antigravity los completa.
-   Variables CSS para todo el juego. */
+/* Tokens de diseño y estilos de componentes UI para HackLab Game.
+   Mantiene una paleta de consola táctica con superficies legibles,
+   números tabulares y primitivas modernas (<progress>, <dialog>). */
 
 :root {
   /* Colores base */
   --color-bg: #0a0a0f;
   --color-surface: #12121a;
+  --color-surface-elevated: #171723;
+  --color-surface-hover: #1d1d2c;
   --color-border: #1a1a2e;
+  --color-border-strong: #282846;
 
   /* Terminal */
   --color-terminal-bg: #0d0d14;
@@ -15,22 +19,28 @@
   --color-terminal-warning: #ffaa00;
   --color-terminal-success: #00ff41;
   --color-terminal-info: #00bfff;
-  --color-terminal-hint: #888;
+  --color-terminal-hint: #8b93a6;
 
   /* UI */
   --color-primary: #00ff41;
+  --color-primary-dim: rgba(0, 255, 65, 0.14);
   --color-accent: #00bfff;
+  --color-accent-dim: rgba(0, 191, 255, 0.14);
+  --color-warning: #ffaa00;
+  --color-warning-dim: rgba(255, 170, 0, 0.16);
   --color-danger: #ff3e3e;
+  --color-danger-dim: rgba(255, 62, 62, 0.18);
   --color-xp: #ffd700;
   --color-credits: #00ff88;
 
-  /* Texto */
-  --color-text: #e0e0e0;
-  --color-text-muted: #666;
+  /* Texto (contraste >= 4.5:1 sobre superficies oscuras) */
+  --color-text: #e4e8f0;
+  --color-text-secondary: #9ba3b8;
+  --color-text-muted: #767f94;
 
   /* Fuentes */
   --font-mono: "Share Tech Mono", "Fira Code", "Consolas", monospace;
-  --font-ui: "Inter", "Segoe UI", sans-serif;
+  --font-ui: "Inter", "Segoe UI", system-ui, sans-serif;
 
   /* Espaciado */
   --space-xs: 4px;
@@ -38,4 +48,310 @@
   --space-md: 16px;
   --space-lg: 24px;
   --space-xl: 32px;
+
+  /* Radios y sombras con desplazamiento real */
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+  --shadow-panel: 0 8px 24px rgba(0, 0, 0, 0.55);
+  --shadow-dialog: 0 18px 48px rgba(0, 0, 0, 0.78);
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-ui);
+  line-height: 1.5;
+  color-scheme: dark;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background-color: rgba(0, 191, 255, 0.28);
+  color: #ffffff;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+/* Datos numéricos y telemetría alineados */
+.hl-tabular {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+/* --- Primitiva <progress> personalizada --- */
+.hl-progress {
+  appearance: none;
+  border: 0 solid;
+  overflow: clip;
+  inline-size: 100%;
+  block-size: 8px;
+  --progress-bar-radius: 999px;
+  border-radius: var(--progress-bar-radius);
+  background: #09090e;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.65);
+}
+
+.hl-progress::-webkit-progress-bar {
+  background: transparent;
+}
+
+.hl-progress::-webkit-progress-value {
+  background: var(--progress-bar-fill, var(--color-primary));
+  border-radius: var(--progress-bar-radius);
+  transition: inline-size 0.25s var(--ease-out-expo);
+}
+
+.hl-progress::-moz-progress-bar {
+  background: var(--progress-bar-fill, var(--color-primary));
+  border-radius: var(--progress-bar-radius);
+  transition: inline-size 0.25s var(--ease-out-expo);
+}
+
+/* --- Primitiva <dialog> nativa --- */
+.hl-dialog {
+  background-color: var(--color-surface);
+  color: var(--color-text);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-dialog);
+  padding: 0;
+  max-inline-size: min(760px, 92dvw);
+  inline-size: 100%;
+  max-block-size: 86dvh;
+}
+
+.hl-dialog:modal {
+  overscroll-behavior: contain;
+}
+
+.hl-dialog::backdrop {
+  background: rgba(5, 6, 10, 0.78);
+  backdrop-filter: blur(4px);
+  overflow: hidden;
+  overscroll-behavior: contain;
+}
+
+/* --- Layout principal de 3 paneles --- */
+.hl-layout {
+  position: relative;
+  min-block-size: 100dvh;
+  inline-size: 100%;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  overflow: clip;
+}
+
+.hl-layout__scene {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.hl-layout__hud,
+.hl-layout__workspace,
+.hl-layout__overlay {
+  position: relative;
+  z-index: 1;
+}
+
+.hl-layout__workspace {
+  display: grid;
+  grid-template-columns: minmax(260px, 310px) minmax(0, 1fr) minmax(260px, 320px);
+  grid-template-areas: "board terminal status";
+  gap: var(--space-md);
+  padding: var(--space-md);
+  min-block-size: 0;
+}
+
+.hl-layout__board {
+  grid-area: board;
+  min-block-size: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.hl-layout__terminal {
+  grid-area: terminal;
+  min-inline-size: 0;
+  min-block-size: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.hl-layout__status {
+  grid-area: status;
+  min-block-size: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+@media (max-width: 1120px) {
+  .hl-layout__workspace {
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas:
+      "terminal terminal"
+      "board    status";
+  }
+}
+
+@media (max-width: 720px) {
+  .hl-layout__workspace {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "terminal"
+      "status"
+      "board";
+    padding: var(--space-sm);
+    gap: var(--space-sm);
+  }
+}
+
+/* --- Paneles y contenedores --- */
+.hl-panel {
+  background-color: rgba(18, 18, 26, 0.92);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-panel);
+  display: flex;
+  flex-direction: column;
+  min-block-size: 0;
+  overflow: clip;
+}
+
+.hl-panel__header {
+  display: flex;
+  align-items: safe center;
+  justify-content: space-between;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-md);
+  border-block-end: 1px solid var(--color-border);
+  background-color: rgba(10, 10, 15, 0.55);
+}
+
+.hl-panel__title {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 0.92rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  color: var(--color-text);
+}
+
+.hl-panel__body {
+  padding: var(--space-md);
+  overflow-y: auto;
+  scrollbar-gutter: stable;
+  overscroll-behavior: contain;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  flex: 1 1 auto;
+}
+
+/* --- Botones e interacciones --- */
+.hl-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xs);
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  padding: 6px 12px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border-strong);
+  background-color: var(--color-surface-elevated);
+  color: var(--color-text);
+  cursor: pointer;
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease,
+    color 0.15s ease;
+}
+
+.hl-btn:hover:not(:disabled) {
+  background-color: var(--color-surface-hover);
+  border-color: var(--color-accent);
+}
+
+.hl-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.hl-btn--primary {
+  border-color: var(--color-primary);
+  background-color: var(--color-primary-dim);
+  color: var(--color-primary);
+}
+
+.hl-btn--primary:hover:not(:disabled) {
+  background-color: rgba(0, 255, 65, 0.24);
+  border-color: var(--color-primary);
+}
+
+.hl-btn--danger {
+  border-color: var(--color-danger);
+  background-color: var(--color-danger-dim);
+  color: #ff8080;
+}
+
+.hl-btn--danger:hover:not(:disabled) {
+  background-color: rgba(255, 62, 62, 0.28);
+  border-color: var(--color-danger);
+}
+
+/* --- Badges y etiquetas --- */
+.hl-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: 2px 8px;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  border: 1px solid var(--color-border-strong);
+  background-color: var(--color-surface-elevated);
+  color: var(--color-text-secondary);
+}
+
+.hl-badge--primary {
+  border-color: rgba(0, 255, 65, 0.4);
+  background-color: var(--color-primary-dim);
+  color: var(--color-primary);
+}
+
+.hl-badge--accent {
+  border-color: rgba(0, 191, 255, 0.4);
+  background-color: var(--color-accent-dim);
+  color: var(--color-accent);
+}
+
+.hl-badge--warning {
+  border-color: rgba(255, 170, 0, 0.45);
+  background-color: var(--color-warning-dim);
+  color: var(--color-warning);
+}
+
+.hl-badge--danger {
+  border-color: rgba(255, 62, 62, 0.45);
+  background-color: var(--color-danger-dim);
+  color: #ff8080;
 }
