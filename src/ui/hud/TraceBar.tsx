@@ -1,4 +1,4 @@
-// Barra de nivel de rastreo (Trace Level 0-100).
+// Barra de nivel de rastreo (Rastreo 0-100 %).
 // Usa <progress> nativo por accesibilidad y cambia el color del indicador según el riesgo de detección.
 
 import { useId } from "react";
@@ -18,7 +18,7 @@ export function TraceBar({ traceLevel }: TraceBarProps) {
         ? "var(--color-warning)"
         : "var(--color-primary)";
 
-  const statusText = clamped >= 75 ? "CRITICAL" : clamped >= 40 ? "ELEVATED" : "LOW";
+  const statusText = clamped >= 75 ? "CRÍTICO" : clamped >= 40 ? "ELEVADO" : "BAJO";
 
   return (
     <div
@@ -39,7 +39,7 @@ export function TraceBar({ traceLevel }: TraceBarProps) {
           whiteSpace: "nowrap",
         }}
       >
-        TRACE {clamped}% ({statusText})
+        RASTREO {clamped}% ({statusText})
       </span>
       <progress
         className="hl-progress"

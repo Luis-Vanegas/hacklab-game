@@ -18,14 +18,15 @@ export function StatusPanel({
 }: StatusPanelProps) {
   if (!activeContract) {
     return (
-      <aside className="hl-panel" aria-label="Contract Status" data-testid="status-panel">
+      <aside className="hl-panel" aria-label="Estado de la misión" data-testid="status-panel">
         <div className="hl-panel__header">
-          <h2 className="hl-panel__title">MISSION STATUS</h2>
-          <span className="hl-badge">IDLE</span>
+          <h2 className="hl-panel__title">ESTADO DE MISIÓN</h2>
+          <span className="hl-badge">SIN MISIÓN</span>
         </div>
         <div className="hl-panel__body">
           <p style={{ color: "var(--color-text-muted)", fontSize: "0.88rem", margin: 0 }}>
-            No active contract selected. Choose an operation from the Darknet Board to deploy.
+            No hay ningún contrato activo. Elige una misión en el tablero de contratos para
+            comenzar.
           </p>
         </div>
       </aside>
@@ -38,16 +39,16 @@ export function StatusPanel({
     connectedTo === activeContract.target.ip || connectedTo === activeContract.target.hostname;
 
   return (
-    <aside className="hl-panel" aria-label="Contract Status" data-testid="status-panel">
+    <aside className="hl-panel" aria-label="Estado de la misión" data-testid="status-panel">
       <div className="hl-panel__header">
-        <h2 className="hl-panel__title">MISSION STATUS</h2>
+        <h2 className="hl-panel__title">ESTADO DE MISIÓN</h2>
         <span className="hl-badge hl-badge--accent hl-tabular">
           {completedCount}/{totalCount} OBJ
         </span>
       </div>
 
       <div className="hl-panel__body">
-        <section aria-label="Target Server Details">
+        <section aria-label="Detalles del servidor objetivo">
           <h3
             style={{
               margin: "0 0 var(--space-xs) 0",
@@ -56,7 +57,7 @@ export function StatusPanel({
               color: "var(--color-accent)",
             }}
           >
-            TARGET // {activeContract.target.hostname}
+            OBJETIVO // {activeContract.target.hostname}
           </h3>
           <div
             className="hl-tabular"
@@ -68,11 +69,11 @@ export function StatusPanel({
             }}
           >
             <span>IP: {activeContract.target.ip}</span>
-            <span>{isConnectedToTarget ? "LINK ACTIVE" : "DISCONNECTED"}</span>
+            <span>{isConnectedToTarget ? "ENLACE ACTIVO" : "DESCONECTADO"}</span>
           </div>
         </section>
 
-        <section aria-label="Contract Objectives">
+        <section aria-label="Objetivos del contrato">
           <h3
             style={{
               margin: "0 0 var(--space-xs) 0",
@@ -81,7 +82,7 @@ export function StatusPanel({
               color: "var(--color-text)",
             }}
           >
-            OBJECTIVES
+            OBJETIVOS
           </h3>
           <ul
             style={{
@@ -136,12 +137,12 @@ export function StatusPanel({
               disabled={completedCount === 0}
               onClick={onSubmitContract}
             >
-              Submit Contract
+              Entregar contrato
             </button>
           ) : null}
           {onAbandonContract ? (
             <button type="button" className="hl-btn hl-btn--danger" onClick={onAbandonContract}>
-              Abort
+              Abandonar
             </button>
           ) : null}
         </div>

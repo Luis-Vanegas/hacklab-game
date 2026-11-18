@@ -1,4 +1,4 @@
-// Panel lateral de Darknet Board.
+// Panel lateral de Tablero de Contratos.
 // Muestra contratos disponibles, completados o bloqueados según el rango de reputación del jugador.
 
 import type { Contract, ReputationTier } from "@/lib/types";
@@ -30,16 +30,16 @@ export function DarknetBoard({
   const playerRank = TIER_RANK[playerReputation];
 
   return (
-    <aside className="hl-panel" aria-label="Darknet Contract Board" data-testid="darknet-board">
+    <aside className="hl-panel" aria-label="Tablero de contratos" data-testid="darknet-board">
       <div className="hl-panel__header">
-        <h2 className="hl-panel__title">DARKNET BOARD</h2>
-        <span className="hl-badge hl-tabular">{contracts.length} OPS</span>
+        <h2 className="hl-panel__title">CONTRATOS</h2>
+        <span className="hl-badge hl-tabular">{contracts.length} MISIONES</span>
       </div>
 
       <div className="hl-panel__body">
         {contracts.length === 0 ? (
           <p style={{ color: "var(--color-text-muted)", fontSize: "0.88rem", margin: 0 }}>
-            No contracts broadcast on this node.
+            No hay contratos publicados en este nodo.
           </p>
         ) : (
           contracts.map((contract) => {
@@ -89,11 +89,11 @@ export function DarknetBoard({
                     {contract.title}
                   </h3>
                   {isCompleted ? (
-                    <span className="hl-badge hl-badge--primary">DONE</span>
+                    <span className="hl-badge hl-badge--primary">COMPLETADO</span>
                   ) : isActive ? (
-                    <span className="hl-badge hl-badge--accent">ACTIVE</span>
+                    <span className="hl-badge hl-badge--accent">ACTIVO</span>
                   ) : isLocked ? (
-                    <span className="hl-badge hl-badge--warning">LOCKED</span>
+                    <span className="hl-badge hl-badge--warning">BLOQUEADO</span>
                   ) : null}
                 </div>
 
@@ -132,7 +132,7 @@ export function DarknetBoard({
                     disabled={isLocked || isActive}
                     onClick={() => onSelectContract(contract.id)}
                   >
-                    {isActive ? "In Progress" : isLocked ? "Insufficient Rank" : "Accept Contract"}
+                    {isActive ? "En curso" : isLocked ? "Rango insuficiente" : "Aceptar contrato"}
                   </button>
                 ) : null}
               </article>

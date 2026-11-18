@@ -1,17 +1,20 @@
 // Secuencia de introducción narrativa en 5 viñetas con efecto máquina de escribir.
-// Avanza con Enter o clic (si el texto aún se está escribiendo, primero lo completa;
-// si ya terminó, pasa a la siguiente viñeta) y permite saltar en cualquier momento.
+// Usa INTRO desde @/store por defecto (o viñetas pasadas por props), avanza con Enter
+// o clic (si el texto aún se está escribiendo, primero lo completa; si ya terminó, pasa
+// a la siguiente viñeta) y permite saltar en cualquier momento.
 
 import { useCallback, useEffect, useState } from "react";
+import { INTRO, type IntroSlide } from "@/store";
 
 export interface IntroVignette {
   readonly id?: string;
   readonly title?: string;
   readonly speaker?: string;
   readonly text: string;
+  readonly mood?: "day" | "night";
 }
 
-export type IntroSlideInput = string | IntroVignette;
+export type IntroSlideInput = string | IntroSlide | IntroVignette;
 
 export interface IntroSequenceProps {
   readonly vignettes?: readonly IntroSlideInput[];
@@ -20,38 +23,7 @@ export interface IntroSequenceProps {
   readonly onSkip?: () => void;
 }
 
-export const DEFAULT_INTRO_VIGNETTES: readonly IntroVignette[] = [
-  {
-    id: "v1",
-    title: "08:00 // MEDELLÍN — NODO SEGURO",
-    speaker: "NARRADOR",
-    text: "Hoy empiezas tus prácticas de ciberseguridad en Nodo Seguro. Tu escritorio huele a café recién molido y tienes acceso a tu primera estación de trabajo.",
-  },
-  {
-    id: "v2",
-    title: "08:15 // MESA DE SERVICIO",
-    speaker: "MARTA RÍOS",
-    text: "Bienvenido al equipo. Aquí trabajamos con alcance definido y autorización firmada. Cada comando que ejecutes deja huella: aprende a leer la red antes de tocar nada.",
-  },
-  {
-    id: "v3",
-    title: "18:30 // FIN DEL TURNO",
-    speaker: "NARRADOR",
-    text: "Tus compañeros apagan sus monitores, pero el sueldo de practicante apenas alcanza para las cuentas del mes. Antes de cerrar sesión, una terminal cifrada parpadea.",
-  },
-  {
-    id: "v4",
-    title: "23:40 // CANAL OCULTO",
-    speaker: "CIPHER",
-    text: "Vi cómo resolviste los tickets de hoy. Tengo encargos nocturnos que pagan en créditos reales. Sin preguntas, pero si el rastreo llega al 100 %, estás solo.",
-  },
-  {
-    id: "v5",
-    title: "00:00 // DOBLE VIDA",
-    speaker: "NARRADOR",
-    text: "De día construyes reputación como analista en Nodo Seguro. De noche operas en la darknet. Tu terminal está lista.",
-  },
-];
+export const DEFAULT_INTRO_VIGNETTES: readonly IntroSlide[] = INTRO;
 
 function normalizeVignette(item: IntroSlideInput, index: number): IntroVignette {
   if (typeof item === "string") {
@@ -59,9 +31,25 @@ function normalizeVignette(item: IntroSlideInput, index: number): IntroVignette 
       id: `vignette-${index + 1}`,
       title: `VIÑETA ${index + 1}`,
       text: item,
+      mood: "day",
     };
   }
-  return item;
+  const mood = "mood" in item && item.mood ? item.mood : "day";
+  const title =
+    "title" in item && item.title
+      ? item.title
+      : mood === "night"
+        ? "TURNO NOCHE // DARKNET"
+        : "TURNO DÍA // NODO SEGURO";
+  const speaker = "speaker" in item ? item.speaker : undefined;
+
+  return {
+    id: item.id ?? `vignette-${index + 1}`,
+    title,
+    speaker,
+    text: item.text,
+    mood,
+  };
 }
 
 function prefersReducedMotion(): boolean {
@@ -90,8 +78,8 @@ export function IntroSequence({
   const visibleChars = instantMode ? fullTextLength : Math.min(typedChars, fullTextLength);
   const isTyping = visibleChars < fullTextLength;
   const isLastSlide = slideIndex >= normalized.length - 1;
+  const isNight = currentSlide?.mood === "night";
 
-  // Efecto máquina de escribir para la viñeta actual (sin setState síncrono en el cuerpo del efecto)
   useEffect(() => {
     if (!hasCurrentSlide || instantMode || visibleChars >= fullTextLength) {
       return;
@@ -137,7 +125,6 @@ export function IntroSequence({
     }
   }, [onSkip, onComplete]);
 
-  // Avance con tecla Enter
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Enter") {
@@ -159,9 +146,13 @@ export function IntroSequence({
       aria-label="Introducción narrativa"
       onClick={handleAdvance}
       data-testid="intro-sequence"
+      data-mood={currentSlide.mood ?? "day"}
     >
       <article
         className="hl-intro-card"
+        style={{
+          borderColor: isNight ? "rgba(0, 255, 65, 0.45)" : "rgba(0, 191, 255, 0.45)",
+        }}
         onClick={(e) => {
           e.stopPropagation();
           handleAdvance();
@@ -178,15 +169,15 @@ export function IntroSequence({
           }}
         >
           <div style={{ display: "flex", alignItems: "center", gap: "var(--space-sm)" }}>
-            {currentSlide.speaker ? (
-              <span className="hl-badge hl-badge--primary">{currentSlide.speaker}</span>
-            ) : null}
+            <span className={isNight ? "hl-badge hl-badge--primary" : "hl-badge hl-badge--accent"}>
+              {currentSlide.speaker ?? (isNight ? "NOCHE" : "DÍA")}
+            </span>
             {currentSlide.title ? (
               <span
                 style={{
                   fontFamily: "var(--font-mono)",
                   fontSize: "0.82rem",
-                  color: "var(--color-accent)",
+                  color: isNight ? "var(--color-primary)" : "var(--color-accent)",
                 }}
               >
                 {currentSlide.title}

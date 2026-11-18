@@ -34,7 +34,7 @@ export function GameLayout({
       <main className="hl-layout__workspace">
         <div className="hl-layout__board">{leftPanel}</div>
 
-        <section className="hl-layout__terminal" aria-label="Interactive Terminal Workspace">
+        <section className="hl-layout__terminal" aria-label="Área de terminal interactiva">
           {storyDialog}
           <div
             style={{ flex: "1 1 auto", minBlockSize: 0, display: "flex", flexDirection: "column" }}

@@ -1,5 +1,5 @@
 // Barra superior (HUD) del juego.
-// Presenta telemetría clave del jugador (usuario, reputación, créditos, trace, host conectado)
+// Presenta telemetría clave del jugador (usuario, reputación, créditos, rastreo, host conectado)
 // y acceso rápido a la tienda de herramientas.
 
 import type { PlayerState } from "@/lib/types";
@@ -58,12 +58,12 @@ export function HUD({ player, traceLevel, connectedTo = null, onOpenShop }: HUDP
           className={connectedTo ? "hl-badge hl-badge--accent hl-tabular" : "hl-badge hl-tabular"}
           data-testid="hud-connection"
         >
-          {connectedTo ? `REMOTE: ${connectedTo}` : "LOCALHOST"}
+          {connectedTo ? `REMOTO: ${connectedTo}` : "EQUIPO LOCAL"}
         </span>
         <TraceBar traceLevel={traceLevel} />
         {onOpenShop ? (
           <button type="button" className="hl-btn hl-btn--primary" onClick={onOpenShop}>
-            Tool Shop
+            Tienda
           </button>
         ) : null}
       </div>

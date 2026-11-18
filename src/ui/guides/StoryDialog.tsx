@@ -1,4 +1,4 @@
-// Globo de diálogo del personaje guía (ej. CIPHER).
+// Globo de diálogo del personaje guía (ej. Marta Ríos o CIPHER).
 // Permite avanzar por las líneas de narrativa o cerrar la transmisión al finalizar.
 
 import { useState } from "react";
@@ -35,7 +35,7 @@ export function StoryDialog({ lines, onDismiss }: StoryDialogProps) {
 
   return (
     <section
-      aria-label={`Incoming transmission from ${currentLine.character}`}
+      aria-label={`Transmisión entrante de ${currentLine.character}`}
       style={{
         display: "flex",
         alignItems: "center",
@@ -74,7 +74,7 @@ export function StoryDialog({ lines, onDismiss }: StoryDialogProps) {
       </div>
 
       <button type="button" className="hl-btn hl-btn--primary" onClick={handleAdvance}>
-        {isLastLine ? "Acknowledge" : "Next"}
+        {isLastLine ? "Entendido" : "Siguiente"}
       </button>
     </section>
   );
