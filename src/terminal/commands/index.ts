@@ -1,6 +1,7 @@
 import type { CommandDefinition } from "./shared";
 import buy from "./buy";
 import cat from "./cat";
+import cd from "./cd";
 import crack from "./crack";
 import download from "./download";
 import createHelp from "./help";
@@ -29,6 +30,13 @@ export const commands: readonly CommandDefinition[] = [
     description: "Leer un archivo virtual.",
     example: "cat notes",
     run: cat,
+  },
+  {
+    name: "cd",
+    usage: "cd [ruta]",
+    description: "Cambiar de directorio virtual; sin ruta vuelve a /home/user.",
+    example: "cd /etc",
+    run: cd,
   },
   {
     name: "crack",
