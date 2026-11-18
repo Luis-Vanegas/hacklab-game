@@ -1,7 +1,8 @@
 import "./styles/tokens.css";
 
-// Punto de entrada del juego.
-// Claude Code ensambla aquí los módulos cuando estén listos.
+// Placeholder temporal.
+// Cuando Antigravity implemente GameLayout y Claude Code integre
+// la terminal con xterm.js, este archivo ensamblará todo.
 
 export default function App() {
   return (
@@ -13,27 +14,15 @@ export default function App() {
       display: "flex",
       alignItems: "center",
       justifyContent: "center",
+      flexDirection: "column",
+      gap: "var(--space-md)",
     }}>
-      <pre style={{ color: "var(--color-terminal-text)" }}>
-{`
-  ██╗  ██╗ █████╗  ██████╗██╗  ██╗██╗      █████╗ ██████╗
-  ██║  ██║██╔══██╗██╔════╝██║ ██╔╝██║     ██╔══██╗██╔══██╗
-  ███████║███████║██║     █████╔╝ ██║     ███████║██████╔╝
-  ██╔══██║██╔══██║██║     ██╔═██╗ ██║     ██╔══██║██╔══██╗
-  ██║  ██║██║  ██║╚██████╗██║  ██╗███████╗██║  ██║██████╔╝
-  ╚═╝  ╚═╝╚═╝  ╚═╝ ╚═════╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝╚═════╝
-
-  [ SYSTEM BOOT ... ]
-  [ Inicializando módulos ... ]
-
-  > Engine: OK
-  > Terminal: pendiente (Codex)
-  > UI: pendiente (Antigravity)
-  > Escenas 3D: pendiente (Antigravity)
-
-  Escribe 'help' para empezar.
-`}
-      </pre>
+      <h1 style={{ color: "var(--color-primary)", fontSize: "1.2rem" }}>
+        HackLab Game
+      </h1>
+      <p style={{ color: "var(--color-text-muted)", fontSize: "0.9rem" }}>
+        Módulos en construcción — la terminal usará xterm.js, no HTML estático.
+      </p>
     </div>
   );
 }
