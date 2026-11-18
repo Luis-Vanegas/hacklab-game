@@ -142,7 +142,7 @@ develop (integrado y probado) ──→ PR → main (release)
 
 ### Reglas para agentes
 
-- Cada agente trabaja en su propia rama `feat/<zona>-<tarea>`.
+- Cada agente trabaja en su propia carpeta (worktree) y rama `feat/<zona>-<tarea>`. Ver "Ramas y carpetas" en AGENTS.md.
 - Nunca hacer push directo a `main` ni a `develop`.
 - Si hay conflictos: avisar en TASKS.md y esperar instrucciones.
 - Antes de crear una rama: `git pull origin develop` para partir del último estado.
