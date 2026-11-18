@@ -108,8 +108,12 @@ export interface ReputationConfig {
 
 // --- Contratos ---
 
+// De día, trabajo autorizado en Nodo Seguro; de noche, encargos de CIPHER (ADR-005)
+export type ContractChannel = "work" | "darknet";
+
 export interface Contract {
   readonly id: string;
+  readonly channel: ContractChannel;
   readonly title: string;
   readonly description: string;
   readonly difficulty: GameDifficulty;
@@ -132,7 +136,29 @@ export interface Objective {
   readonly trigger: ObjectiveTrigger;
   readonly completed: boolean;
   readonly hint?: string;
+  // Pistas escalonadas: suave, media y la solución
+  readonly hints?: readonly string[];
 }
+
+// --- Avisos de juego para la UI (distintos de los eventos de observabilidad) ---
+
+export type GameAlert =
+  | {
+      readonly type: "objective_completed";
+      readonly objectiveId: string;
+      readonly description: string;
+    }
+  | {
+      readonly type: "contract_completed";
+      readonly contractId: string;
+      readonly title: string;
+      readonly credits: number;
+      readonly xp: number;
+    }
+  | { readonly type: "rank_up"; readonly from: ReputationTier; readonly to: ReputationTier }
+  | { readonly type: "trace_alarm"; readonly level: number };
+
+export type QueuedGameAlert = GameAlert & { readonly id: number };
 
 // Qué acción completa un objetivo
 export interface ObjectiveTrigger {
