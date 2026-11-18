@@ -13,3 +13,12 @@ export {
   type SceneManagerProps,
   type ActiveSceneKind,
 } from "./SceneManager";
+export {
+  OfficeScene,
+  interpolateRoute,
+  COWORKER_ROUTES,
+  ZOOM_DURATION_SECONDS,
+  type OfficeSceneProps,
+  type WalkWaypoint,
+  type WalkerPose,
+} from "./OfficeScene";
