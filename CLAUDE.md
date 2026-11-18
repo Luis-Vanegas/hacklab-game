@@ -93,6 +93,52 @@ src/
 - **Persistencia**: localStorage con schema versionado y migración automática.
 - **Concurrencia**: Web Workers para sandbox de scripts del jugador.
 
+## Git workflow
+
+### Ramas permanentes
+- **`main`** — siempre desplegable. Solo recibe merges desde `develop` vía PR
+  revisado. Protegida: nadie hace push directo.
+- **`develop`** — rama de integración. Aquí se juntan las features terminadas
+  y se prueba que todo funcione junto antes de subir a `main`.
+
+### Ramas de trabajo (efímeras)
+Cada tarea vive en su propia rama, creada desde `develop`:
+```
+feat/<nombre>     # funcionalidad nueva
+fix/<nombre>      # corrección de bug
+docs/<nombre>     # solo documentación
+refactor/<nombre> # reestructuración sin cambio de comportamiento
+chore/<nombre>    # tooling, config, dependencias
+```
+
+### Flujo de trabajo
+```
+develop ──┬── feat/terminal-xterm ──→ PR → develop
+          ├── feat/commands-ls    ──→ PR → develop
+          └── fix/state-machine   ──→ PR → develop
+
+develop (integrado y probado) ──→ PR → main (release)
+```
+
+1. **Crear rama** desde `develop`: `git checkout -b feat/mi-feature develop`
+2. **Commits pequeños** con Conventional Commits: un cambio lógico por commit.
+3. **Push** de la rama: `git push -u origin feat/mi-feature`
+4. **Pull Request** a `develop` con descripción: qué, por qué, cómo probar.
+5. **Review + merge** a `develop`. Borrar la rama después.
+6. **Cuando `develop` está estable**: PR de `develop` → `main` como release.
+
+### Reglas para agentes
+- Cada agente trabaja en su propia rama `feat/<zona>-<tarea>`.
+- Nunca hacer push directo a `main` ni a `develop`.
+- Si hay conflictos: avisar en TASKS.md y esperar instrucciones.
+- Antes de crear una rama: `git pull origin develop` para partir del último estado.
+
+### Protección contra errores
+- Si algo se rompe en `develop`: se revierte el merge con `git revert`.
+- Si algo se rompe en `main`: hotfix desde main (`fix/hotfix-<tema>`), merge
+  a `main` Y a `develop`.
+- Tags en `main` para cada release: `v0.1.0`, `v0.2.0`, etc. (semver).
+
 ## Coordinación entre agentes
 Leer **AGENTS.md** para roles, modelos y zonas de cada agente.
 Leer **TASKS.md** para el backlog y comunicación entre agentes.
