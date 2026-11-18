@@ -5,39 +5,50 @@
   "type": "module",
   "description": "Juego de terminal hacker en el navegador. Enseña ciberseguridad, scripting y conceptos de ingeniería.",
   "license": "MIT",
+  "engines": {
+    "node": ">=22.22"
+  },
   "scripts": {
     "dev": "vite",
-    "build": "tsc --noEmit && vite build",
+    "build": "npm run typecheck && vite build",
     "preview": "vite preview",
     "test": "vitest run",
     "test:watch": "vitest",
-    "typecheck": "tsc --noEmit",
-    "lint": "eslint src/",
-    "lint:fix": "eslint src/ --fix"
+    "test:coverage": "vitest run --coverage",
+    "typecheck": "tsc --noEmit && tsc --noEmit -p tsconfig.node.json",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "check": "npm run typecheck && npm run lint && npm run format:check && npm run test"
   },
   "dependencies": {
+    "@react-three/drei": "^10.7.9",
+    "@react-three/fiber": "^9.8.2",
+    "@xterm/xterm": "^6.0.0",
     "react": "^19.3.1",
     "react-dom": "^19.3.1",
-    "@xterm/xterm": "^5.5.0",
-    "@react-three/fiber": "^9.1.2",
-    "@react-three/drei": "^10.0.0",
-    "three": "^0.175.0",
-    "zustand": "^5.0.0"
+    "three": "^0.187.0",
+    "zustand": "^5.1.0"
   },
   "devDependencies": {
-    "@eslint/js": "^9.27.0",
+    "@eslint/js": "^10.0.1",
     "@testing-library/jest-dom": "^7.0.1",
     "@testing-library/react": "^16.3.3",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
-    "@types/three": "^0.175.0",
-    "@vitejs/plugin-react": "^6.2.1",
-    "eslint": "^9.27.0",
-    "globals": "^16.1.0",
-    "jsdom": "^29.1.1",
-    "typescript": "^7.0.2",
-    "typescript-eslint": "^8.33.0",
-    "vite": "^8.3.5",
-    "vitest": "^5.1.0"
+    "@types/node": "^22",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@types/three": "^0.187.0",
+    "@vitejs/plugin-react": "^6.3.0",
+    "@vitest/coverage-v8": "^5.1.1",
+    "eslint": "^10.15.0",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "globals": "^17.14.0",
+    "jsdom": "^31.0.1",
+    "prettier": "^3",
+    "typescript": "~6.0.3",
+    "typescript-eslint": "^8.73.0",
+    "vite": "^8.3.8",
+    "vitest": "^5.1.1"
   }
 }
