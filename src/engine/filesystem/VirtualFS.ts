@@ -63,7 +63,8 @@ export function createRootFS(): FileSystemNode {
               "auth.log": {
                 type: "file",
                 name: "auth.log",
-                content: "[2026-11-18 03:42:01] sshd: Failed password for root from 192.168.1.100\n[2026-11-18 03:42:05] sshd: Accepted password for user from 10.0.0.1",
+                content:
+                  "[2026-11-18 03:42:01] sshd: Failed password for root from 192.168.1.100\n[2026-11-18 03:42:05] sshd: Accepted password for user from 10.0.0.1",
                 permissions: "-rw-r-----",
               },
             },
@@ -110,10 +111,7 @@ export function normalizePath(currentDir: string, target: string): string {
 }
 
 // Lista los hijos de un directorio (respetando archivos ocultos según nivel)
-export function listDir(
-  node: FileSystemNode,
-  showHidden: boolean,
-): readonly string[] {
+export function listDir(node: FileSystemNode, showHidden: boolean): readonly string[] {
   if (node.type !== "dir") return [];
   return Object.values(node.children)
     .filter((child) => showHidden || !child.hidden)
@@ -153,10 +151,12 @@ function applyAtPath(
 
   if (rest.length === 0) {
     // Estamos en el directorio padre del target
-    const newChildren = { ...node.children };
-    if (change.action === "delete") {
-      delete newChildren[head];
-    } else if (change.node) {
+    // Copia filtrada en vez de `delete`: el borrado tampoco muta el objeto
+    const newChildren =
+      change.action === "delete"
+        ? Object.fromEntries(Object.entries(node.children).filter(([key]) => key !== head))
+        : { ...node.children };
+    if (change.action !== "delete" && change.node) {
       newChildren[head] = change.node;
     }
     return { ...node, children: newChildren };
