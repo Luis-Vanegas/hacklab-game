@@ -1,11 +1,14 @@
 # Agentes y distribución de trabajo
 
 ## Regla de aislamiento (OBLIGATORIA)
+
 Cada agente trabaja SOLO en su zona asignada. No toca archivos de otra zona.
 Si necesita algo de otra zona, lo anota en `TASKS.md` bajo `## 📬 Mensajes entre agentes`.
 
 ## Comunicación
+
 Archivo central: **TASKS.md**
+
 - Cada agente marca `[x]` cuando termina una tarea.
 - Si tiene dudas, escribe una nota debajo de la tarea.
 - Antes de empezar, lee TASKS.md para ver qué han hecho los demás.
@@ -20,6 +23,7 @@ Archivo central: **TASKS.md**
 integra los módulos, hace code review de los otros agentes.
 
 **Zona exclusiva**:
+
 ```
 src/engine/          # Toda la lógica pura del juego
 src/story/           # Narrativa, personajes, diálogos
@@ -36,6 +40,7 @@ package.json         # Solo Claude Code modifica dependencias
 ```
 
 **Responsabilidades**:
+
 - State machines (GameState, ContractState)
 - Filesystem virtual
 - ContractSystem y ReputationSystem
@@ -55,6 +60,7 @@ package.json         # Solo Claude Code modifica dependencias
 Investiga si es necesario antes de implementar.
 
 **Zona exclusiva**:
+
 ```
 src/terminal/commands/   # Un archivo por comando + su test
 src/terminal/CommandParser.ts
@@ -67,6 +73,7 @@ tests/data/              # Tests de validación de datos
 ```
 
 **Responsabilidades**:
+
 - Implementar cada comando de terminal como función pura
 - Diseñar el formato JSON de contratos (con historia, objetivos, recompensas)
 - Crear el catálogo de herramientas y niveles
@@ -75,6 +82,7 @@ tests/data/              # Tests de validación de datos
 - Investigar mecánicas de juegos similares si es necesario
 
 **Reglas para Codex**:
+
 - Cada comando es `(args: string[], ctx: CommandContext) => CommandResult`
 - NO importar nada de `engine/` directamente — usar solo `CommandContext`
 - Un commit por comando con su test
@@ -90,6 +98,7 @@ tests/data/              # Tests de validación de datos
 animaciones. Investiga referencias visuales si es necesario.
 
 **Zona exclusiva**:
+
 ```
 src/ui/                  # Todos los componentes de interfaz
 src/terminal/Terminal.tsx # Solo el componente visual (no el parser)
@@ -101,6 +110,7 @@ README.md                # Con Gemini Flash para redacción
 ```
 
 **Responsabilidades**:
+
 - HUD (reputación, créditos, nivel de trace)
 - Panel de Darknet Board y Status
 - Tienda de herramientas (modal)
@@ -112,6 +122,7 @@ README.md                # Con Gemini Flash para redacción
 - CSS tokens y design system
 
 **Reglas para Antigravity**:
+
 - Componentes presentacionales: reciben props, no acceden al store directamente
 - Para estado, importar solo los hooks de Zustand que Claude Code exponga
 - NO tocar `engine/`, `lib/`, ni `data/`
@@ -123,6 +134,7 @@ README.md                # Con Gemini Flash para redacción
 ## 📝 Modelo para documentación puntual
 
 **Gemini 2.5 Flash** (3.8 Flash o equivalente):
+
 - Generar README.md largo y profesional
 - Documentar APIs internas
 - Generar CONTRIBUTING.md
@@ -144,6 +156,7 @@ README.md                # Con Gemini Flash para redacción
 ```
 
 ## Resolución de conflictos
+
 - Si dos agentes necesitan el mismo archivo → Claude Code decide quién lo toca.
 - Si un agente necesita una interfaz que no existe → la anota en TASKS.md,
   Claude Code la crea, y luego el agente la usa.

@@ -1,17 +1,20 @@
 # HackLab Game — Guía para agentes
 
 ## Qué es
+
 Juego de terminal hacker en el navegador. Enseña ciberseguridad, Python, scripting
 y conceptos de ingeniería de software a través de contratos (misiones) con historia.
 100% client-side, sin servidor. Open source, MIT.
 
 ## Filosofía
+
 - **Interactivo, no teórico.** El jugador aprende haciendo. Teoría solo cuando sube de nivel.
 - **Sin dependencias de IA.** Todo funciona sin modelos. La IA es un módulo opcional.
 - **Código profesional.** Atomicidad, idempotencia, observabilidad, trazabilidad.
   State machines explícitas. TypeScript strict, cero `any`.
 
 ## Comandos
+
 ```powershell
 npm run dev          # Dev server (Vite)
 npm run build        # Build de producción
@@ -21,6 +24,7 @@ npm run typecheck    # tsc --noEmit
 ```
 
 ## Stack
+
 - React 19 + TypeScript strict + Vite
 - xterm.js — terminal real en el navegador
 - Three.js + React Three Fiber — escenas 3D
@@ -28,6 +32,7 @@ npm run typecheck    # tsc --noEmit
 - Vitest + Testing Library — pruebas
 
 ## Estructura
+
 ```
 src/
 ├── engine/              # Lógica pura del juego (sin UI, sin efectos)
@@ -73,6 +78,7 @@ src/
 ```
 
 ## Convenciones
+
 - TypeScript strict, cero `any`.
 - Funciones puras en `engine/` — sin efectos secundarios.
 - Cada comando: un archivo en `terminal/commands/` que exporta
@@ -85,6 +91,7 @@ src/
 - Sin firmas ni atribución de IA.
 
 ## Patrones obligatorios
+
 - **Atomicidad**: acción del jugador se completa o no cambia nada.
 - **Idempotencia**: mismo comando dos veces = mismo resultado, sin corrupción.
 - **Observabilidad**: event bus para toda acción significativa.
@@ -96,13 +103,16 @@ src/
 ## Git workflow
 
 ### Ramas permanentes
+
 - **`main`** — siempre desplegable. Solo recibe merges desde `develop` vía PR
   revisado. Protegida: nadie hace push directo.
 - **`develop`** — rama de integración. Aquí se juntan las features terminadas
   y se prueba que todo funcione junto antes de subir a `main`.
 
 ### Ramas de trabajo (efímeras)
+
 Cada tarea vive en su propia rama, creada desde `develop`:
+
 ```
 feat/<nombre>     # funcionalidad nueva
 fix/<nombre>      # corrección de bug
@@ -112,6 +122,7 @@ chore/<nombre>    # tooling, config, dependencias
 ```
 
 ### Flujo de trabajo
+
 ```
 develop ──┬── feat/terminal-xterm ──→ PR → develop
           ├── feat/commands-ls    ──→ PR → develop
@@ -128,18 +139,21 @@ develop (integrado y probado) ──→ PR → main (release)
 6. **Cuando `develop` está estable**: PR de `develop` → `main` como release.
 
 ### Reglas para agentes
+
 - Cada agente trabaja en su propia rama `feat/<zona>-<tarea>`.
 - Nunca hacer push directo a `main` ni a `develop`.
 - Si hay conflictos: avisar en TASKS.md y esperar instrucciones.
 - Antes de crear una rama: `git pull origin develop` para partir del último estado.
 
 ### Protección contra errores
+
 - Si algo se rompe en `develop`: se revierte el merge con `git revert`.
 - Si algo se rompe en `main`: hotfix desde main (`fix/hotfix-<tema>`), merge
   a `main` Y a `develop`.
 - Tags en `main` para cada release: `v0.1.0`, `v0.2.0`, etc. (semver).
 
 ## Coordinación entre agentes
+
 Leer **AGENTS.md** para roles, modelos y zonas de cada agente.
 Leer **TASKS.md** para el backlog y comunicación entre agentes.
 **Regla de oro**: cada agente trabaja SOLO en su zona. Si necesita algo
