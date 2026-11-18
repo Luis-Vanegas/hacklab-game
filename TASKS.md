@@ -19,11 +19,11 @@
 
 ### K1 — Contratos de integración · rama `feat/engine-game-events` · desbloquea C4, C5, A3, A4 y A5
 
-- [ ] `Contract.channel: "work" | "darknet"` y `Objective.hints?: readonly string[]` (3 niveles: suave, media y solución) en `src/lib/types.ts`
-- [ ] Cola de eventos en el store: `objective_completed`, `contract_completed`, `rank_up`, `trace_alarm` (trace ≥ 75 %). Hook `useGameEvents()` que entrega y consume eventos
-- [ ] `useIntroSeen()` y `useMarkIntroSeen()`, guardados en la partida
-- [ ] `COMMAND_GUIDE` exportado desde `@/store` con los campos de guía de cada comando
-- [ ] Pruebas de todo lo anterior
+- [x] `Contract.channel: "work" | "darknet"` y `Objective.hints?: readonly string[]` (3 niveles: suave, media y solución) en `src/lib/types.ts`
+- [x] Cola de eventos en el store: `objective_completed`, `contract_completed`, `rank_up`, `trace_alarm` (trace ≥ 75 %). Hook `useGameEvents()` que entrega y consume eventos
+- [x] `useIntroSeen()` y `useMarkIntroSeen()`, guardados en la partida
+- [x] `COMMAND_GUIDE` exportado desde `@/store` con los campos de guía de cada comando
+- [x] Pruebas de todo lo anterior
 
 ### K2 — Historia · rama `feat/engine-story-intro`
 
@@ -90,7 +90,6 @@ Datos nuevos: `src/data/machine/workstation.json` (tu equipo: hostname `nodo-ws-
   - `10-dia-1-bienvenida`: `cat bienvenida.txt`, `ipconfig`, `ping 10.20.0.1` y `nslookup intranet.nodoseguro.test`
   - `11-dia-2-logs`: `tail /var/log/auth.log`, `grep -c Failed /var/log/auth.log` y encontrar la IP atacante
   - `12-dia-3-proceso-raro`: `netstat`, `ps` y `kill 4444`
-- [ ] Marcar `00`, `01` y `02` con `"channel": "darknet"`
 - [ ] Balancear la XP para que el jugador llegue a `hacker` (500 XP) combinando trabajo y darknet
 - [ ] Pruebas en `tests/data/` y un recorrido completo de cada contrato nuevo, como `tests/store/tutorialFlow.test.ts`
 
@@ -141,6 +140,12 @@ Datos nuevos: `src/data/machine/workstation.json` (tu equipo: hostname `nodo-ws-
 
 - [2026-11-18] CLAUDE → TODOS: arranca la Fase 2. Pueden empezar ya, en paralelo, **C1, C2, C3, A1 y A2**: no dependen de nadie. Las demás tareas esperan a K1, y aviso aquí cuando esté en `develop`.
 - [2026-11-18] CLAUDE → CODEX: sigue pendiente el balance de XP de `02-data-heist`; quedó dentro de C5.
+- [2026-11-18] CLAUDE → TODOS: **K1 listo** (rama `feat/engine-game-events`). Desbloquea C4, C5, A3, A4 y A5 cuando llegue a `develop`:
+  - `Contract.channel` (`"work"` o `"darknet"`) es obligatorio. `00`, `01` y `02` ya están marcados `darknet`.
+  - `Objective.hints` es opcional: un arreglo con las 3 pistas.
+  - `useGameEvents()` devuelve `{ events, dismiss }`. Cada aviso es un `QueuedGameAlert` con `id` y `type`: `objective_completed` (`objectiveId`, `description`), `contract_completed` (`contractId`, `title`, `credits`, `xp`), `rank_up` (`from`, `to`) o `trace_alarm` (`level`). Al cerrarlo, llamar `dismiss(id)`.
+  - `useIntroSeen()` y `useMarkIntroSeen()` vienen de `@/store`.
+  - `COMMAND_GUIDE` y el tipo `CommandManual` se exportan desde `@/store`. Lo que Codex agregue a `CommandManual` en C4 aparece solo en `COMMAND_GUIDE`.
 
 ---
 

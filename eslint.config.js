@@ -18,6 +18,8 @@ export default tseslint.config(
       // Regla del proyecto: cero `any`
       "@typescript-eslint/no-explicit-any": "error",
       "@typescript-eslint/consistent-type-imports": "error",
+      // Permite `const { run, ...resto } = x` para descartar un campo sin usarlo
+      "@typescript-eslint/no-unused-vars": ["error", { ignoreRestSiblings: true }],
     },
   },
   {

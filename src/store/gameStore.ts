@@ -8,7 +8,12 @@ import {
   canAcceptContract,
   submitContract as submitInEngine,
 } from "@/engine/contracts";
-import { applyCommandResult, createSession, type GameSession } from "@/engine/session";
+import {
+  applyCommandResult,
+  createSession,
+  diffGameEvents,
+  type GameSession,
+} from "@/engine/session";
 import { emit } from "@/lib/events";
 import { load, save } from "@/lib/persistence";
 import { getAllTiers } from "@/engine/reputation";
@@ -19,10 +24,13 @@ import type {
   GameDifficulty,
   GamePhase,
   GameState,
+  QueuedGameAlert,
   ReputationTier,
   ToolDefinition,
 } from "@/lib/types";
 import { executeCommand, parseCommand } from "@/terminal/CommandParser";
+import { commands } from "@/terminal/commands";
+import type { CommandManual } from "@/terminal/commands/shared";
 
 // Capa de integración: une parser, comandos y engine, y es lo único con efectos
 // (persistencia y eventos). La UI solo habla con este store a través de los hooks.
@@ -31,8 +39,13 @@ import { executeCommand, parseCommand } from "@/terminal/CommandParser";
 export const CONTRACTS: readonly Contract[] = [tutorial, firstHack, dataHeist] as Contract[];
 export const TOOLS: readonly ToolDefinition[] = shopData;
 
+// Manual de cada comando para la guía visual, sin la función que lo ejecuta
+export const COMMAND_GUIDE: readonly CommandManual[] = commands.map(({ run, ...manual }) => manual);
+
 // ponytail: tope fijo para que localStorage no crezca sin límite
 const MAX_HISTORY = 500;
+// ponytail: si la UI no descarta avisos, solo se guardan los últimos
+const MAX_EVENTS = 20;
 
 // Deben declararse antes de crear el store: create() llama a loadSession() al importar
 // el módulo, y con una partida guardada isGameState las usa en ese mismo momento.
@@ -41,22 +54,32 @@ const DIFFICULTIES: readonly GameDifficulty[] = ["beginner", "normal", "elite", 
 const TIERS: readonly ReputationTier[] = getAllTiers().map((t) => t.tier);
 
 export interface GameStore extends GameSession {
+  // Avisos pendientes para la UI. No se guardan: son de la sesión en curso.
+  readonly events: readonly QueuedGameAlert[];
   runCommand(input: string): CommandResult;
   acceptContract(contractId: string): boolean;
   submitContract(): void;
   newGame(): void;
+  dismissEvent(id: number): void;
+  markIntroSeen(): void;
 }
 
 export const useGameStore = create<GameStore>()((set, get) => {
   // Guarda y publica en un solo lugar: toda transición pasa por aquí
+  let nextEventId = 1;
   const commit = (session: GameSession, event: string, payload: Record<string, unknown>) => {
-    set(session);
+    const fresh = diffGameEvents(get().game, session.game).map((e) => ({
+      ...e,
+      id: nextEventId++,
+    }));
+    set({ ...session, events: [...get().events, ...fresh].slice(-MAX_EVENTS) });
     save({ gameState: session.game, commandHistory: session.history });
     emit(event, payload, "gameStore");
   };
 
   return {
     ...loadSession(),
+    events: [],
 
     runCommand(input) {
       const parsed = parseCommand(input);
@@ -96,6 +119,19 @@ export const useGameStore = create<GameStore>()((set, get) => {
 
     newGame() {
       commit(createSession(), "game.new", {});
+      // Los avisos de la partida anterior ya no aplican
+      set({ events: [] });
+    },
+
+    dismissEvent(id) {
+      set({ events: get().events.filter((e) => e.id !== id) });
+    },
+
+    markIntroSeen() {
+      const session = currentSession(get());
+      if (session.game.storyFlags.introSeen) return;
+      const game = { ...session.game, storyFlags: { ...session.game.storyFlags, introSeen: true } };
+      commit({ ...session, game }, "story.intro.seen", {});
     },
   };
 });

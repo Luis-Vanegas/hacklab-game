@@ -1,5 +1,6 @@
 {
   "id": "02-data-heist",
+  "channel": "darknet",
   "title": "La bitácora del apagón",
   "description": "En un simulacro de continuidad, recupera la bitácora sin modificar el servidor de entrenamiento.",
   "difficulty": "normal",

@@ -17,3 +17,13 @@ export const useRunCommand = () => useGameStore((s) => s.runCommand);
 export const useAcceptContract = () => useGameStore((s) => s.acceptContract);
 export const useSubmitContract = () => useGameStore((s) => s.submitContract);
 export const useNewGame = () => useGameStore((s) => s.newGame);
+
+export const useIntroSeen = () => useGameStore((s) => s.game.storyFlags.introSeen === true);
+export const useMarkIntroSeen = () => useGameStore((s) => s.markIntroSeen);
+
+// Avisos tipo videojuego. La UI muestra `events` y llama `dismiss(id)` al cerrarlos.
+export function useGameEvents() {
+  const events = useGameStore((s) => s.events);
+  const dismiss = useGameStore((s) => s.dismissEvent);
+  return { events, dismiss };
+}
