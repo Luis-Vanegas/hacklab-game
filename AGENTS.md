@@ -5,6 +5,43 @@
 Cada agente trabaja SOLO en su zona asignada. No toca archivos de otra zona.
 Si necesita algo de otra zona, lo anota en `TASKS.md` bajo `## 📬 Mensajes entre agentes`.
 
+## Ramas y carpetas (OBLIGATORIO)
+
+Cada agente trabaja en **su propia carpeta (git worktree)** y en **su propia rama**.
+Nunca dos agentes en la misma carpeta: se pisan los archivos y los commits se mezclan.
+
+| Agente      | Carpeta                                     | Ramas                            |
+| ----------- | ------------------------------------------- | -------------------------------- |
+| Claude Code | `C:\Users\LENOVO\Music\hacklab-game-engine` | `feat/engine-*`, `docs/*`        |
+| Codex       | `C:\Users\LENOVO\Music\hacklab-game-cmd`    | `feat/terminal-*`, `feat/data-*` |
+| Antigravity | `C:\Users\LENOVO\Music\hacklab-game-ui`     | `feat/ui-*`, `feat/scenes-*`     |
+
+La carpeta principal `C:\Users\LENOVO\Music\hacklab-game` es solo de Luis. Ningún agente
+escribe ahí.
+
+### Al empezar cada tarea
+
+Desde tu carpeta, con el trabajo anterior ya commiteado:
+
+```powershell
+git fetch origin
+git switch -c feat/<zona>-<tarea> origin/develop
+npm ci
+```
+
+### Al terminar cada tarea
+
+1. `npm run check` en verde (typecheck, ESLint, Prettier y pruebas).
+2. Un commit por cambio lógico, con su prueba, en Conventional Commits.
+3. Push de tu rama y PR hacia `develop`. Nunca hacia `main`.
+
+### Si tu entorno no puede escribir en `.git`
+
+Algunos sandboxes (por ejemplo, Codex en modo por defecto) no pueden crear ramas ni commits.
+En ese caso: trabaja igual en tu carpeta, corre `npm run check`, y deja en `TASKS.md` el
+mensaje `[FECHA] AGENTE → LUIS: listo para commit en <carpeta>, rama <nombre>`.
+Luis o Claude Code hacen el commit y el PR.
+
 ## Comunicación
 
 Archivo central: **TASKS.md**
