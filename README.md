@@ -13,6 +13,8 @@ rompes sistemas simulados mientras aprendes seguridad, Python e ingeniería de s
 ![Vite](https://img.shields.io/badge/Vite-8-646cff?style=flat-square&logo=vite&logoColor=white)
 ![Status](https://img.shields.io/badge/estado-jugable-00ff9c?style=flat-square)
 
+### [▶ Jugar ahora en hacklab-game.vercel.app](https://hacklab-game.vercel.app)
+
 </div>
 
 ![Recorrido del juego: título, oficina y terminal](docs/screenshots/walkthrough.gif)
@@ -24,6 +26,9 @@ rompes sistemas simulados mientras aprendes seguridad, Python e ingeniería de s
 ---
 
 ## Inicio rápido
+
+Para jugar no necesitas instalar nada: abre [hacklab-game.vercel.app](https://hacklab-game.vercel.app).
+Para correrlo en tu equipo o contribuir:
 
 Requisitos: **Node.js 26 LTS** (ver `.nvmrc`). También funciona con Node 24.15+.
 
