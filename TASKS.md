@@ -38,10 +38,10 @@ Empieza cuando K4 esté en `develop` (necesita `outputIncludes`).
 
 Puedes maquetar ya; conecta los hooks cuando K4 esté en `develop`.
 
-- [ ] Ventana «Editor» en el escritorio: abre el archivo de `useEditorFile()`, con números de línea, tabulación de 4 espacios y `Ctrl+S` para guardar con `useSaveFile()`
-- [ ] Sin librerías nuevas: un `<textarea>` con estilo de terminal basta
-- [ ] Indicador «Cargando el intérprete de Python…» en la barra de tareas mientras `usePythonStatus()` sea `"loading"`
-- [ ] Accesible con teclado y legible a 375 px
+- [x] Ventana «Editor» en el escritorio: abre el archivo de `useEditorFile()`, con números de línea, tabulación de 4 espacios y `Ctrl+S` para guardar con `useSaveFile()`
+- [x] Sin librerías nuevas: un `<textarea>` con estilo de terminal basta
+- [x] Indicador «Cargando el intérprete de Python…» en la barra de tareas mientras `usePythonStatus()` sea `"loading"`
+- [x] Accesible con teclado y legible a 375 px
 
 ---
 

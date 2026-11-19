@@ -36,6 +36,7 @@ export {
   type DesktopWindowId,
   type SidePanelTab,
 } from "./desktop/Desktop";
+export { CodeEditor, type CodeEditorProps, type EditorFile } from "./desktop/CodeEditor";
 export {
   Inbox,
   countUnreadContracts,
