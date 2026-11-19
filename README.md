@@ -41,6 +41,14 @@ Abre `http://localhost:5173`. No necesitas cuentas, servidores ni API keys.
 | 100% en el navegador   | Sin servidor. El progreso se guarda en `localStorage` con esquema versionado |
 | IA opcional            | Pistas con Ollama u otros proveedores. El juego funciona completo sin IA     |
 
+## Capturas
+
+![Recorrido completo de HackLab Game desde la pantalla de título hasta el escritorio y la terminal](public/screenshots/walkthrough.gif)
+
+| Escritorio (1440 px)                                                                                                                   | Móvil (375 px)                                                                                               |
+| -------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------ |
+| ![Escritorio de HackLab OS a 1440 px con bandeja de contratos, terminal activa y panel de misión](public/screenshots/desktop-1440.png) | ![Vista móvil de HackLab OS a 375 px con pestañas de ventanas y terminal](public/screenshots/mobile-375.png) |
+
 ## Scripts
 
 | Comando                 | Qué hace                                               |

@@ -4,10 +4,11 @@
 // muestra el estado bloqueado ("Se desbloquea en rango X") y ofrece el botón "Probar"
 // que escribe el ejemplo en la terminal sin ejecutarlo.
 
-import { useState } from "react";
+import { useId, useState } from "react";
 import type { ReputationTier } from "@/lib/types";
 import { COMMAND_GUIDE, usePlayer, type CommandManual } from "@/store";
 import { injectTerminalDraft } from "@/terminal/Terminal";
+import { handleTabListKeyDown } from "../a11y/keyboardTabs";
 
 export type CommandGuideCategory = CommandManual["category"];
 export type CommandGuideItem = CommandManual;
@@ -58,9 +59,11 @@ export function CommandGuide({
   const storePlayer = usePlayer();
   const playerReputation = propReputation ?? storePlayer.reputation;
   const playerRank = TIER_RANK[playerReputation];
+  const searchId = useId();
 
   const [query, setQuery] = useState("");
   const [activeCategory, setActiveCategory] = useState<"all" | CommandGuideCategory>("all");
+  const categoryTabs: readonly ("all" | CommandGuideCategory)[] = ["all", ...CATEGORY_ORDER];
 
   const normalizedQuery = query.trim().toLowerCase();
 
@@ -107,22 +110,16 @@ export function CommandGuide({
           backgroundColor: "rgba(10, 10, 15, 0.45)",
         }}
       >
+        <label htmlFor={searchId} className="visually-hidden">
+          Buscar comando por nombre o descripción
+        </label>
         <input
+          id={searchId}
           type="search"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           placeholder="Buscar por nombre o descripción..."
-          aria-label="Buscar comando por nombre o descripción"
-          style={{
-            inlineSize: "100%",
-            padding: "8px 12px",
-            borderRadius: "var(--radius-sm)",
-            border: "1px solid var(--color-border-strong)",
-            backgroundColor: "var(--color-surface-elevated)",
-            color: "var(--color-text)",
-            fontFamily: "var(--font-mono)",
-            fontSize: "0.84rem",
-          }}
+          className="hl-search-input"
           data-testid="command-guide-search"
         />
 
@@ -134,10 +131,14 @@ export function CommandGuide({
           <button
             type="button"
             role="tab"
+            tabIndex={activeCategory === "all" ? 0 : -1}
             aria-selected={activeCategory === "all"}
             className={activeCategory === "all" ? "hl-btn hl-btn--primary" : "hl-btn"}
             style={{ fontSize: "0.74rem", padding: "3px 8px" }}
             onClick={() => setActiveCategory("all")}
+            onKeyDown={(e) =>
+              handleTabListKeyDown(e, categoryTabs, activeCategory, setActiveCategory)
+            }
           >
             Todas
           </button>
@@ -146,10 +147,14 @@ export function CommandGuide({
               key={cat}
               type="button"
               role="tab"
+              tabIndex={activeCategory === cat ? 0 : -1}
               aria-selected={activeCategory === cat}
               className={activeCategory === cat ? "hl-btn hl-btn--primary" : "hl-btn"}
               style={{ fontSize: "0.74rem", padding: "3px 8px" }}
               onClick={() => setActiveCategory(cat)}
+              onKeyDown={(e) =>
+                handleTabListKeyDown(e, categoryTabs, activeCategory, setActiveCategory)
+              }
             >
               {cat.charAt(0).toUpperCase() + cat.slice(1)}
             </button>
@@ -204,7 +209,7 @@ export function CommandGuide({
                         display: "flex",
                         flexDirection: "column",
                         gap: "var(--space-xs)",
-                        opacity: isLocked ? 0.68 : 1,
+                        opacity: isLocked ? 0.85 : 1,
                       }}
                       data-testid={`guide-card-${cmd.name}`}
                     >
@@ -261,6 +266,7 @@ export function CommandGuide({
                             type="button"
                             className="hl-btn hl-btn--primary"
                             style={{ fontSize: "0.76rem", padding: "3px 10px" }}
+                            aria-label={`Probar comando ${cmd.name}`}
                             onClick={() => handleTry(cmd.example)}
                             data-testid={`guide-try-${cmd.name}`}
                           >

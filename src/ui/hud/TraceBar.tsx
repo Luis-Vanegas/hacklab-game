@@ -26,7 +26,9 @@ export function TraceBar({ traceLevel }: TraceBarProps) {
         display: "flex",
         alignItems: "center",
         gap: "var(--space-sm)",
-        minInlineSize: "180px",
+        minInlineSize: "148px",
+        flex: "1 1 148px",
+        maxInlineSize: "240px",
       }}
       data-testid="trace-bar"
     >
@@ -35,7 +37,7 @@ export function TraceBar({ traceLevel }: TraceBarProps) {
         className="hl-tabular"
         style={{
           fontSize: "0.78rem",
-          color: clamped >= 75 ? "var(--color-danger)" : "var(--color-text-secondary)",
+          color: clamped >= 75 ? "var(--color-danger-text)" : "var(--color-text-secondary)",
           whiteSpace: "nowrap",
         }}
       >

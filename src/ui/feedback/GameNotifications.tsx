@@ -97,6 +97,43 @@ export function GameNotifications({
     return null;
   }
 
+  const criticalAlerts = events.filter((alert) => alert.type === "trace_alarm");
+  const standardAlerts = events.filter((alert) => alert.type !== "trace_alarm");
+
+  const renderAlertCard = (alert: QueuedGameAlert) => {
+    const meta = renderAlertContent(alert);
+    return (
+      <div key={alert.id} className={meta.cardClass} data-testid={`game-alert-${alert.type}`}>
+        <div style={{ display: "flex", flexDirection: "column", gap: "4px", minInlineSize: 0 }}>
+          <span className={meta.badgeClass}>{meta.badge}</span>
+          <strong
+            style={{
+              fontFamily: "var(--font-mono)",
+              fontSize: "0.88rem",
+              color: "var(--color-text)",
+            }}
+          >
+            {meta.title}
+          </strong>
+          <span style={{ fontSize: "0.8rem", color: "var(--color-text-secondary)" }}>
+            {meta.subtitle}
+          </span>
+        </div>
+
+        <button
+          type="button"
+          className="hl-btn"
+          style={{ padding: "4px 8px", fontSize: "0.75rem" }}
+          aria-label={`Cerrar aviso: ${meta.title}`}
+          onClick={() => dismiss(alert.id)}
+          data-testid={`dismiss-alert-${alert.id}`}
+        >
+          Cerrar
+        </button>
+      </div>
+    );
+  };
+
   return (
     <>
       {hasHighTrace ? (
@@ -106,48 +143,30 @@ export function GameNotifications({
       {events.length > 0 ? (
         <aside
           className="hl-alert-stack"
-          role="status"
-          aria-live="polite"
-          aria-label="Avisos de progreso del juego"
+          aria-label="Notificaciones del juego"
           data-testid="game-notifications"
         >
-          {events.map((alert) => {
-            const meta = renderAlertContent(alert);
-            return (
-              <div
-                key={alert.id}
-                className={meta.cardClass}
-                data-testid={`game-alert-${alert.type}`}
-              >
-                <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
-                  <span className={meta.badgeClass}>{meta.badge}</span>
-                  <strong
-                    style={{
-                      fontFamily: "var(--font-mono)",
-                      fontSize: "0.88rem",
-                      color: "var(--color-text)",
-                    }}
-                  >
-                    {meta.title}
-                  </strong>
-                  <span style={{ fontSize: "0.8rem", color: "var(--color-text-secondary)" }}>
-                    {meta.subtitle}
-                  </span>
-                </div>
+          {criticalAlerts.length > 0 ? (
+            <div
+              role="alert"
+              aria-live="assertive"
+              aria-label="Alertas críticas de rastreo"
+              style={{ display: "flex", flexDirection: "column", gap: "var(--space-sm)" }}
+            >
+              {criticalAlerts.map(renderAlertCard)}
+            </div>
+          ) : null}
 
-                <button
-                  type="button"
-                  className="hl-btn"
-                  style={{ padding: "2px 8px", fontSize: "0.75rem" }}
-                  aria-label={`Cerrar aviso: ${meta.title}`}
-                  onClick={() => dismiss(alert.id)}
-                  data-testid={`dismiss-alert-${alert.id}`}
-                >
-                  Cerrar
-                </button>
-              </div>
-            );
-          })}
+          {standardAlerts.length > 0 ? (
+            <div
+              role="status"
+              aria-live="polite"
+              aria-label="Avisos de progreso del juego"
+              style={{ display: "flex", flexDirection: "column", gap: "var(--space-sm)" }}
+            >
+              {standardAlerts.map(renderAlertCard)}
+            </div>
+          ) : null}
         </aside>
       ) : null}
     </>

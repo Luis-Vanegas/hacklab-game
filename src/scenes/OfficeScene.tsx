@@ -496,6 +496,9 @@ export function OfficeScene({
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Enter") {
+        if (event.target instanceof HTMLElement && event.target.closest("button")) {
+          return;
+        }
         event.preventDefault();
         startEnterComputer();
       }
@@ -532,6 +535,7 @@ export function OfficeScene({
       data-mode={night ? "night" : "day"}
       data-zooming={zooming ? "true" : "false"}
     >
+      <h1 className="visually-hidden">Oficina de Nodo Seguro</h1>
       <div style={{ position: "absolute", inset: 0 }}>
         {webglReady ? (
           <Canvas

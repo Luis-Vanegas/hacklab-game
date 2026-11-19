@@ -4,7 +4,12 @@
 
 import { useState } from "react";
 import type { Contract, ContractChannel, ReputationTier } from "@/lib/types";
+import { handleTabListKeyDown } from "../a11y/keyboardTabs";
 import { ReputationBadge } from "../hud/ReputationBadge";
+
+type ChannelTab = "all" | ContractChannel;
+
+const CHANNEL_TABS: readonly ChannelTab[] = ["all", "work", "darknet"];
 
 export interface DarknetBoardProps {
   readonly contracts: readonly Contract[];
@@ -62,10 +67,14 @@ export function DarknetBoard({
         <button
           type="button"
           role="tab"
+          tabIndex={selectedChannel === "all" ? 0 : -1}
           aria-selected={selectedChannel === "all"}
           className={selectedChannel === "all" ? "hl-btn hl-btn--primary" : "hl-btn"}
           style={{ fontSize: "0.76rem", padding: "4px 8px" }}
           onClick={() => setSelectedChannel("all")}
+          onKeyDown={(e) =>
+            handleTabListKeyDown(e, CHANNEL_TABS, selectedChannel, setSelectedChannel)
+          }
           data-testid="channel-tab-all"
         >
           Todos ({contracts.length})
@@ -74,10 +83,14 @@ export function DarknetBoard({
         <button
           type="button"
           role="tab"
+          tabIndex={selectedChannel === "work" ? 0 : -1}
           aria-selected={selectedChannel === "work"}
           className={selectedChannel === "work" ? "hl-btn hl-btn--primary" : "hl-btn"}
           style={{ fontSize: "0.76rem", padding: "4px 8px" }}
           onClick={() => setSelectedChannel("work")}
+          onKeyDown={(e) =>
+            handleTabListKeyDown(e, CHANNEL_TABS, selectedChannel, setSelectedChannel)
+          }
           data-testid="channel-tab-work"
         >
           Trabajo · Nodo Seguro ({workCount})
@@ -86,10 +99,14 @@ export function DarknetBoard({
         <button
           type="button"
           role="tab"
+          tabIndex={selectedChannel === "darknet" ? 0 : -1}
           aria-selected={selectedChannel === "darknet"}
           className={selectedChannel === "darknet" ? "hl-btn hl-btn--primary" : "hl-btn"}
           style={{ fontSize: "0.76rem", padding: "4px 8px" }}
           onClick={() => setSelectedChannel("darknet")}
+          onKeyDown={(e) =>
+            handleTabListKeyDown(e, CHANNEL_TABS, selectedChannel, setSelectedChannel)
+          }
           data-testid="channel-tab-darknet"
         >
           Darknet · CIPHER ({darknetCount})
@@ -123,7 +140,7 @@ export function DarknetBoard({
                   display: "flex",
                   flexDirection: "column",
                   gap: "var(--space-sm)",
-                  opacity: isLocked ? 0.65 : 1,
+                  opacity: isLocked ? 0.85 : 1,
                 }}
                 data-testid={`contract-card-${contract.id}`}
                 data-channel={contract.channel}
@@ -195,6 +212,13 @@ export function DarknetBoard({
                     type="button"
                     className={isActive ? "hl-btn" : "hl-btn hl-btn--primary"}
                     disabled={isLocked || isActive}
+                    aria-label={
+                      isActive
+                        ? `En curso: ${contract.title}`
+                        : isLocked
+                          ? `Rango insuficiente para ${contract.title}`
+                          : `Aceptar contrato ${contract.title}`
+                    }
                     onClick={() => onSelectContract(contract.id)}
                   >
                     {isActive ? "En curso" : isLocked ? "Rango insuficiente" : "Aceptar contrato"}

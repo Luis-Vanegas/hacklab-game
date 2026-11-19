@@ -168,6 +168,7 @@ export function StoryDialog({ lines, onDismiss }: StoryDialogProps) {
       aria-label={`Transmisión entrante de ${displayName}`}
       style={{
         display: "flex",
+        flexWrap: "wrap",
         alignItems: "center",
         justifyContent: "space-between",
         gap: "var(--space-md)",
@@ -181,7 +182,15 @@ export function StoryDialog({ lines, onDismiss }: StoryDialogProps) {
       }}
       data-testid="story-dialog"
     >
-      <div style={{ display: "flex", alignItems: "center", gap: "var(--space-md)" }}>
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: "var(--space-md)",
+          flex: "1 1 200px",
+          minInlineSize: 0,
+        }}
+      >
         <PixelPortrait character={currentLine.character} />
 
         <div style={{ display: "flex", flexDirection: "column", gap: "2px" }}>
