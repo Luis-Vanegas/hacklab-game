@@ -10,7 +10,7 @@
   --color-surface-hover: #1d1d2c;
   --color-panel-bg: rgba(18, 18, 26, 0.78);
   --color-panel-bg-fallback: rgba(18, 18, 26, 0.9);
-  --color-terminal-panel-bg: rgba(13, 13, 20, 0.78);
+  --color-terminal-panel-bg: rgba(13, 13, 20, 0.45);
   --color-border: #1a1a2e;
   --color-border-strong: #282846;
   --color-border-control: #5b6488;
@@ -311,8 +311,18 @@ body {
     backdrop-filter: blur(10px);
   }
 
+  /* La escena 3D es oscura y de líneas finas: con más opacidad o más desenfoque
+     desaparece detrás de la terminal. La sombra del texto mantiene la lectura. */
   .hl-panel--terminal {
     background-color: var(--color-terminal-panel-bg);
+    -webkit-backdrop-filter: blur(2px);
+    backdrop-filter: blur(2px);
+  }
+
+  .hl-panel--terminal .xterm-rows {
+    text-shadow:
+      0 0 3px #000,
+      0 0 1px #000;
   }
 }
 
