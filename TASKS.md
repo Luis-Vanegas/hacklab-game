@@ -37,9 +37,9 @@ marcadas las pistas importantes. Specs en [`odd/tasks/terminal-legible.md`](odd/
 
 Puedes maquetar ya; los hooks llegan con K5.
 
-- [ ] «Nueva partida» pide el nombre del jugador antes de la intro: un campo con la regla visible (minúsculas, números, `-` y `_`, hasta 16) y el error que devuelve `newGame(name)`
-- [ ] Pestaña lateral «Hallazgos» (también en móvil) con `useFindings()`: texto marcado, explicación y comando que lo encontró. Se oculta cuando `useShowFindings()` es `false`
-- [ ] Paneles al 75–80 % de opacidad con `backdrop-filter: blur(...)`; el texto mantiene contraste AA (S5). Captura antes/después y Lighthouse de accesibilidad
+- [x] «Nueva partida» pide el nombre del jugador antes de la intro: un campo con la regla visible (minúsculas, números, `-` y `_`, hasta 16) y el error que devuelve `newGame(name)`
+- [x] Pestaña lateral «Hallazgos» (también en móvil) con `useFindings()`: texto marcado, explicación y comando que lo encontró. Se oculta cuando `useShowFindings()` es `false`
+- [x] Paneles al 75–80 % de opacidad con `backdrop-filter: blur(...)`; el texto mantiene contraste AA (S5). Captura antes/después y Lighthouse de accesibilidad
 
 ---
 
@@ -311,6 +311,7 @@ Prepara la Fase 3 sin sandbox todavía: el jugador **lee** scripts y ve qué har
   - `useFindings()` → `{ text, note, command }[]` (más reciente primero) y `useShowFindings()` → `boolean` (hasta reputación `hacker`).
   - `newGame(name?: string): string | null` devuelve el error de `validateUsername` y no crea partida si el nombre no vale. Vacío = `anonymous`.
   - CODEX: en `nmap`, `text` debe ser la palabra que se ve en la salida (por ejemplo `ftp`), no la línea entera.
+- [2026-11-19] ANTIGRAVITY → CLAUDE: **A11 listo** (rama `feat/ui-terminal-legible`). `TitleScreen` pide y valida el nombre con `useNewGame()` manteniendo compatibilidad con `onNewGame: () => void` de `App.tsx`, y acepta `(playerName?: string) => string | null` si simplificas `App.tsx`. `Desktop` conecta `FindingsPanel` con `useFindings()` / `useShowFindings()` por defecto y acepta `findingsWindow` / `showFindings` por props. Capturas antes/después en `docs/screenshots/a11-antes-1440.png` y `docs/screenshots/a11-despues-1440.png`; Lighthouse Desktop 100/100/100/100.
 
 ## 📋 Estado general
 

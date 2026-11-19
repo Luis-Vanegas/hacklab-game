@@ -106,13 +106,17 @@ export function Terminal({
     let term: XTerm | null = null;
     try {
       term = new XTerm({
+        allowTransparency: true,
         cursorBlink: true,
         cursorStyle: "block",
         convertEol: true,
         fontFamily: '"Share Tech Mono", "Fira Code", "Consolas", monospace',
         fontSize: 14,
         lineHeight: 1.35,
-        theme: getTerminalTheme(promptStateRef.current.difficulty),
+        theme: {
+          ...getTerminalTheme(promptStateRef.current.difficulty),
+          background: "rgba(0, 0, 0, 0)",
+        },
       });
 
       // FitAddon ajusta columnas y filas al tamaño real del panel
@@ -331,14 +335,17 @@ export function Terminal({
   // Actualiza el tema en caliente cuando cambia la dificultad
   useEffect(() => {
     if (termRef.current) {
-      termRef.current.options.theme = getTerminalTheme(difficulty);
+      termRef.current.options.theme = {
+        ...getTerminalTheme(difficulty),
+        background: "rgba(0, 0, 0, 0)",
+      };
     }
   }, [difficulty]);
 
   return (
     <section
       ref={panelRef}
-      className="hl-panel"
+      className="hl-panel hl-panel--terminal"
       aria-label="Consola de terminal"
       style={{ flex: "1 1 auto", minBlockSize: "260px", position: "relative" }}
       data-testid="terminal-panel"
@@ -355,7 +362,7 @@ export function Terminal({
         style={{
           flex: "1 1 auto",
           padding: "var(--space-sm)",
-          backgroundColor: "var(--color-terminal-bg)",
+          backgroundColor: "transparent",
           minBlockSize: "200px",
           overflow: "clip",
         }}
