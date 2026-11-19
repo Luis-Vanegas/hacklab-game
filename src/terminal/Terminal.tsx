@@ -37,9 +37,16 @@ const OUTPUT_COLOR: Record<NonNullable<CommandResult["outputType"]>, string> = {
   hint: "\x1b[90m",
 };
 
+const DIFFICULTY_LABELS: Record<GameDifficulty, string> = {
+  beginner: "PRINCIPIANTE",
+  normal: "NORMAL",
+  elite: "ÉLITE",
+  anonymous: "ANÓNIMO",
+};
+
 const DEFAULT_WELCOME: readonly string[] = [
   "HACKLAB OS v2.6 // ENTORNO TÁCTICO DE TERMINAL",
-  "Escribe 'help' para ver los comandos o elige un contrato en el Darknet Board.",
+  "Escribe 'help' para ver los comandos o elige un contrato en el tablero.",
 ];
 
 export function formatPrompt(username: string, host: string, currentDir: string): string {
@@ -272,7 +279,7 @@ export function Terminal({
   return (
     <section
       className="hl-panel"
-      aria-label="Terminal Console"
+      aria-label="Consola de terminal"
       style={{ flex: "1 1 auto", minBlockSize: "340px" }}
       data-testid="terminal-panel"
       data-prompt={`${username}@${host}:${currentDir}$`}
@@ -281,7 +288,7 @@ export function Terminal({
         <h2 className="hl-panel__title">
           TERMINAL // {username}@{host}:{currentDir}
         </h2>
-        <span className="hl-badge hl-tabular">{difficulty.toUpperCase()}</span>
+        <span className="hl-badge hl-tabular">{DIFFICULTY_LABELS[difficulty]}</span>
       </div>
       <div
         ref={containerRef}

@@ -2,6 +2,8 @@
    Mantiene una paleta de consola táctica con superficies legibles,
    números tabulares y primitivas modernas (<progress>, <dialog>). */
 
+@import url("https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap");
+
 :root {
   /* Colores base */
   --color-bg: #0a0a0f;
@@ -39,6 +41,7 @@
   --color-text-muted: #767f94;
 
   /* Fuentes */
+  --font-pixel: "Press Start 2P", "VT323", "Share Tech Mono", monospace;
   --font-mono: "Share Tech Mono", "Fira Code", "Consolas", monospace;
   --font-ui: "Inter", "Segoe UI", system-ui, sans-serif;
 
@@ -354,4 +357,84 @@ body {
   border-color: rgba(255, 62, 62, 0.45);
   background-color: var(--color-danger-dim);
   color: #ff8080;
+}
+
+/* --- Pantalla de título e Intro narrativa --- */
+.hl-title-screen {
+  min-block-size: 100dvh;
+  inline-size: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-lg);
+  background:
+    radial-gradient(circle at 50% 25%, rgba(0, 255, 65, 0.12), transparent 55%),
+    radial-gradient(circle at 80% 80%, rgba(0, 191, 255, 0.1), transparent 45%), var(--color-bg);
+  text-align: center;
+}
+
+.hl-title-card {
+  max-inline-size: min(560px, 100%);
+  inline-size: 100%;
+  padding: var(--space-xl) var(--space-lg);
+  background-color: rgba(18, 18, 26, 0.94);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-dialog);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-lg);
+}
+
+.hl-pixel-logo {
+  margin: 0;
+  font-family: var(--font-pixel);
+  font-size: clamp(1.75rem, 6dvw, 3rem);
+  line-height: 1.25;
+  letter-spacing: 0.08em;
+  color: var(--color-primary);
+  text-shadow: 0 4px 18px rgba(0, 255, 65, 0.32);
+}
+
+.hl-intro-screen {
+  min-block-size: 100dvh;
+  inline-size: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-md);
+  background-color: var(--color-bg);
+  cursor: pointer;
+}
+
+.hl-intro-card {
+  max-inline-size: min(680px, 100%);
+  inline-size: 100%;
+  padding: var(--space-lg);
+  background-color: rgba(18, 18, 26, 0.96);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-dialog);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+/* Canvas pixelado para escenas 3D low-poly */
+.hl-pixel-canvas canvas {
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }

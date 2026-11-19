@@ -1,4 +1,4 @@
-// Modal de tienda de herramientas (Tool Shop).
+// Modal de tienda de herramientas (Tienda).
 // Usa <dialog> nativo con showModal() para gestión de foco, cierre con Esc y top-layer sin hacks.
 
 import { useEffect, useId, useRef } from "react";
@@ -57,14 +57,14 @@ export function ToolShop({
     >
       <div className="hl-panel__header">
         <h2 id={titleId} className="hl-panel__title">
-          BLACK MARKET // TOOL SHOP
+          MERCADO // TIENDA DE HERRAMIENTAS
         </h2>
         <div style={{ display: "flex", alignItems: "center", gap: "var(--space-sm)" }}>
           <span className="hl-badge hl-tabular" style={{ color: "var(--color-credits)" }}>
-            BALANCE: {playerCredits} CR
+            SALDO: {playerCredits} CR
           </span>
           <button type="button" className="hl-btn" onClick={onClose}>
-            Close
+            Cerrar
           </button>
         </div>
       </div>
@@ -72,7 +72,7 @@ export function ToolShop({
       <div className="hl-panel__body">
         {tools.length === 0 ? (
           <p style={{ color: "var(--color-text-muted)", margin: 0 }}>
-            No tools available in the current market catalog.
+            No hay herramientas disponibles en el catálogo actual.
           </p>
         ) : (
           <div
@@ -148,7 +148,7 @@ export function ToolShop({
                       marginBlockStart: "auto",
                     }}
                   >
-                    <span className="hl-badge">LVL {tool.requiredLevel}+</span>
+                    <span className="hl-badge">NIV {tool.requiredLevel}+</span>
                     <span
                       className={
                         tool.traceModifier > 0
@@ -156,8 +156,8 @@ export function ToolShop({
                           : "hl-badge hl-badge--primary"
                       }
                     >
-                      TRACE {tool.traceModifier > 0 ? `+${tool.traceModifier}` : tool.traceModifier}
-                      %
+                      RASTREO{" "}
+                      {tool.traceModifier > 0 ? `+${tool.traceModifier}` : tool.traceModifier}%
                     </span>
                   </div>
 
@@ -178,7 +178,7 @@ export function ToolShop({
                         color: isOwned ? "var(--color-primary)" : "var(--color-credits)",
                       }}
                     >
-                      {isOwned ? "INSTALLED" : `${tool.price} CR`}
+                      {isOwned ? "INSTALADA" : `${tool.price} CR`}
                     </span>
 
                     {onBuyTool ? (
@@ -189,12 +189,12 @@ export function ToolShop({
                         onClick={() => onBuyTool(tool.id)}
                       >
                         {isOwned
-                          ? "Owned"
+                          ? "Adquirida"
                           : !meetsLevel
-                            ? `Req LVL ${tool.requiredLevel}`
+                            ? `Req. NIV ${tool.requiredLevel}`
                             : !canAfford
-                              ? "Low Credits"
-                              : "Buy"}
+                              ? "Créditos insuficientes"
+                              : "Comprar"}
                       </button>
                     ) : null}
                   </div>

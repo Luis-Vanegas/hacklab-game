@@ -17,7 +17,7 @@ export function CommandHint({ hint, difficulty, commandExample }: CommandHintPro
 
   return (
     <aside
-      aria-label="Tactical Command Hint"
+      aria-label="Pista de comando"
       style={{
         display: "flex",
         alignItems: "center",
@@ -41,7 +41,7 @@ export function CommandHint({ hint, difficulty, commandExample }: CommandHintPro
             marginInlineEnd: "var(--space-sm)",
           }}
         >
-          [HINT]
+          [PISTA]
         </strong>
         <span>{hint}</span>
       </div>

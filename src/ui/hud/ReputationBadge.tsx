@@ -1,5 +1,5 @@
 // Badge de reputación del jugador.
-// Traduce el tier interno a una etiqueta legible y un esquema cromático coherente con el progreso.
+// Traduce el tier interno a una etiqueta legible en español y un esquema cromático coherente con el progreso.
 
 import type { ReputationTier } from "@/lib/types";
 
@@ -13,11 +13,11 @@ const TIER_META: Record<
   ReputationTier,
   { readonly label: string; readonly variant: "default" | "accent" | "primary" | "warning" }
 > = {
-  script_kiddie: { label: "Script Kiddie", variant: "default" },
+  script_kiddie: { label: "Novato", variant: "default" },
   hacker: { label: "Hacker", variant: "accent" },
-  elite_hacker: { label: "Elite Hacker", variant: "primary" },
+  elite_hacker: { label: "Hacker Élite", variant: "primary" },
   l33t: { label: "L33T", variant: "warning" },
-  anonymous: { label: "Anonymous", variant: "primary" },
+  anonymous: { label: "Anónimo", variant: "primary" },
 };
 
 export function ReputationBadge({ tier, level, xp }: ReputationBadgeProps) {
@@ -28,7 +28,7 @@ export function ReputationBadge({ tier, level, xp }: ReputationBadgeProps) {
   return (
     <span className={variantClass} data-testid="reputation-badge">
       <span>{meta.label}</span>
-      {level !== undefined ? <span className="hl-tabular">LVL {level}</span> : null}
+      {level !== undefined ? <span className="hl-tabular">NIV {level}</span> : null}
       {xp !== undefined ? <span className="hl-tabular">({xp} XP)</span> : null}
     </span>
   );

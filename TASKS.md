@@ -102,9 +102,9 @@ Datos nuevos: `src/data/machine/workstation.json` (tu equipo: hostname `nodo-ws-
 
 ### A1 — Pantalla de título e intro · rama `feat/ui-title-intro` · sin dependencias
 
-- [ ] `src/ui/title/TitleScreen.tsx`: logo "HACKLAB" con fuente pixel (Google Fonts, por ejemplo "Press Start 2P" o "VT323"), botones "Nueva partida" y "Continuar" (solo si hay partida)
-- [ ] `src/ui/intro/IntroSequence.tsx`: 5 viñetas con texto tipo máquina de escribir, botón "Saltar" y avance con Enter o clic. Recibe las viñetas por props (Claude las publica en K2; usa texto de ejemplo mientras tanto)
-- [ ] Traducir al español todos los textos actuales: "Accept Contract", "Submit Contract", "MISSION STATUS" y cualquier otro
+- [x] `src/ui/title/TitleScreen.tsx`: logo "HACKLAB" con fuente pixel (Google Fonts, por ejemplo "Press Start 2P" o "VT323"), botones "Nueva partida" y "Continuar" (solo si hay partida)
+- [x] `src/ui/intro/IntroSequence.tsx`: 5 viñetas con texto tipo máquina de escribir, botón "Saltar" y avance con Enter o clic. Recibe las viñetas por props (Claude las publica en K2; usa texto de ejemplo mientras tanto)
+- [x] Traducir al español todos los textos actuales: "Accept Contract", "Submit Contract", "MISSION STATUS" y cualquier otro
 
 ### A2 — Escena "La oficina" · rama `feat/scenes-office` · sin dependencias
 
