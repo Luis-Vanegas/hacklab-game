@@ -30,7 +30,11 @@ describe("Recorridos de los contratos simulados", () => {
         gameState: { ...base.gameState, activeContract: acmeContract },
       }),
     );
-    expect(executeCommand("nmap acme.example", ctx).output).toContain("22 ssh simulación Acme");
+    expect(executeCommand("nmap acme.example", ctx).highlights).toContainEqual({
+      text: "ftp",
+      kind: "finding",
+      note: expect.any(String),
+    });
     const session = executeCommand("ssh acme.example", ctx).stateChanges?.connectedTo;
     expect(session).toBe("acme.example");
     const copy = executeCommand("download /entrega/turno.txt", {
