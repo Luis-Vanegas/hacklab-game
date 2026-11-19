@@ -43,6 +43,17 @@ Puedes maquetar ya; los hooks llegan con K5.
 
 ---
 
+## 📡 Vista de ataques (siguiente fase)
+
+Empieza cuando C11 y A11 estén en `develop`. Specs y contrato en
+[`odd/tasks/vista-de-ataques.md`](odd/tasks/vista-de-ataques.md).
+
+- **K6 · Claude** · `feat/engine-packets`: tipo `Packet`, constructores en `src/lib/packets.ts`, `useCapture()` y `useTopology()`
+- **C12 · Codex** · `feat/terminal-packets` · después de K6: `ping`, `nslookup`, `nmap`, `ssh`, `curl` y `traceroute` devuelven sus paquetes; explicaciones con fuente
+- **A12 · Antigravity** · `feat/ui-attack-view` · después de K6: diagrama SVG, tabla de paquetes con reproducir y paso a paso, explicación del paquete elegido
+
+---
+
 ## 🐍 Fase 3 — Python real
 
 ### K4 — Sandbox de Python · Claude · rama `feat/engine-python-sandbox`
