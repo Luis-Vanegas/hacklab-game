@@ -4,6 +4,32 @@ Registro corto de decisiones importantes. La más reciente va arriba.
 
 ---
 
+## ADR-006 — Python real con Pyodide en un Web Worker
+
+**Fecha:** 2026-11-19
+
+**Contexto.** El comando `python` solo mostraba una salida guardada. La Fase 3 busca que el
+jugador escriba y ejecute Python de verdad, sin servidor y sin volver pesado el juego.
+
+**Decisión.**
+
+- **Intérprete:** Pyodide (CPython compilado a WebAssembly), versión fijada `314.0.8`. Se descartó
+  MicroPython porque le falta parte de la biblioteca estándar que el curso usa (`re`, `hashlib`).
+- **Carga diferida y local:** se descarga solo la primera vez que se usa `python` y se sirve desde
+  el propio build, no desde un CDN, para que el juego no dependa de terceros.
+- **Aislamiento:** corre en un Web Worker de tipo módulo, sobre una copia de `/home/user`.
+  Un script que excede 5 s se corta con `worker.terminate()` y se crea un worker nuevo.
+- **Atomicidad:** los cambios de archivos vuelven al filesystem virtual solo si el script termina bien.
+
+**Consecuencias.**
+
+- Dependencia nueva: `pyodide`. La carga inicial no cambia; el primer `python` tarda unos segundos.
+- Cortar con `terminate()` obliga a recargar Pyodide tras un tiempo agotado. Interrumpir sin
+  recargar exige `SharedArrayBuffer` y cabeceras COOP/COEP: se revisará si el costo molesta.
+- Los comandos siguen siendo síncronos; `python` es el único asíncrono y lo coordina el store.
+
+---
+
 ## ADR-005 — Historia de doble vida y escena 3D pixelada
 
 **Fecha:** 2026-11-18

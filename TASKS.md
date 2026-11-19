@@ -1,10 +1,10 @@
 # Tareas — HackLab Game
 
 > Archivo de coordinación entre agentes. Leer antes de empezar. Actualizar al terminar.
-> **Fase actual: 2 — Experiencia de juego.** La visión completa y las specs (S1–S8) están en
-> [`odd/tasks/experiencia-de-juego.md`](odd/tasks/experiencia-de-juego.md). Léelo antes de tu primera tarea.
+> **Fase actual: 3 — Python real.** Specs (S1–S8) y contratos entre capas en
+> [`odd/tasks/fase-3-python.md`](odd/tasks/fase-3-python.md). Léelo antes de tu primera tarea.
 
-## Reglas de la Fase 2 (todos)
+## Reglas (todos)
 
 1. **Una rama por tarea**, creada desde `origin/develop` en **tu carpeta** (ver `AGENTS.md`). Nombre: el que indica la tarea.
 2. **Puedes usar tus propios subagentes**, siempre dentro de tu zona y tu carpeta. Si los usas en paralelo, que no toquen el mismo archivo.
@@ -12,6 +12,36 @@
 4. **Todo texto visible en español** (S6). Identificadores en inglés.
 5. **Nada real como objetivo.** IPs solo de rangos privados (`10.x`, `192.168.x`) o de documentación (`192.0.2.x`, `198.51.100.x`, `203.0.113.x`). Dominios ficticios terminados en `.test` o `.example`. Así nadie aprende a atacar sistemas reales.
 6. **Si te falta un tipo o un hook**, no lo inventes en tu zona: escríbelo en 📬 Mensajes y sigue con otra tarea.
+
+---
+
+## 🐍 Fase 3 — Python real
+
+### K4 — Sandbox de Python · Claude · rama `feat/engine-python-sandbox`
+
+- [ ] Pyodide en un Web Worker, carga diferida y servido desde el build (S1, S2)
+- [ ] Copia de `/home/user` hacia el intérprete y de vuelta solo si el script termina bien (S3, S4)
+- [ ] Tiempo límite de 5 s con `worker.terminate()` (S3)
+- [ ] `ObjectiveTrigger.outputIncludes`, comando `edit`, hooks `usePythonStatus`, `useEditorFile`, `useSaveFile` (S5, S6)
+- [ ] Respaldo: si Pyodide no carga, la salida simulada de hoy (S8)
+
+### C10 — Curso de Python aplicado · Codex · rama `feat/data-python-course`
+
+Empieza cuando K4 esté en `develop` (necesita `outputIncludes`).
+
+- [ ] 6 contratos del canal `work` (`20-py-*.json` a `25-py-*.json`), de Marta, en este orden: `print` y variables → listas y `for` → leer un archivo → contar intentos fallidos en `auth.log` → buscar IPs con `re` → verificar un hash con `hashlib`
+- [ ] Cada contrato deja en `~/scripts/` un script incompleto con `# TODO` que el jugador completa con `edit`, y un objetivo con `outputIncludes` que valida el resultado
+- [ ] Las tres pistas por objetivo; la tercera muestra la línea exacta que falta
+- [ ] Recorrido de cada contrato nuevo en `tests/data/contractWalkthrough.test.ts`
+
+### A10 — Editor de código · Antigravity · rama `feat/ui-code-editor`
+
+Puedes maquetar ya; conecta los hooks cuando K4 esté en `develop`.
+
+- [ ] Ventana «Editor» en el escritorio: abre el archivo de `useEditorFile()`, con números de línea, tabulación de 4 espacios y `Ctrl+S` para guardar con `useSaveFile()`
+- [ ] Sin librerías nuevas: un `<textarea>` con estilo de terminal basta
+- [ ] Indicador «Cargando el intérprete de Python…» en la barra de tareas mientras `usePythonStatus()` sea `"loading"`
+- [ ] Accesible con teclado y legible a 375 px
 
 ---
 
@@ -240,9 +270,9 @@ Prepara la Fase 3 sin sandbox todavía: el jugador **lee** scripts y ve qué har
 
 ## 📋 Estado general
 
-| Fase                          | Estado       | Fecha inicio |
-| ----------------------------- | ------------ | ------------ |
-| Fase 1 — MVP jugable          | ✅ Completa  | 2026-11-18   |
-| Fase 2 — Experiencia de juego | ✅ Completa  | 2026-11-18   |
-| Fase 3 — Python + Blue Team   | ⬜ Pendiente | —            |
-| Fase 4 — IA opcional          | ⬜ Pendiente | —            |
+| Fase                          | Estado         | Fecha inicio |
+| ----------------------------- | -------------- | ------------ |
+| Fase 1 — MVP jugable          | ✅ Completa    | 2026-11-18   |
+| Fase 2 — Experiencia de juego | ✅ Completa    | 2026-11-18   |
+| Fase 3 — Python real          | 🟡 En progreso | 2026-11-19   |
+| Fase 4 — IA opcional          | ⬜ Pendiente   | —            |
