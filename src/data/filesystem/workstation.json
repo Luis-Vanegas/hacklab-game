@@ -1,0 +1,217 @@
+{
+  "type": "dir",
+  "name": "/",
+  "permissions": "drwxr-xr-x",
+  "children": {
+    "home": {
+      "type": "dir",
+      "name": "home",
+      "permissions": "drwxr-xr-x",
+      "children": {
+        "user": {
+          "type": "dir",
+          "name": "user",
+          "permissions": "drwx------",
+          "children": {
+            ".bashrc": {
+              "type": "file",
+              "name": ".bashrc",
+              "content": "# Configuración de la terminal de HackLab\nexport PS1='practicante@nodo-ws-07:~$ '\n",
+              "permissions": "-rw-r--r--",
+              "hidden": true
+            },
+            ".bash_history": {
+              "type": "file",
+              "name": ".bash_history",
+              "content": "pwd\nls\ncat bienvenida.txt\nipconfig\n",
+              "permissions": "-rw-------",
+              "hidden": true
+            },
+            "notes": {
+              "type": "file",
+              "name": "notes",
+              "content": "Bienvenido a la red. Escribe 'help' para empezar.",
+              "permissions": "-rw-r--r--"
+            },
+            "bienvenida.txt": {
+              "type": "file",
+              "name": "bienvenida.txt",
+              "content": "Bienvenido a Nodo Seguro.\n\nSoy Marta Ríos y voy a acompañarte en tu primera semana. Hoy vas a familiarizarte con esta estación de Medellín y con la red de práctica.\n\nEl alcance de los tickets está en la bandeja. Deja constancia de lo que observas antes de proponer cambios.\n\nMarta",
+              "permissions": "-rw-r--r--"
+            },
+            "correo": {
+              "type": "dir",
+              "name": "correo",
+              "permissions": "drwxr-xr-x",
+              "children": {
+                "factura.eml": {
+                  "type": "file",
+                  "name": "factura.eml",
+                  "content": "From: Facturación de Nodo Seguro <avisos@nodoseguro-pagos.example>\nTo: Equipo de Seguridad <seguridad@nodoseguro.test>\nSubject: Factura pendiente\n\nSe adjunta el aviso de cobro de práctica. Destino declarado: https://nodoseguro-pagos.example/factura\nMensaje ficticio conservado como evidencia.\n",
+                  "permissions": "-rw-r--r--"
+                }
+              }
+            },
+            "auditoria": {
+              "type": "dir",
+              "name": "auditoria",
+              "permissions": "drwxr-xr-x",
+              "children": {
+                "hashes.txt": {
+                  "type": "file",
+                  "name": "hashes.txt",
+                  "content": "Inventario de práctica. Huellas de archivos de muestra, sin secretos.\nMD5 | muestra-a.txt | 900150983cd24fb0d6963f7d28e17f72\nSHA-256 | muestra-b.txt | ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad\n",
+                  "permissions": "-rw-r--r--"
+                },
+                "criterios.txt": {
+                  "type": "file",
+                  "name": "criterios.txt",
+                  "content": "MD5: es rápido y tiene debilidades de colisión. No es adecuado para almacenar contraseñas. Para ellas se usa una función de derivación con sal y coste ajustable.\nSHA-256: una huella simple permite comprobar la integridad de un archivo.\n",
+                  "permissions": "-rw-r--r--"
+                }
+              }
+            },
+            "scripts": {
+              "type": "dir",
+              "name": "scripts",
+              "permissions": "drwxr-xr-x",
+              "children": {
+                "escaner_puertos.py": {
+                  "type": "file",
+                  "name": "escaner_puertos.py",
+                  "permissions": "-rw-r--r--",
+                  "content": "# Inventario del laboratorio ficticio, sin abrir conexiones.\ninventario = [(22, \"ssh\"), (443, \"https\")]\n\nfor puerto, servicio in inventario:\n    print(f\"{puerto}/tcp {servicio}\")\n"
+                },
+                "contar_fallidos.py": {
+                  "type": "file",
+                  "name": "contar_fallidos.py",
+                  "permissions": "-rw-r--r--",
+                  "content": "# Muestra anonimizada del registro de práctica.\nregistro = [\n    \"Accepted acceso de práctica\",\n    \"Failed intento de práctica 1\",\n    \"Failed intento de práctica 2\",\n    \"Failed intento de práctica 3\",\n    \"Failed intento de práctica 4\",\n    \"Accepted acceso de práctica\",\n]\n\nfallidos = sum(\"Failed\" in linea for linea in registro)\nprint(f\"Fallos de autenticación: {fallidos}\")\n"
+                },
+                "hash_archivo.py": {
+                  "type": "file",
+                  "name": "hash_archivo.py",
+                  "permissions": "-rw-r--r--",
+                  "content": "from hashlib import sha256\n\n# Son los bytes de un archivo de muestra, no credenciales.\ncontenido = b\"abc\"\nhuella = sha256(contenido).hexdigest()\n\nprint(f\"SHA-256 de muestra: {huella}\")\n"
+                },
+                "datos-curso": {
+                  "type": "dir",
+                  "name": "datos-curso",
+                  "permissions": "drwxr-xr-x",
+                  "children": {
+                    "turno.txt": {
+                      "type": "file",
+                      "name": "turno.txt",
+                      "permissions": "-rw-r--r--",
+                      "content": "Turno cerrado. Copia de respaldo revisada.\n"
+                    },
+                    "auth.log": {
+                      "type": "file",
+                      "name": "auth.log",
+                      "permissions": "-rw-r--r--",
+                      "content": "[2026-11-18 08:09:56] sshd: Accepted password for user from 10.20.0.1\n[2026-11-18 08:11:10] sshd: Failed password for user from 203.0.113.45 port 54210\n[2026-11-18 08:11:12] sshd: Failed password for user from 203.0.113.45 port 54211\n[2026-11-18 08:11:14] sshd: Failed password for user from 203.0.113.45 port 54212\n[2026-11-18 08:11:16] sshd: Failed password for user from 203.0.113.45 port 54213\n[2026-11-18 08:12:01] sshd: Accepted password for user from 10.20.0.1\n"
+                    },
+                    "evidencia.txt": {
+                      "type": "file",
+                      "name": "evidencia.txt",
+                      "permissions": "-rw-r--r--",
+                      "content": "abc"
+                    }
+                  }
+                },
+                "20-py-variables.py": {
+                  "type": "file",
+                  "name": "20-py-variables.py",
+                  "permissions": "-rw-r--r--",
+                  "content": "mensaje = \"Estación virtual preparada.\"\n# TODO: muestra el contenido de mensaje.\n"
+                },
+                "21-py-listas.py": {
+                  "type": "file",
+                  "name": "21-py-listas.py",
+                  "permissions": "-rw-r--r--",
+                  "content": "controles = [\"Inventario\", \"Registros\", \"Copia\"]\n\nfor control in controles:\n    # TODO: muestra este control con el prefijo indicado.\n    pass\n"
+                },
+                "22-py-archivos.py": {
+                  "type": "file",
+                  "name": "22-py-archivos.py",
+                  "permissions": "-rw-r--r--",
+                  "content": "from pathlib import Path\n\nruta = Path(\"/home/user/scripts/datos-curso/turno.txt\")\n# TODO: lee la nota y muestra su contenido.\n"
+                },
+                "23-py-fallos.py": {
+                  "type": "file",
+                  "name": "23-py-fallos.py",
+                  "permissions": "-rw-r--r--",
+                  "content": "from pathlib import Path\n\nruta = Path(\"/home/user/scripts/datos-curso/auth.log\")\nlineas = ruta.read_text(encoding=\"utf-8\").splitlines()\nfallos = 0\n\nfor linea in lineas:\n    if \"Failed\" in linea:\n        # TODO: actualiza el contador solo si la línea contiene Failed.\n        pass\n\nprint(f\"Total de fallos: {fallos}.\")\n"
+                },
+                "24-py-direcciones.py": {
+                  "type": "file",
+                  "name": "24-py-direcciones.py",
+                  "permissions": "-rw-r--r--",
+                  "content": "import re\nfrom pathlib import Path\n\nruta = Path(\"/home/user/scripts/datos-curso/auth.log\")\ntexto = ruta.read_text(encoding=\"utf-8\")\npatron = r\"\\b(?:[0-9]{1,3}\\.){3}[0-9]{1,3}\\b\"\nips = []\n# TODO: guarda en ips todas las coincidencias.\n\nprint(\"Direcciones observadas: \" + \", \".join(sorted(set(ips))) + \".\")\n"
+                },
+                "25-py-integridad.py": {
+                  "type": "file",
+                  "name": "25-py-integridad.py",
+                  "permissions": "-rw-r--r--",
+                  "content": "import hashlib\nfrom pathlib import Path\n\nruta = Path(\"/home/user/scripts/datos-curso/evidencia.txt\")\ncontenido = ruta.read_bytes()\nesperado = \"ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad\"\nhuella = \"\"\n# TODO: calcula la huella SHA-256 en hexadecimal.\n\nprint(\"Integridad: coincide.\" if huella == esperado else \"Integridad: no coincide.\")\n"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "etc": {
+      "type": "dir",
+      "name": "etc",
+      "permissions": "drwxr-xr-x",
+      "children": {
+        "passwd": {
+          "type": "file",
+          "name": "passwd",
+          "content": "root:x:0:0:root:/root:/bin/bash\nuser:x:1000:1000:user:/home/user:/bin/bash",
+          "permissions": "-rw-r--r--"
+        },
+        "hosts": {
+          "type": "file",
+          "name": "hosts",
+          "content": "10.20.0.15 nodo-ws-07.nodoseguro.test nodo-ws-07\n10.20.0.1 gateway.nodoseguro.test\n10.20.0.53 dns.nodoseguro.test\n10.20.0.80 intranet.nodoseguro.test\n",
+          "permissions": "-rw-r--r--"
+        }
+      }
+    },
+    "var": {
+      "type": "dir",
+      "name": "var",
+      "permissions": "drwxr-xr-x",
+      "children": {
+        "log": {
+          "type": "dir",
+          "name": "log",
+          "permissions": "drwxr-xr-x",
+          "children": {
+            "auth.log": {
+              "type": "file",
+              "name": "auth.log",
+              "content": "[2026-11-18 08:09:56] sshd: Accepted password for user from 10.20.0.1\n[2026-11-18 08:11:10] sshd: Failed password for user from 203.0.113.45 port 54210\n[2026-11-18 08:11:12] sshd: Failed password for user from 203.0.113.45 port 54211\n[2026-11-18 08:11:14] sshd: Failed password for user from 203.0.113.45 port 54212\n[2026-11-18 08:11:16] sshd: Failed password for user from 203.0.113.45 port 54213\n[2026-11-18 08:12:01] sshd: Accepted password for user from 10.20.0.1\n",
+              "permissions": "-rw-r-----"
+            },
+            "nginx": {
+              "type": "dir",
+              "name": "nginx",
+              "permissions": "drwxr-xr-x",
+              "children": {
+                "access.log": {
+                  "type": "file",
+                  "name": "access.log",
+                  "content": "10.20.0.15 - [18/Nov/2026:09:10:01 -0500] \"GET /inicio HTTP/1.1\" 200\n198.51.100.47 - [18/Nov/2026:09:11:03 -0500] \"GET /catalogo HTTP/1.1\" 403 alerta=sql_injection consulta=omitida\n10.20.0.15 - [18/Nov/2026:09:11:07 -0500] \"GET /ayuda HTTP/1.1\" 200\n198.51.100.47 - [18/Nov/2026:09:12:11 -0500] \"GET /catalogo HTTP/1.1\" 403 alerta=sql_injection consulta=omitida\n198.51.100.47 - [18/Nov/2026:09:12:12 -0500] \"GET /busqueda HTTP/1.1\" 403 alerta=sql_injection consulta=omitida\n",
+                  "permissions": "-rw-r--r--"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

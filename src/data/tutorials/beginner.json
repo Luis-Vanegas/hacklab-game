@@ -1,0 +1,35 @@
+{
+  "contractId": "00-tutorial",
+  "hints": [
+    {
+      "level": 1,
+      "objectiveId": "tut-01",
+      "command": "ls",
+      "text": "Escribe ls para ver qué hay en tu carpeta virtual."
+    },
+    {
+      "level": 1,
+      "objectiveId": "tut-02",
+      "command": "cat notes",
+      "text": "Lee la nota de bienvenida en tu carpeta de inicio."
+    },
+    {
+      "level": 2,
+      "objectiveId": "tut-03",
+      "command": "cd /etc",
+      "text": "Entra a la carpeta virtual de configuración."
+    },
+    {
+      "level": 2,
+      "objectiveId": "tut-04",
+      "command": "cat passwd",
+      "text": "Lee la lista de cuentas ficticias dentro de /etc."
+    },
+    {
+      "level": 3,
+      "objectiveId": "tut-05",
+      "command": "whoami",
+      "text": "Confirma qué nombre usa tu personaje en la terminal."
+    }
+  ]
+}

@@ -4,11 +4,11 @@
 // --- State Machine del juego ---
 
 export type GamePhase =
-  | "boot"        // Secuencia de arranque
-  | "menu"        // Menú principal
-  | "playing"     // Jugando (sin contrato activo)
+  | "boot" // Secuencia de arranque
+  | "menu" // Menú principal
+  | "playing" // Jugando (sin contrato activo)
   | "in_contract" // Dentro de un contrato
-  | "game_over";  // Partida terminada
+  | "game_over"; // Partida terminada
 
 export type GameDifficulty = "beginner" | "normal" | "elite" | "anonymous";
 
@@ -22,8 +22,12 @@ export interface CommandContext {
   readonly hostname: string;
   readonly connectedTo: string | null;
   readonly difficulty: GameDifficulty;
+  // Copia de solo lectura del historial de la sesión (para `history`)
+  readonly history: readonly string[];
 }
 
+// Contrato: si `error` está presente, el engine ignora TODOS los cambios
+// (stateChanges, filesystemChanges, cwd). Un comando fallido nunca cambia el juego.
 export interface CommandResult {
   readonly output: string[];
   readonly stateChanges?: Partial<MutableGameFields>;
@@ -31,6 +35,12 @@ export interface CommandResult {
   readonly error?: string;
   // Señal para la UI: qué tipo de output es
   readonly outputType?: "info" | "success" | "warning" | "error" | "hint";
+  // Nuevo directorio actual (absoluto). Lo usa `cd`; el engine lo aplica.
+  readonly cwd?: string;
+  // Pide a la terminal visual que limpie la pantalla. Lo usa `clear`.
+  readonly clearScreen?: boolean;
+  // Pide abrir el editor con este archivo. Lo usa `edit`; el store lo publica a la UI.
+  readonly openEditor?: { readonly path: string; readonly content: string };
 }
 
 export type CommandHandler = (
@@ -41,7 +51,13 @@ export type CommandHandler = (
 // --- Filesystem virtual ---
 
 export type FileSystemNode =
-  | { type: "dir"; name: string; children: Record<string, FileSystemNode>; permissions: string }
+  | {
+      type: "dir";
+      name: string;
+      children: Record<string, FileSystemNode>;
+      permissions: string;
+      hidden?: boolean;
+    }
   | { type: "file"; name: string; content: string; permissions: string; hidden?: boolean };
 
 export interface FileSystemChange {
@@ -65,10 +81,7 @@ export interface GameState {
 }
 
 // Campos que un comando puede mutar (a través de stateChanges)
-export type MutableGameFields = Pick<
-  GameState,
-  "traceLevel" | "connectedTo" | "storyFlags"
-> & {
+export type MutableGameFields = Pick<GameState, "traceLevel" | "connectedTo" | "storyFlags"> & {
   playerCredits?: number;
   playerXp?: number;
   completeObjective?: string;
@@ -85,12 +98,7 @@ export interface PlayerState {
 
 // --- Reputación ---
 
-export type ReputationTier =
-  | "script_kiddie"
-  | "hacker"
-  | "elite_hacker"
-  | "l33t"
-  | "anonymous";
+export type ReputationTier = "script_kiddie" | "hacker" | "elite_hacker" | "l33t" | "anonymous";
 
 export interface ReputationConfig {
   readonly tier: ReputationTier;
@@ -102,8 +110,12 @@ export interface ReputationConfig {
 
 // --- Contratos ---
 
+// De día, trabajo autorizado en Nodo Seguro; de noche, encargos de CIPHER (ADR-005)
+export type ContractChannel = "work" | "darknet";
+
 export interface Contract {
   readonly id: string;
+  readonly channel: ContractChannel;
   readonly title: string;
   readonly description: string;
   readonly difficulty: GameDifficulty;
@@ -126,13 +138,37 @@ export interface Objective {
   readonly trigger: ObjectiveTrigger;
   readonly completed: boolean;
   readonly hint?: string;
+  // Pistas escalonadas: suave, media y la solución
+  readonly hints?: readonly string[];
 }
+
+// --- Avisos de juego para la UI (distintos de los eventos de observabilidad) ---
+
+export type GameAlert =
+  | {
+      readonly type: "objective_completed";
+      readonly objectiveId: string;
+      readonly description: string;
+    }
+  | {
+      readonly type: "contract_completed";
+      readonly contractId: string;
+      readonly title: string;
+      readonly credits: number;
+      readonly xp: number;
+    }
+  | { readonly type: "rank_up"; readonly from: ReputationTier; readonly to: ReputationTier }
+  | { readonly type: "trace_alarm"; readonly level: number };
+
+export type QueuedGameAlert = GameAlert & { readonly id: number };
 
 // Qué acción completa un objetivo
 export interface ObjectiveTrigger {
-  readonly command: string;        // Comando que dispara
+  readonly command: string; // Comando que dispara
   readonly args?: readonly string[]; // Args específicos (opcional)
   readonly requiresConnection?: boolean;
+  // La salida debe contener este texto: valida el resultado de un script, no solo que corrió
+  readonly outputIncludes?: string;
 }
 
 export interface TargetServer {
@@ -171,8 +207,8 @@ export interface ToolDefinition {
   readonly name: string;
   readonly description: string;
   readonly price: number;
-  readonly command: string;         // Comando que habilita
-  readonly traceModifier: number;   // Cambio al trace level al usar
+  readonly command: string; // Comando que habilita
+  readonly traceModifier: number; // Cambio al trace level al usar
   readonly requiredLevel: number;
 }
 

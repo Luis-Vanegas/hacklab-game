@@ -1,0 +1,174 @@
+// Avisos tipo videojuego (GameNotifications.tsx).
+// Consume useGameEvents() y useTraceLevel() desde @/store para mostrar notificaciones
+// de "¡Objetivo completado! +50 XP", "Contrato completado", subida de rango animada
+// y alarma roja visual cuando el rastreo alcanza o supera el 75 %, disparando sonidos Web Audio.
+
+import { useEffect, useRef } from "react";
+import type { ReputationTier } from "@/lib/types";
+import { useGameEvents, useTraceLevel, type QueuedGameAlert } from "@/store";
+import { playSound } from "./soundEffects";
+
+export interface GameNotificationsProps {
+  readonly events?: readonly QueuedGameAlert[];
+  readonly onDismiss?: (id: number) => void;
+  readonly traceLevel?: number;
+}
+
+const TIER_LABELS: Record<ReputationTier, string> = {
+  script_kiddie: "Novato",
+  hacker: "Hacker",
+  elite_hacker: "Hacker Élite",
+  l33t: "L33T",
+  anonymous: "Anónimo",
+};
+
+function renderAlertContent(alert: QueuedGameAlert) {
+  switch (alert.type) {
+    case "objective_completed":
+      return {
+        badge: "OBJETIVO COMPLETADO",
+        badgeClass: "hl-badge hl-badge--primary",
+        cardClass: "hl-alert-card",
+        title: "¡Objetivo completado! +50 XP",
+        subtitle: alert.description,
+      };
+    case "contract_completed":
+      return {
+        badge: "CONTRATO COMPLETADO",
+        badgeClass: "hl-badge hl-badge--accent",
+        cardClass: "hl-alert-card",
+        title: `Contrato completado: ${alert.title}`,
+        subtitle: `Recompensa: +${alert.credits} CR / +${alert.xp} XP`,
+      };
+    case "rank_up":
+      return {
+        badge: "¡NUEVO RANGO!",
+        badgeClass: "hl-badge hl-badge--warning",
+        cardClass: "hl-alert-card hl-alert-card--rank",
+        title: `Ascenso de rango: ${TIER_LABELS[alert.from]} → ${TIER_LABELS[alert.to]}`,
+        subtitle: "Nuevos contratos y herramientas desbloqueados en tu estación.",
+      };
+    case "trace_alarm":
+      return {
+        badge: "ALARMA DE RASTREO",
+        badgeClass: "hl-badge hl-badge--danger",
+        cardClass: "hl-alert-card hl-alert-card--alarm",
+        title: `¡Rastreo crítico al ${alert.level} %!`,
+        subtitle: "Peligro de detección inminente. Termina la operación antes de llegar al 100 %.",
+      };
+  }
+}
+
+export function GameNotifications({
+  events: propEvents,
+  onDismiss: propOnDismiss,
+  traceLevel: propTraceLevel,
+}: GameNotificationsProps = {}) {
+  const storeEvents = useGameEvents();
+  const storeTrace = useTraceLevel();
+
+  const events = propEvents ?? storeEvents.events;
+  const dismiss = propOnDismiss ?? storeEvents.dismiss;
+  const traceLevel = propTraceLevel ?? storeTrace;
+
+  const seenAlertIdsRef = useRef<Set<number>>(new Set());
+
+  useEffect(() => {
+    const seen = seenAlertIdsRef.current;
+    for (const alert of events) {
+      if (seen.has(alert.id)) {
+        continue;
+      }
+      seen.add(alert.id);
+      if (alert.type === "rank_up") {
+        playSound("rank_up");
+      } else if (alert.type === "trace_alarm") {
+        playSound("trace_alarm");
+      } else {
+        playSound("objective");
+      }
+    }
+  }, [events]);
+
+  const hasHighTrace =
+    traceLevel >= 75 || events.some((event) => event.type === "trace_alarm" && event.level >= 75);
+
+  if (events.length === 0 && !hasHighTrace) {
+    return null;
+  }
+
+  const criticalAlerts = events.filter((alert) => alert.type === "trace_alarm");
+  const standardAlerts = events.filter((alert) => alert.type !== "trace_alarm");
+
+  const renderAlertCard = (alert: QueuedGameAlert) => {
+    const meta = renderAlertContent(alert);
+    return (
+      <div key={alert.id} className={meta.cardClass} data-testid={`game-alert-${alert.type}`}>
+        <div style={{ display: "flex", flexDirection: "column", gap: "4px", minInlineSize: 0 }}>
+          <span className={meta.badgeClass}>{meta.badge}</span>
+          <strong
+            style={{
+              fontFamily: "var(--font-mono)",
+              fontSize: "0.88rem",
+              color: "var(--color-text)",
+            }}
+          >
+            {meta.title}
+          </strong>
+          <span style={{ fontSize: "0.8rem", color: "var(--color-text-secondary)" }}>
+            {meta.subtitle}
+          </span>
+        </div>
+
+        <button
+          type="button"
+          className="hl-btn"
+          style={{ padding: "4px 8px", fontSize: "0.75rem" }}
+          aria-label={`Cerrar aviso: ${meta.title}`}
+          onClick={() => dismiss(alert.id)}
+          data-testid={`dismiss-alert-${alert.id}`}
+        >
+          Cerrar
+        </button>
+      </div>
+    );
+  };
+
+  return (
+    <>
+      {hasHighTrace ? (
+        <div className="hl-trace-vignette" aria-hidden="true" data-testid="trace-alarm-vignette" />
+      ) : null}
+
+      {events.length > 0 ? (
+        <aside
+          className="hl-alert-stack"
+          aria-label="Notificaciones del juego"
+          data-testid="game-notifications"
+        >
+          {criticalAlerts.length > 0 ? (
+            <div
+              role="alert"
+              aria-live="assertive"
+              aria-label="Alertas críticas de rastreo"
+              style={{ display: "flex", flexDirection: "column", gap: "var(--space-sm)" }}
+            >
+              {criticalAlerts.map(renderAlertCard)}
+            </div>
+          ) : null}
+
+          {standardAlerts.length > 0 ? (
+            <div
+              role="status"
+              aria-live="polite"
+              aria-label="Avisos de progreso del juego"
+              style={{ display: "flex", flexDirection: "column", gap: "var(--space-sm)" }}
+            >
+              {standardAlerts.map(renderAlertCard)}
+            </div>
+          ) : null}
+        </aside>
+      ) : null}
+    </>
+  );
+}

@@ -1,0 +1,81 @@
+{
+  "id": "12-dia-3-proceso-raro",
+  "channel": "work",
+  "title": "Día 3 · Contén el proceso sospechoso",
+  "description": "Compara conexiones y procesos y detén el proceso ficticio señalado en el ticket.",
+  "difficulty": "beginner",
+  "requiredReputation": "script_kiddie",
+  "reward": {
+    "credits": 220,
+    "xp": 160,
+    "partialMultiplier": 0.75
+  },
+  "objectives": [
+    {
+      "id": "dia3-01",
+      "description": "Identifica la conexión sospechosa en la estación virtual.",
+      "trigger": {
+        "command": "netstat"
+      },
+      "completed": false,
+      "hints": [
+        "Compara los destinos de las conexiones activas.",
+        "netstat lista direcciones remotas y puertos de la estación.",
+        "Ejecuta netstat y busca 203.0.113.45:4444."
+      ]
+    },
+    {
+      "id": "dia3-02",
+      "description": "Localiza svch0st y confirma su identificador de proceso.",
+      "trigger": {
+        "command": "ps"
+      },
+      "completed": false,
+      "hints": [
+        "Busca el nombre que aparece en el ticket, letra por letra.",
+        "ps muestra los procesos activos y el PID de cada uno.",
+        "Ejecuta ps y localiza svch0st, PID 4444."
+      ]
+    },
+    {
+      "id": "dia3-03",
+      "description": "Detén el proceso autorizado en el ticket.",
+      "trigger": {
+        "command": "kill",
+        "args": ["4444"]
+      },
+      "completed": false,
+      "hints": [
+        "La acción de contención se aplica solo al PID del proceso señalado.",
+        "kill recibe el identificador del proceso que vas a detener en el juego.",
+        "Ejecuta kill 4444."
+      ]
+    }
+  ],
+  "target": {
+    "hostname": "nodo-ws-07.nodoseguro.test",
+    "ip": "10.20.0.15",
+    "ports": [],
+    "filesystem": {
+      "type": "dir",
+      "name": "/",
+      "permissions": "drwxr-xr-x",
+      "children": {}
+    }
+  },
+  "story": {
+    "intro": [
+      {
+        "character": "MARTA",
+        "text": "La estación de práctica tiene una conexión que no esperamos. Revisa las conexiones y la lista de procesos. En este ticket tienes autorización para detener únicamente el proceso ficticio svch0st."
+      }
+    ],
+    "onComplete": [
+      {
+        "character": "MARTA",
+        "text": "El proceso quedó detenido en la estación virtual. Documenta la conexión observada y el identificador del proceso para el cierre del ticket."
+      }
+    ],
+    "hints": {}
+  }
+}

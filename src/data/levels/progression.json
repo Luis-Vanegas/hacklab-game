@@ -1,0 +1,56 @@
+{
+  "xpPerLevel": 100,
+  "tiers": [
+    {
+      "tier": "script_kiddie",
+      "label": "Script Kiddie",
+      "minXp": 0,
+      "unlocksContracts": [
+        "00-tutorial",
+        "01-first-hack",
+        "10-dia-1-bienvenida",
+        "11-dia-2-logs",
+        "12-dia-3-proceso-raro",
+        "13-dia-4-phishing",
+        "14-dia-5-logs-web",
+        "15-dia-6-contrasenas",
+        "16-dia-7-informe",
+        "20-py-variables",
+        "21-py-listas",
+        "22-py-archivos",
+        "23-py-fallos",
+        "24-py-direcciones",
+        "25-py-integridad"
+      ],
+      "unlocksTools": ["nmap", "ssh"]
+    },
+    {
+      "tier": "hacker",
+      "label": "Hacker",
+      "minXp": 500,
+      "unlocksContracts": ["02-data-heist", "03-espejo-clinico", "04-archivo-de-turno"],
+      "unlocksTools": ["hydra", "sqlmap"]
+    },
+    {
+      "tier": "elite_hacker",
+      "label": "Elite Hacker",
+      "minXp": 2000,
+      "unlocksContracts": [],
+      "unlocksTools": ["metasploit", "proxychains"]
+    },
+    {
+      "tier": "l33t",
+      "label": "1337",
+      "minXp": 5000,
+      "unlocksContracts": [],
+      "unlocksTools": ["zero_day"]
+    },
+    {
+      "tier": "anonymous",
+      "label": "Anonymous",
+      "minXp": 10000,
+      "unlocksContracts": [],
+      "unlocksTools": []
+    }
+  ]
+}

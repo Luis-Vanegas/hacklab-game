@@ -1,0 +1,60 @@
+{
+  "id": "21-py-listas",
+  "channel": "work",
+  "title": "Python 2 · La lista de controles",
+  "description": "Recorre una lista con for e imprime un control por línea.",
+  "difficulty": "beginner",
+  "requiredReputation": "script_kiddie",
+  "reward": {
+    "credits": 50,
+    "xp": 50,
+    "partialMultiplier": 0
+  },
+  "objectives": [
+    {
+      "id": "21-py-listas",
+      "description": "Muestra cada control en una línea con el prefijo «Control: ».",
+      "trigger": {
+        "command": "python",
+        "args": ["~/scripts/21-py-listas.py"],
+        "outputIncludes": "Control: Inventario\nControl: Registros\nControl: Copia"
+      },
+      "completed": false,
+      "hints": [
+        "La lista usa corchetes. Cada vuelta del bucle tiene un valor distinto en la variable control.",
+        "Una cadena con f antes de las comillas inserta el valor de {control}. La línea de print() va dentro del for, con cuatro espacios.",
+        "Sustituye la línea # TODO por `    print(f\"Control: {control}\")`."
+      ]
+    }
+  ],
+  "target": {
+    "hostname": "nodo-ws-07.nodoseguro.test",
+    "ip": "10.20.0.15",
+    "ports": [],
+    "filesystem": {
+      "type": "dir",
+      "name": "/",
+      "permissions": "drwxr-xr-x",
+      "children": {}
+    }
+  },
+  "story": {
+    "intro": [
+      {
+        "character": "MARTA",
+        "text": "Antes de cerrar el turno revisamos inventario, registros y copia. La plantilla guarda esos nombres en una lista llamada controles. El bucle for toma uno por vuelta y lo llama control. Completa el cuerpo del bucle para mostrarlo."
+      },
+      {
+        "character": "MARTA",
+        "text": "Abre la plantilla con edit ~/scripts/21-py-listas.py. Sustituye la línea marcada con # TODO, guarda con Ctrl+S y ejecuta python ~/scripts/21-py-listas.py."
+      }
+    ],
+    "onComplete": [
+      {
+        "character": "MARTA",
+        "text": "La lista se recorrió completa. Si mañana agregamos un control, el bucle también lo mostrará."
+      }
+    ],
+    "hints": {}
+  }
+}

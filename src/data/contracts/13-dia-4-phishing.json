@@ -1,0 +1,97 @@
+{
+  "id": "13-dia-4-phishing",
+  "channel": "work",
+  "title": "Día 4 · Revisa la factura sospechosa",
+  "description": "Analiza un correo de práctica sin abrir el enlace ni responder.",
+  "difficulty": "beginner",
+  "requiredReputation": "script_kiddie",
+  "reward": {
+    "credits": 240,
+    "xp": 200,
+    "partialMultiplier": 0.75
+  },
+  "objectives": [
+    {
+      "id": "dia4-01",
+      "description": "Lee el correo de práctica.",
+      "trigger": {
+        "command": "cat",
+        "args": ["~/correo/factura.eml"]
+      },
+      "completed": false,
+      "hints": [
+        "El correo quedó en tu carpeta personal.",
+        "Usa cat para leer el archivo .eml como texto.",
+        "Ejecuta cat ~/correo/factura.eml."
+      ]
+    },
+    {
+      "id": "dia4-02",
+      "description": "Aísla el encabezado del remitente.",
+      "trigger": {
+        "command": "grep",
+        "args": ["From:", "~/correo/factura.eml"]
+      },
+      "completed": false,
+      "hints": [
+        "El remitente se declara en un encabezado del mensaje.",
+        "Busca el texto From: sin confiar solo en el nombre mostrado.",
+        "Ejecuta grep From: ~/correo/factura.eml."
+      ]
+    },
+    {
+      "id": "dia4-03",
+      "description": "Revisa el destino sin abrirlo.",
+      "trigger": {
+        "command": "grep",
+        "args": ["https://", "~/correo/factura.eml"]
+      },
+      "completed": false,
+      "hints": [
+        "El cuerpo del mensaje contiene una URL.",
+        "Filtra por https:// para verla como texto.",
+        "Ejecuta grep https:// ~/correo/factura.eml."
+      ]
+    },
+    {
+      "id": "dia4-04",
+      "description": "Confirma el dominio engañoso.",
+      "trigger": {
+        "command": "grep",
+        "args": ["nodoseguro-pagos.example", "~/correo/factura.eml"]
+      },
+      "completed": false,
+      "hints": [
+        "Compara el dominio del enlace con nodoseguro.test.",
+        "Busca el dominio completo que aparece en la dirección.",
+        "Ejecuta grep nodoseguro-pagos.example ~/correo/factura.eml."
+      ]
+    }
+  ],
+  "target": {
+    "hostname": "nodo-ws-07.nodoseguro.test",
+    "ip": "10.20.0.15",
+    "ports": [],
+    "filesystem": {
+      "type": "dir",
+      "name": "/",
+      "permissions": "drwxr-xr-x",
+      "children": {}
+    }
+  },
+  "story": {
+    "intro": [
+      {
+        "character": "MARTA",
+        "text": "Nos reenviaron una factura inesperada. Lee el mensaje como texto. Identifica quién dice enviarlo y a qué dominio apunta antes de clasificarlo."
+      }
+    ],
+    "onComplete": [
+      {
+        "character": "MARTA",
+        "text": "Escalaremos el mensaje como sospechoso. Deja anotado el dominio que encontraste."
+      }
+    ],
+    "hints": {}
+  }
+}

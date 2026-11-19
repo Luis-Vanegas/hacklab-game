@@ -1,11 +1,51 @@
 # Agentes y distribución de trabajo
 
 ## Regla de aislamiento (OBLIGATORIA)
+
 Cada agente trabaja SOLO en su zona asignada. No toca archivos de otra zona.
 Si necesita algo de otra zona, lo anota en `TASKS.md` bajo `## 📬 Mensajes entre agentes`.
 
+## Ramas y carpetas (OBLIGATORIO)
+
+Cada agente trabaja en **su propia carpeta (git worktree)** y en **su propia rama**.
+Nunca dos agentes en la misma carpeta: se pisan los archivos y los commits se mezclan.
+
+| Agente      | Carpeta                                     | Ramas                            |
+| ----------- | ------------------------------------------- | -------------------------------- |
+| Claude Code | `C:\Users\LENOVO\Music\hacklab-game-engine` | `feat/engine-*`, `docs/*`        |
+| Codex       | `C:\Users\LENOVO\Music\hacklab-game-cmd`    | `feat/terminal-*`, `feat/data-*` |
+| Antigravity | `C:\Users\LENOVO\Music\hacklab-game-ui`     | `feat/ui-*`, `feat/scenes-*`     |
+
+La carpeta principal `C:\Users\LENOVO\Music\hacklab-game` es solo de Luis. Ningún agente
+escribe ahí.
+
+### Al empezar cada tarea
+
+Desde tu carpeta, con el trabajo anterior ya commiteado:
+
+```powershell
+git fetch origin
+git switch -c feat/<zona>-<tarea> origin/develop
+npm ci
+```
+
+### Al terminar cada tarea
+
+1. `npm run check` en verde (typecheck, ESLint, Prettier y pruebas).
+2. Un commit por cambio lógico, con su prueba, en Conventional Commits.
+3. Push de tu rama y PR hacia `develop`. Nunca hacia `main`.
+
+### Si tu entorno no puede escribir en `.git`
+
+Algunos sandboxes (por ejemplo, Codex en modo por defecto) no pueden crear ramas ni commits.
+En ese caso: trabaja igual en tu carpeta, corre `npm run check`, y deja en `TASKS.md` el
+mensaje `[FECHA] AGENTE → LUIS: listo para commit en <carpeta>, rama <nombre>`.
+Luis o Claude Code hacen el commit y el PR.
+
 ## Comunicación
+
 Archivo central: **TASKS.md**
+
 - Cada agente marca `[x]` cuando termina una tarea.
 - Si tiene dudas, escribe una nota debajo de la tarea.
 - Antes de empezar, lee TASKS.md para ver qué han hecho los demás.
@@ -20,11 +60,13 @@ Archivo central: **TASKS.md**
 integra los módulos, hace code review de los otros agentes.
 
 **Zona exclusiva**:
+
 ```
 src/engine/          # Toda la lógica pura del juego
 src/story/           # Narrativa, personajes, diálogos
 src/ai/              # Módulo opcional de IA
 src/lib/             # Utilidades transversales
+src/store/           # Store Zustand y hooks públicos para la UI
 src/App.tsx          # Punto de entrada
 CLAUDE.md
 AGENTS.md
@@ -36,6 +78,7 @@ package.json         # Solo Claude Code modifica dependencias
 ```
 
 **Responsabilidades**:
+
 - State machines (GameState, ContractState)
 - Filesystem virtual
 - ContractSystem y ReputationSystem
@@ -49,12 +92,13 @@ package.json         # Solo Claude Code modifica dependencias
 
 ## 🟠 Codex (OpenAI) — Implementador de lógica
 
-**Modelo**: GPT-4o / o3 (lo que traiga Codex)
+**Modelo**: Sol 6.2 medio
 **Para documentación**: Gemini 2.5 Flash (si se necesita generar docs largos)
 **Rol**: Implementa comandos, datos, y lógica de juego bien acotada.
 Investiga si es necesario antes de implementar.
 
 **Zona exclusiva**:
+
 ```
 src/terminal/commands/   # Un archivo por comando + su test
 src/terminal/CommandParser.ts
@@ -67,6 +111,7 @@ tests/data/              # Tests de validación de datos
 ```
 
 **Responsabilidades**:
+
 - Implementar cada comando de terminal como función pura
 - Diseñar el formato JSON de contratos (con historia, objetivos, recompensas)
 - Crear el catálogo de herramientas y niveles
@@ -75,6 +120,7 @@ tests/data/              # Tests de validación de datos
 - Investigar mecánicas de juegos similares si es necesario
 
 **Reglas para Codex**:
+
 - Cada comando es `(args: string[], ctx: CommandContext) => CommandResult`
 - NO importar nada de `engine/` directamente — usar solo `CommandContext`
 - Un commit por comando con su test
@@ -90,6 +136,7 @@ tests/data/              # Tests de validación de datos
 animaciones. Investiga referencias visuales si es necesario.
 
 **Zona exclusiva**:
+
 ```
 src/ui/                  # Todos los componentes de interfaz
 src/terminal/Terminal.tsx # Solo el componente visual (no el parser)
@@ -101,6 +148,7 @@ README.md                # Con Gemini Flash para redacción
 ```
 
 **Responsabilidades**:
+
 - HUD (reputación, créditos, nivel de trace)
 - Panel de Darknet Board y Status
 - Tienda de herramientas (modal)
@@ -112,8 +160,9 @@ README.md                # Con Gemini Flash para redacción
 - CSS tokens y design system
 
 **Reglas para Antigravity**:
+
 - Componentes presentacionales: reciben props, no acceden al store directamente
-- Para estado, importar solo los hooks de Zustand que Claude Code exponga
+- Para estado, importar solo los hooks de `@/store` (ESLint bloquea importar `engine/` desde `ui/` y `scenes/`)
 - NO tocar `engine/`, `lib/`, ni `data/`
 - Si necesita un hook o dato nuevo, anotarlo en TASKS.md
 - Los componentes 3D siguen la spec que Claude Code deje en TASKS.md
@@ -123,6 +172,7 @@ README.md                # Con Gemini Flash para redacción
 ## 📝 Modelo para documentación puntual
 
 **Gemini 2.5 Flash** (3.8 Flash o equivalente):
+
 - Generar README.md largo y profesional
 - Documentar APIs internas
 - Generar CONTRIBUTING.md
@@ -144,6 +194,7 @@ README.md                # Con Gemini Flash para redacción
 ```
 
 ## Resolución de conflictos
+
 - Si dos agentes necesitan el mismo archivo → Claude Code decide quién lo toca.
 - Si un agente necesita una interfaz que no existe → la anota en TASKS.md,
   Claude Code la crea, y luego el agente la usa.

@@ -1,0 +1,7 @@
+{
+  "/home/user/scripts/escaner_puertos.py": ["22/tcp ssh", "443/tcp https"],
+  "/home/user/scripts/contar_fallidos.py": ["Fallos de autenticación: 4"],
+  "/home/user/scripts/hash_archivo.py": [
+    "SHA-256 de muestra: ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad"
+  ]
+}

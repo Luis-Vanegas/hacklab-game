@@ -1,0 +1,97 @@
+{
+  "id": "15-dia-6-contrasenas",
+  "channel": "work",
+  "title": "Día 6 · Revisa el inventario de hashes",
+  "description": "Distingue el tipo de archivo, comprueba su integridad y explica el hallazgo sobre MD5.",
+  "difficulty": "beginner",
+  "requiredReputation": "script_kiddie",
+  "reward": {
+    "credits": 300,
+    "xp": 260,
+    "partialMultiplier": 0.75
+  },
+  "objectives": [
+    {
+      "id": "dia6-01",
+      "description": "Identifica el tipo del inventario.",
+      "trigger": {
+        "command": "file",
+        "args": ["~/auditoria/hashes.txt"]
+      },
+      "completed": false,
+      "hints": [
+        "El inventario está en tu carpeta auditoria.",
+        "file reconoce si tienes texto, un script o un binario.",
+        "Ejecuta file ~/auditoria/hashes.txt."
+      ]
+    },
+    {
+      "id": "dia6-02",
+      "description": "Calcula la huella del archivo para verificar su integridad.",
+      "trigger": {
+        "command": "sha256sum",
+        "args": ["~/auditoria/hashes.txt"]
+      },
+      "completed": false,
+      "hints": [
+        "Necesitamos una huella del inventario completo.",
+        "SHA-256 aquí sirve para comprobar el archivo, no para proteger contraseñas.",
+        "Ejecuta sha256sum ~/auditoria/hashes.txt."
+      ]
+    },
+    {
+      "id": "dia6-03",
+      "description": "Identifica la entrada heredada.",
+      "trigger": {
+        "command": "grep",
+        "args": ["MD5", "~/auditoria/hashes.txt"]
+      },
+      "completed": false,
+      "hints": [
+        "El inventario etiqueta el algoritmo usado en cada entrada.",
+        "Filtra las líneas por MD5.",
+        "Ejecuta grep MD5 ~/auditoria/hashes.txt."
+      ]
+    },
+    {
+      "id": "dia6-04",
+      "description": "Consulta por qué MD5 no se debe usar para contraseñas.",
+      "trigger": {
+        "command": "grep",
+        "args": ["MD5", "~/auditoria/criterios.txt"]
+      },
+      "completed": false,
+      "hints": [
+        "El equipo dejó el criterio en otro archivo de auditoría.",
+        "Busca MD5 en criterios.txt.",
+        "Ejecuta grep MD5 ~/auditoria/criterios.txt."
+      ]
+    }
+  ],
+  "target": {
+    "hostname": "nodo-ws-07.nodoseguro.test",
+    "ip": "10.20.0.15",
+    "ports": [],
+    "filesystem": {
+      "type": "dir",
+      "name": "/",
+      "permissions": "drwxr-xr-x",
+      "children": {}
+    }
+  },
+  "story": {
+    "intro": [
+      {
+        "character": "MARTA",
+        "text": "Audita un inventario con huellas de muestra, sin credenciales reales. Identifica el archivo, calcula su huella de integridad y revisa por qué el algoritmo heredado debe retirarse."
+      }
+    ],
+    "onComplete": [
+      {
+        "character": "MARTA",
+        "text": "El informe queda separado en dos partes: integridad del inventario y debilidad del método heredado."
+      }
+    ],
+    "hints": {}
+  }
+}

@@ -1,0 +1,65 @@
+[
+  {
+    "id": "nmap",
+    "name": "Visor de inventario",
+    "description": "Muestra los puertos escritos para la misión.",
+    "price": 80,
+    "command": "nmap",
+    "traceModifier": 0,
+    "requiredLevel": 1
+  },
+  {
+    "id": "ssh",
+    "name": "Sesión de práctica",
+    "description": "Abre la sesión virtual de una misión.",
+    "price": 100,
+    "command": "ssh",
+    "traceModifier": 0,
+    "requiredLevel": 1
+  },
+  {
+    "id": "hydra",
+    "name": "Lector de fichas",
+    "description": "Revela la ficha prefijada de un desafío del juego.",
+    "price": 150,
+    "command": "crack",
+    "traceModifier": 0,
+    "requiredLevel": 6
+  },
+  {
+    "id": "sqlmap",
+    "name": "Filtro de inventario",
+    "description": "Mejora prevista para la consulta virtual de inventario.",
+    "price": 200,
+    "command": "nmap",
+    "traceModifier": -2,
+    "requiredLevel": 6
+  },
+  {
+    "id": "metasploit",
+    "name": "Ayuda de escenario",
+    "description": "Mejora prevista para los desafíos de ficha.",
+    "price": 350,
+    "command": "crack",
+    "traceModifier": -3,
+    "requiredLevel": 21
+  },
+  {
+    "id": "proxychains",
+    "name": "Adaptador de sesión",
+    "description": "Mejora prevista para las sesiones virtuales.",
+    "price": 400,
+    "command": "ssh",
+    "traceModifier": -4,
+    "requiredLevel": 21
+  },
+  {
+    "id": "zero_day",
+    "name": "Estuche de respaldo",
+    "description": "Mejora prevista para las copias de archivos virtuales.",
+    "price": 700,
+    "command": "download",
+    "traceModifier": -4,
+    "requiredLevel": 51
+  }
+]

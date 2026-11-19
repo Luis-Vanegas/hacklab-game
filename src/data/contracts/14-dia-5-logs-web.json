@@ -1,0 +1,69 @@
+{
+  "id": "14-dia-5-logs-web",
+  "channel": "work",
+  "title": "Día 5 · Investiga las alertas web",
+  "description": "Encuentra y cuenta los intentos registrados en el servidor web de práctica.",
+  "difficulty": "beginner",
+  "requiredReputation": "script_kiddie",
+  "reward": {
+    "credits": 280,
+    "xp": 240,
+    "partialMultiplier": 0.75
+  },
+  "objectives": [
+    {
+      "id": "dia5-01",
+      "description": "Encuentra las alertas de inyección SQL.",
+      "trigger": {
+        "command": "grep",
+        "args": ["sql_injection", "/var/log/nginx/access.log"]
+      },
+      "completed": false,
+      "hints": [
+        "Cada evento sospechoso tiene un campo alerta.",
+        "La marca que buscas es sql_injection.",
+        "Ejecuta grep sql_injection /var/log/nginx/access.log."
+      ]
+    },
+    {
+      "id": "dia5-02",
+      "description": "Cuenta las líneas que contienen esa marca.",
+      "trigger": {
+        "command": "grep",
+        "args": ["-c", "sql_injection", "/var/log/nginx/access.log"]
+      },
+      "completed": false,
+      "hints": [
+        "Necesitamos un número, no todo el registro.",
+        "La opción -c de grep cuenta las líneas que coinciden.",
+        "Ejecuta grep -c sql_injection /var/log/nginx/access.log."
+      ]
+    }
+  ],
+  "target": {
+    "hostname": "nodo-ws-07.nodoseguro.test",
+    "ip": "10.20.0.15",
+    "ports": [],
+    "filesystem": {
+      "type": "dir",
+      "name": "/",
+      "permissions": "drwxr-xr-x",
+      "children": {}
+    }
+  },
+  "story": {
+    "intro": [
+      {
+        "character": "MARTA",
+        "text": "El registro virtual tiene accesos habituales e intentos de inyección SQL marcados por la detección del laboratorio. Separa esas líneas y devuelve el recuento."
+      }
+    ],
+    "onComplete": [
+      {
+        "character": "MARTA",
+        "text": "El recuento queda en el expediente. Registra la evidencia sin reproducir las solicitudes sospechosas."
+      }
+    ],
+    "hints": {}
+  }
+}

@@ -1,0 +1,60 @@
+{
+  "id": "23-py-fallos",
+  "channel": "work",
+  "title": "Python 4 · Cuenta los intentos fallidos",
+  "description": "Analiza un registro virtual de autenticación con un condicional y un contador.",
+  "difficulty": "beginner",
+  "requiredReputation": "script_kiddie",
+  "reward": {
+    "credits": 70,
+    "xp": 70,
+    "partialMultiplier": 0
+  },
+  "objectives": [
+    {
+      "id": "23-py-fallos",
+      "description": "Muestra el total de líneas que contienen Failed en el registro de práctica.",
+      "trigger": {
+        "command": "python",
+        "args": ["~/scripts/23-py-fallos.py"],
+        "outputIncludes": "Total de fallos: 4."
+      },
+      "completed": false,
+      "hints": [
+        "fallos comienza en cero. Debe aumentar en uno cada vez que se cumple el if.",
+        "Usa += 1 dentro del if, con ocho espacios al comienzo de la línea.",
+        "Sustituye la línea # TODO por `        fallos += 1`."
+      ]
+    }
+  ],
+  "target": {
+    "hostname": "nodo-ws-07.nodoseguro.test",
+    "ip": "10.20.0.15",
+    "ports": [],
+    "filesystem": {
+      "type": "dir",
+      "name": "/",
+      "permissions": "drwxr-xr-x",
+      "children": {}
+    }
+  },
+  "story": {
+    "intro": [
+      {
+        "character": "MARTA",
+        "text": "En ~/scripts/datos-curso/auth.log hay una copia del registro de autenticación del ejercicio. Failed indica un intento fallido. El bucle ya recorre el texto línea por línea y el if detecta esa palabra. Falta actualizar el contador."
+      },
+      {
+        "character": "MARTA",
+        "text": "Abre la plantilla con edit ~/scripts/23-py-fallos.py. Sustituye la línea marcada con # TODO, guarda con Ctrl+S y ejecuta python ~/scripts/23-py-fallos.py."
+      }
+    ],
+    "onComplete": [
+      {
+        "character": "MARTA",
+        "text": "Ya puedes contar fallos de autenticación en este registro. El mismo patrón sirve para contar otros eventos por su etiqueta."
+      }
+    ],
+    "hints": {}
+  }
+}

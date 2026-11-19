@@ -1,0 +1,101 @@
+{
+  "id": "16-dia-7-informe",
+  "channel": "work",
+  "title": "Día 7 · Entrega el informe",
+  "description": "Redacta un resumen virtual y revísalo antes de cerrar el ticket.",
+  "difficulty": "beginner",
+  "requiredReputation": "script_kiddie",
+  "reward": {
+    "credits": 350,
+    "xp": 300,
+    "partialMultiplier": 0.75
+  },
+  "objectives": [
+    {
+      "id": "dia7-python",
+      "description": "Ejecuta contar_fallidos.py y observa el total de fallos de la muestra.",
+      "trigger": {
+        "command": "python",
+        "args": ["~/scripts/contar_fallidos.py"]
+      },
+      "completed": false,
+      "hints": [
+        "El ejemplo está en tu carpeta scripts.",
+        "Con cat puedes leer cómo el script cuenta las líneas de la muestra.",
+        "Ejecuta python ~/scripts/contar_fallidos.py."
+      ]
+    },
+    {
+      "id": "dia7-comparacion",
+      "description": "Compara ese total con grep en el registro de autenticación virtual.",
+      "trigger": {
+        "command": "grep",
+        "args": ["-c", "Failed", "/var/log/auth.log"]
+      },
+      "completed": false,
+      "hints": [
+        "Compara el número del script con el registro de autenticación.",
+        "grep -c cuenta las líneas que contienen Failed.",
+        "Ejecuta grep -c Failed /var/log/auth.log y compara ambos totales."
+      ]
+    },
+    {
+      "id": "dia7-01",
+      "description": "Escribe el resumen en ~/informe.txt.",
+      "trigger": {
+        "command": "echo",
+        "args": [
+          "Dominio sospechoso: nodoseguro-pagos.example; intentos web: 3; MD5 debe retirarse.",
+          ">",
+          "~/informe.txt"
+        ]
+      },
+      "completed": false,
+      "hints": [
+        "Recupera los tres resultados de esta semana.",
+        "Usa echo con > y el texto entre comillas para guardar el resumen.",
+        "Ejecuta echo \"Dominio sospechoso: nodoseguro-pagos.example; intentos web: 3; MD5 debe retirarse.\" > ~/informe.txt."
+      ]
+    },
+    {
+      "id": "dia7-02",
+      "description": "Revisa el informe que acabas de escribir.",
+      "trigger": {
+        "command": "cat",
+        "args": ["~/informe.txt"]
+      },
+      "completed": false,
+      "hints": [
+        "Comprueba que el archivo quedó en tu carpeta personal.",
+        "cat te permite revisar el resumen antes de entregarlo.",
+        "Ejecuta cat ~/informe.txt."
+      ]
+    }
+  ],
+  "target": {
+    "hostname": "nodo-ws-07.nodoseguro.test",
+    "ip": "10.20.0.15",
+    "ports": [],
+    "filesystem": {
+      "type": "dir",
+      "name": "/",
+      "permissions": "drwxr-xr-x",
+      "children": {}
+    }
+  },
+  "story": {
+    "intro": [
+      {
+        "character": "MARTA",
+        "text": "Organiza un informe breve con el dominio sospechoso, el número de alertas web y el criterio sobre MD5. Guarda el archivo en tu carpeta personal y léelo antes de enviar. Antes de entregar, compara el total del ejemplo de Python con el que muestra grep en el registro virtual."
+      }
+    ],
+    "onComplete": [
+      {
+        "character": "MARTA",
+        "text": "El expediente quedó listo. Podemos revisar los hallazgos y sus evidencias sin depender de una captura de pantalla."
+      }
+    ],
+    "hints": {}
+  }
+}
