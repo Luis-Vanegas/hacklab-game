@@ -12,8 +12,6 @@ Enseña ciberseguridad, scripting y conceptos de ingeniería de software a trav�
 de contratos (misiones) con historia. Es open source (MIT), independiente, y
 pensado para recibir donaciones y contribuciones de la comunidad.
 
-**NO es parte de VEXILRA** (otro proyecto del mismo dueño en `C:\Users\LENOVO\Music\LAB_LARV`).
-
 **Inspiración**: juegos tipo Hacknet, pero con diseño PROPIO. No copiar la
 referencia visual ni usar HTML estático para la terminal. La terminal es
 xterm.js, el fondo es Three.js, todo profesional.
