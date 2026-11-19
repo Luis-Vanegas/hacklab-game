@@ -5,7 +5,13 @@
       "tier": "script_kiddie",
       "label": "Script Kiddie",
       "minXp": 0,
-      "unlocksContracts": ["00-tutorial", "01-first-hack"],
+      "unlocksContracts": [
+        "00-tutorial",
+        "01-first-hack",
+        "10-dia-1-bienvenida",
+        "11-dia-2-logs",
+        "12-dia-3-proceso-raro"
+      ],
       "unlocksTools": ["nmap", "ssh"]
     },
     {

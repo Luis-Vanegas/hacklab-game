@@ -1,0 +1,96 @@
+{
+  "id": "10-dia-1-bienvenida",
+  "channel": "work",
+  "title": "Día 1 · Conoce tu estación",
+  "description": "Lee el mensaje de Marta y verifica cómo se conecta la estación a la red de práctica.",
+  "difficulty": "beginner",
+  "requiredReputation": "script_kiddie",
+  "reward": {
+    "credits": 140,
+    "xp": 110,
+    "partialMultiplier": 0.75
+  },
+  "objectives": [
+    {
+      "id": "dia1-01",
+      "description": "Lee la nota de bienvenida.",
+      "trigger": {
+        "command": "cat",
+        "args": ["bienvenida.txt"]
+      },
+      "completed": false,
+      "hints": [
+        "La carta está en tu carpeta personal.",
+        "Usa cat para leer el contenido de un archivo.",
+        "Ejecuta cat bienvenida.txt."
+      ]
+    },
+    {
+      "id": "dia1-02",
+      "description": "Consulta la configuración de red de la estación.",
+      "trigger": {
+        "command": "ipconfig"
+      },
+      "completed": false,
+      "hints": [
+        "Busca qué IP y puerta de enlace tiene la estación.",
+        "ipconfig muestra las interfaces y sus direcciones.",
+        "Ejecuta ipconfig."
+      ]
+    },
+    {
+      "id": "dia1-03",
+      "description": "Verifica que responde la puerta de enlace de la red de práctica.",
+      "trigger": {
+        "command": "ping",
+        "args": ["10.20.0.1"]
+      },
+      "completed": false,
+      "hints": [
+        "Revisa la dirección de la puerta de enlace que aparece en la configuración.",
+        "Usa ping seguido de esa IP para comparar las respuestas.",
+        "Ejecuta ping 10.20.0.1."
+      ]
+    },
+    {
+      "id": "dia1-04",
+      "description": "Consulta la IP que el DNS asigna a la intranet.",
+      "trigger": {
+        "command": "nslookup",
+        "args": ["intranet.nodoseguro.test"]
+      },
+      "completed": false,
+      "hints": [
+        "La intranet tiene un nombre en el dominio de prueba de Nodo Seguro.",
+        "nslookup consulta una dirección a partir del nombre.",
+        "Ejecuta nslookup intranet.nodoseguro.test."
+      ]
+    }
+  ],
+  "target": {
+    "hostname": "nodo-ws-07.nodoseguro.test",
+    "ip": "10.20.0.15",
+    "ports": [],
+    "filesystem": {
+      "type": "dir",
+      "name": "/",
+      "permissions": "drwxr-xr-x",
+      "children": {}
+    }
+  },
+  "story": {
+    "intro": [
+      {
+        "character": "MARTA",
+        "text": "Bienvenido a Nodo Seguro. Lee mi nota en tu carpeta personal y comprueba la estación, la puerta de enlace y el nombre de la intranet. Este ticket se limita al equipo y la red virtuales."
+      }
+    ],
+    "onComplete": [
+      {
+        "character": "MARTA",
+        "text": "Bien. Ya tienes una referencia de cómo se ve la red cuando está funcionando. Guárdala para comparar en el próximo turno."
+      }
+    ],
+    "hints": {}
+  }
+}

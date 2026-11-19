@@ -2,6 +2,9 @@ import { describe, expect, it } from "vitest";
 import tutorial from "@/data/contracts/00-tutorial.json";
 import acme from "@/data/contracts/01-first-hack.json";
 import archivo from "@/data/contracts/02-data-heist.json";
+import dayOne from "@/data/contracts/10-dia-1-bienvenida.json";
+import dayTwo from "@/data/contracts/11-dia-2-logs.json";
+import dayThree from "@/data/contracts/12-dia-3-proceso-raro.json";
 import progression from "@/data/levels/progression.json";
 import shopData from "@/data/tools/shop.json";
 import beginner from "@/data/tutorials/beginner.json";
@@ -10,7 +13,7 @@ import { parseCommand } from "@/terminal/CommandParser";
 import { commands } from "@/terminal/commands";
 import { findVirtualNode } from "@/terminal/commands/virtualPath";
 
-const contracts = [tutorial, acme, archivo] as readonly Contract[];
+const contracts = [tutorial, acme, archivo, dayOne, dayTwo, dayThree] as readonly Contract[];
 const shop: readonly ToolDefinition[] = shopData;
 const tiers = progression.tiers as readonly ReputationConfig[];
 
@@ -35,6 +38,7 @@ describe("Datos del juego", () => {
     // cd se registra cuando la integración exponga el cambio de directorio.
     const knownCommands = new Set([...commands.map((command) => command.name), "cd"]);
     for (const contract of contracts) {
+      expect(["work", "darknet"]).toContain(contract.channel);
       expect(contract.title).not.toBe("");
       expect(contract.description).not.toBe("");
       expect(["beginner", "normal", "elite", "anonymous"]).toContain(contract.difficulty);
