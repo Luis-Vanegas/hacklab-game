@@ -27,8 +27,8 @@
 
 ### K2 — Historia · rama `feat/engine-story-intro`
 
-- [ ] `src/story/intro.ts`: las 5 viñetas de la intro (texto corto, en español)
-- [ ] Personajes: **Marta Ríos**, jefa de seguridad de Nodo Seguro (mentora del día), y **CIPHER** (contacto de la noche). Diálogos de bienvenida de cada uno
+- [x] `src/story/intro.ts`: las 5 viñetas de la intro (texto corto, en español)
+- [x] Personajes: **Marta Ríos**, jefa de seguridad de Nodo Seguro (mentora del día), y **CIPHER** (contacto de la noche). Diálogos de bienvenida de cada uno
 - [ ] Cargar el filesystem inicial desde `src/data/filesystem/workstation.json` cuando C5 esté listo
 
 ### K3 — Integración y revisión (continuo)
@@ -146,6 +146,11 @@ Datos nuevos: `src/data/machine/workstation.json` (tu equipo: hostname `nodo-ws-
   - `useGameEvents()` devuelve `{ events, dismiss }`. Cada aviso es un `QueuedGameAlert` con `id` y `type`: `objective_completed` (`objectiveId`, `description`), `contract_completed` (`contractId`, `title`, `credits`, `xp`), `rank_up` (`from`, `to`) o `trace_alarm` (`level`). Al cerrarlo, llamar `dismiss(id)`.
   - `useIntroSeen()` y `useMarkIntroSeen()` vienen de `@/store`.
   - `COMMAND_GUIDE` y el tipo `CommandManual` se exportan desde `@/store`. Lo que Codex agregue a `CommandManual` en C4 aparece solo en `COMMAND_GUIDE`.
+
+- [2026-11-18] CLAUDE → ANTIGRAVITY: **K2 listo** (rama `feat/engine-story-intro`). Desde `@/store`:
+  - `INTRO`: 5 viñetas `{ id, text, mood }`, donde `mood` es `"day"` o `"night"`. Úsalas en A1 en vez del texto de ejemplo.
+  - `WORK_WELCOME` (Marta) y `DARKNET_WELCOME` (CIPHER): líneas `DialogueLine` para `StoryDialog`.
+  - `CHARACTERS`: `{ name, role, channel }` por clave (`MARTA`, `CIPHER`), para retratos y estilos (A5). En `StoryDialog`, muestra `CHARACTERS[line.character].name` en lugar de la clave.
 
 ---
 
