@@ -17,3 +17,9 @@ export {
   type IntroVignette,
   type IntroSlideInput,
 } from "./intro/IntroSequence";
+export {
+  Desktop,
+  type DesktopProps,
+  type DesktopWindowId,
+  type SidePanelTab,
+} from "./desktop/Desktop";
