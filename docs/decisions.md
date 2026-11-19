@@ -15,8 +15,9 @@ jugador escriba y ejecute Python de verdad, sin servidor y sin volver pesado el 
 
 - **Intérprete:** Pyodide (CPython compilado a WebAssembly), versión fijada `314.0.8`. Se descartó
   MicroPython porque le falta parte de la biblioteca estándar que el curso usa (`re`, `hashlib`).
-- **Carga diferida y local:** se descarga solo la primera vez que se usa `python` y se sirve desde
-  el propio build, no desde un CDN, para que el juego no dependa de terceros.
+- **Carga diferida y local:** se descarga solo cuando se usa `python` y se sirve desde el propio
+  juego, no desde un CDN. Un plugin de `vite.config.ts` la lee de `node_modules` en desarrollo
+  (Vite no deja importar módulos de `public/`) y la copia a `dist/pyodide` en el build.
 - **Aislamiento:** corre en un Web Worker de tipo módulo, sobre una copia de `/home/user`.
   Un script que excede 5 s se corta con `worker.terminate()` y se crea un worker nuevo.
 - **Atomicidad:** los cambios de archivos vuelven al filesystem virtual solo si el script termina bien.
