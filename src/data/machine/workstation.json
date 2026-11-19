@@ -1,0 +1,45 @@
+{
+  "hostname": "nodo-ws-07",
+  "interfaces": [
+    {
+      "name": "eth0",
+      "ipv4": "10.20.0.15",
+      "prefixLength": 24,
+      "netmask": "255.255.255.0",
+      "mac": "02:20:00:00:00:15"
+    },
+    {
+      "name": "wlan0",
+      "ipv4": "10.20.1.15",
+      "prefixLength": 24,
+      "netmask": "255.255.255.0",
+      "mac": "02:20:01:00:00:15"
+    }
+  ],
+  "gateway": "10.20.0.1",
+  "dns": ["10.20.0.53"],
+  "system": {
+    "name": "Linux",
+    "release": "6.8.0-hacklab",
+    "architecture": "x86_64",
+    "operatingSystem": "GNU/Linux"
+  },
+  "gameDate": "2026-11-18 08:15:00 COT (UTC-05:00)",
+  "processes": [
+    {
+      "pid": 1,
+      "owner": "root",
+      "command": "init"
+    },
+    {
+      "pid": 730,
+      "owner": "user",
+      "command": "terminal"
+    },
+    {
+      "pid": 4444,
+      "owner": "user",
+      "command": "svch0st"
+    }
+  ]
+}

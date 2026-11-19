@@ -10,6 +10,13 @@ import history from "./history";
 import ls from "./ls";
 import createMan from "./man";
 import nmap from "./nmap";
+import curl from "./curl";
+import ipconfig from "./ipconfig";
+import netstat from "./netstat";
+import nslookup from "./nslookup";
+import ping from "./ping";
+import traceroute from "./traceroute";
+import whois from "./whois";
 import pwd from "./pwd";
 import ssh from "./ssh";
 import trace from "./trace";
@@ -95,6 +102,56 @@ export const commands: readonly CommandDefinition[] = [
     description: "Leer el inventario de puertos de la misión.",
     example: "nmap acme.example",
     run: nmap,
+  },
+  {
+    name: "ipconfig",
+    aliases: ["ifconfig"],
+    usage: "ipconfig",
+    description: "Mostrar la configuración de red del equipo. Alias: ifconfig.",
+    example: "ipconfig",
+    run: ipconfig,
+  },
+  {
+    name: "ping",
+    usage: "ping <host>",
+    description: "Comprobar si un equipo simulado responde en la red.",
+    example: "ping 10.20.0.1",
+    run: ping,
+  },
+  {
+    name: "nslookup",
+    usage: "nslookup <dominio>",
+    description: "Consultar la dirección de un dominio en el DNS virtual.",
+    example: "nslookup intranet.nodoseguro.test",
+    run: nslookup,
+  },
+  {
+    name: "traceroute",
+    usage: "traceroute <host>",
+    description: "Mostrar los saltos simulados hasta un equipo.",
+    example: "traceroute archivo.example",
+    run: traceroute,
+  },
+  {
+    name: "netstat",
+    usage: "netstat",
+    description: "Listar las conexiones virtuales del equipo.",
+    example: "netstat",
+    run: netstat,
+  },
+  {
+    name: "curl",
+    usage: "curl <url-http-o-https>",
+    description: "Ver los encabezados y el contenido de una respuesta HTTP simulada.",
+    example: "curl https://intranet.nodoseguro.test/",
+    run: curl,
+  },
+  {
+    name: "whois",
+    usage: "whois <dominio>",
+    description: "Consultar el titular y las fechas de un dominio ficticio.",
+    example: "whois acme.example",
+    run: whois,
   },
   {
     name: "pwd",

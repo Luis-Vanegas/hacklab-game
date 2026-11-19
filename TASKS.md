@@ -48,13 +48,13 @@
 
 Datos nuevos: `src/data/machine/workstation.json` (tu equipo: hostname `nodo-ws-07`, interfaces, IP `10.20.0.15/24`, gateway `10.20.0.1`, DNS) y `src/data/network/hosts.json` (hosts conocidos: gateway, intranet `intranet.nodoseguro.test`, DNS y los servidores de los contratos).
 
-- [ ] `ipconfig`, con alias `ifconfig`: interfaces, IP, máscara, gateway y MAC. Si el parser no soporta alias, agrégalo (`aliases` en la definición)
-- [ ] `ping <host>`: 4 respuestas con tiempos fijos, o "Host inalcanzable" si no existe
-- [ ] `nslookup <dominio>`: resuelve con `hosts.json`
-- [ ] `traceroute <host>`: saltos fijos hasta el destino
-- [ ] `netstat`: conexiones de tu equipo, incluida una sospechosa a `203.0.113.45:4444` que usará C5
-- [ ] `curl <url>`: encabezados y cuerpo ficticio desde datos
-- [ ] `whois <dominio>`: dueño y fechas del dominio ficticio
+- [x] `ipconfig`, con alias `ifconfig`: interfaces, IP, máscara, gateway y MAC. Si el parser no soporta alias, agrégalo (`aliases` en la definición)
+- [x] `ping <host>`: 4 respuestas con tiempos fijos, o "Host inalcanzable" si no existe
+- [x] `nslookup <dominio>`: resuelve con `hosts.json`
+- [x] `traceroute <host>`: saltos fijos hasta el destino
+- [x] `netstat`: conexiones de tu equipo, incluida una sospechosa a `203.0.113.45:4444` que usará C5
+- [x] `curl <url>`: encabezados y cuerpo ficticio desde datos
+- [x] `whois <dominio>`: dueño y fechas del dominio ficticio
 
 ### C2 — Archivos y texto · rama `feat/terminal-files` · sin dependencias
 
@@ -151,6 +151,8 @@ Datos nuevos: `src/data/machine/workstation.json` (tu equipo: hostname `nodo-ws-
   - `INTRO`: 5 viñetas `{ id, text, mood }`, donde `mood` es `"day"` o `"night"`. Úsalas en A1 en vez del texto de ejemplo.
   - `WORK_WELCOME` (Marta) y `DARKNET_WELCOME` (CIPHER): líneas `DialogueLine` para `StoryDialog`.
   - `CHARACTERS`: `{ name, role, channel }` por clave (`MARTA`, `CIPHER`), para retratos y estilos (A5). En `StoryDialog`, muestra `CHARACTERS[line.character].name` en lugar de la clave.
+
+- [2026-11-18] CODEX → LUIS y CLAUDE: git fetch origin devolvió acceso denegado a .git/worktrees/hacklab-game-cmd/FETCH_HEAD. La carpeta compartida de Codex tampoco está disponible para escritura. Los parches de C1 a C5 parten de d65d14b (K2) y se entregan en orden. Crear cada rama en hacklab-game-cmd desde origin/develop una vez fusionada la tarea previa. Claude prepara los commits, el push y los PR hacia develop.
 
 ---
 
