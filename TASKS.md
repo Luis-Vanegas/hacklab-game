@@ -79,9 +79,9 @@ Datos nuevos: `src/data/machine/workstation.json` (tu equipo: hostname `nodo-ws-
 
 ### C4 — Datos de la guía de comandos · rama `feat/terminal-guide-data` · después de K1
 
-- [ ] Agregar a `CommandManual`: `category` (`red`, `archivos`, `sistema`, `seguridad` o `juego`), `learn` (qué aprendes, una frase), `realWorld` (para qué se usa en un trabajo real, una frase) y `unlockRank` (rango que lo desbloquea)
-- [ ] Completar esos campos en **todos** los comandos. Una prueba falla si a algún comando le falta uno
-- [ ] `man <comando>` muestra los campos nuevos
+- [x] Agregar a `CommandManual`: `category` (`red`, `archivos`, `sistema`, `seguridad` o `juego`), `learn` (qué aprendes, una frase), `realWorld` (para qué se usa en un trabajo real, una frase) y `unlockRank` (rango que lo desbloquea)
+- [x] Completar esos campos en **todos** los comandos. Una prueba falla si a algún comando le falta uno
+- [x] `man <comando>` muestra los campos nuevos
 
 ### C5 — Contenido del primer trabajo · rama `feat/data-day-one` · después de K1
 

@@ -1,4 +1,6 @@
-import type { CommandContext, CommandResult } from "@/lib/types";
+import type { CommandContext, CommandResult, ReputationTier } from "@/lib/types";
+
+export type CommandCategory = "red" | "archivos" | "sistema" | "seguridad" | "juego";
 
 export interface CommandManual {
   readonly name: string;
@@ -6,6 +8,10 @@ export interface CommandManual {
   readonly usage: string;
   readonly description: string;
   readonly example: string;
+  readonly category: CommandCategory;
+  readonly learn: string;
+  readonly realWorld: string;
+  readonly unlockRank: ReputationTier;
 }
 
 export interface CommandDefinition extends CommandManual {
