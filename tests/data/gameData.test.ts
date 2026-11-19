@@ -2,6 +2,8 @@ import { describe, expect, it } from "vitest";
 import tutorial from "@/data/contracts/00-tutorial.json";
 import acme from "@/data/contracts/01-first-hack.json";
 import archivo from "@/data/contracts/02-data-heist.json";
+import clinical from "@/data/contracts/03-espejo-clinico.json";
+import shelter from "@/data/contracts/04-archivo-de-turno.json";
 import dayOne from "@/data/contracts/10-dia-1-bienvenida.json";
 import dayTwo from "@/data/contracts/11-dia-2-logs.json";
 import dayThree from "@/data/contracts/12-dia-3-proceso-raro.json";
@@ -18,6 +20,8 @@ import { commands } from "@/terminal/commands";
 import { findVirtualNode } from "@/terminal/commands/virtualPath";
 
 const contracts = [
+  clinical,
+  shelter,
   tutorial,
   acme,
   archivo,
