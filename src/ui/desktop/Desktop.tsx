@@ -5,19 +5,27 @@
 
 import { useState, type ReactNode } from "react";
 import type { Contract, PlayerState } from "@/lib/types";
+import {
+  useCloseEditor,
+  useEditorFile,
+  usePythonStatus,
+  useSaveFile,
+  type PythonStatus,
+} from "@/store";
 import { handleTabListKeyDown } from "../a11y/keyboardTabs";
 import { useSoundMute } from "../feedback/soundEffects";
 import { ReputationBadge } from "../hud/ReputationBadge";
 import { TraceBar } from "../hud/TraceBar";
+import { CodeEditor, type EditorFile } from "./CodeEditor";
 
-export type DesktopWindowId = "terminal" | "inbox" | "guide" | "map" | "shop";
+export type DesktopWindowId = "terminal" | "inbox" | "editor" | "guide" | "map" | "shop";
 
-export type SidePanelTab = "status" | "guide" | "map";
+export type SidePanelTab = "status" | "editor" | "guide" | "map";
 
-type MobileTabWindow = "terminal" | "inbox" | "guide" | "map";
+type MobileTabWindow = "terminal" | "inbox" | "editor" | "guide" | "map";
 
-const MOBILE_TABS: readonly MobileTabWindow[] = ["terminal", "inbox", "guide", "map"];
-const SIDE_TABS: readonly SidePanelTab[] = ["status", "guide", "map"];
+const MOBILE_TABS: readonly MobileTabWindow[] = ["terminal", "inbox", "editor", "guide", "map"];
+const SIDE_TABS: readonly SidePanelTab[] = ["status", "editor", "guide", "map"];
 
 export interface DesktopProps {
   readonly player: PlayerState;
@@ -29,8 +37,10 @@ export interface DesktopProps {
   readonly unreadInboxCount?: number;
   readonly soundMuted?: boolean;
   readonly onToggleSound?: () => void;
+  readonly pythonStatus?: PythonStatus;
   readonly terminalWindow: ReactNode;
   readonly inboxWindow: ReactNode;
+  readonly editorWindow?: ReactNode;
   readonly statusWindow?: ReactNode;
   readonly commandGuideWindow?: ReactNode;
   readonly networkMapWindow?: ReactNode;
@@ -171,8 +181,10 @@ export function Desktop({
   unreadInboxCount = 0,
   soundMuted,
   onToggleSound,
+  pythonStatus,
   terminalWindow,
   inboxWindow,
+  editorWindow,
   statusWindow,
   commandGuideWindow,
   networkMapWindow,
@@ -188,9 +200,33 @@ export function Desktop({
   const isMuted = soundMuted ?? storedMuted;
   const handleToggleSound = onToggleSound ?? toggleStoredMute;
 
+  const storeEditorFile = useEditorFile();
+  const storeSaveFile = useSaveFile();
+  const storeCloseEditor = useCloseEditor();
+  const storePythonStatus = usePythonStatus();
+  const effectivePythonStatus = pythonStatus ?? storePythonStatus;
+
+  const [prevEditorFile, setPrevEditorFile] = useState<EditorFile | null>(storeEditorFile);
+  if (storeEditorFile !== prevEditorFile) {
+    setPrevEditorFile(storeEditorFile);
+    if (storeEditorFile !== null) {
+      setSideTab("editor");
+      setMobileWindow("editor");
+    } else {
+      if (sideTab === "editor") {
+        setSideTab("status");
+      }
+      if (mobileWindow === "editor") {
+        setMobileWindow("terminal");
+      }
+    }
+  }
+
   const selectMobileTab = (target: MobileTabWindow) => {
     setMobileWindow(target);
-    if (target === "guide") {
+    if (target === "editor") {
+      setSideTab("editor");
+    } else if (target === "guide") {
       setSideTab("guide");
     } else if (target === "map") {
       setSideTab("map");
@@ -214,10 +250,21 @@ export function Desktop({
           document.getElementById("hacklab-terminal-main")?.focus();
         }
       });
+    } else if (target === "editor" && typeof document !== "undefined") {
+      window.requestAnimationFrame(() => {
+        document.querySelector<HTMLElement>('[data-testid="editor-textarea"]')?.focus();
+      });
     }
   };
 
   const renderSideContent = () => {
+    if (sideTab === "editor") {
+      return (
+        editorWindow ?? (
+          <CodeEditor file={storeEditorFile} onSave={storeSaveFile} onClose={storeCloseEditor} />
+        )
+      );
+    }
     if (sideTab === "guide" && commandGuideWindow) {
       return commandGuideWindow;
     }
@@ -243,8 +290,10 @@ export function Desktop({
     );
   };
 
-  const isMobileSideActive = mobileWindow === "guide" || mobileWindow === "map";
+  const isMobileSideActive =
+    mobileWindow === "editor" || mobileWindow === "guide" || mobileWindow === "map";
   const activeMobileTab: MobileTabWindow = mobileWindow === "shop" ? "terminal" : mobileWindow;
+  const hasOpenEditorFile = storeEditorFile !== null;
 
   return (
     <div className="hl-desktop" data-testid="hacklab-desktop">
@@ -299,6 +348,26 @@ export function Desktop({
                   {unreadInboxCount}
                 </span>
                 <span className="visually-hidden"> ({unreadInboxCount} correos sin leer)</span>
+              </>
+            ) : null}
+          </button>
+          <button
+            type="button"
+            role="tab"
+            tabIndex={mobileWindow === "editor" ? 0 : -1}
+            aria-selected={mobileWindow === "editor"}
+            className={mobileWindow === "editor" ? "hl-btn hl-btn--primary" : "hl-btn"}
+            onClick={() => selectMobileTab("editor")}
+            onKeyDown={(e) =>
+              handleTabListKeyDown(e, MOBILE_TABS, activeMobileTab, selectMobileTab)
+            }
+            data-testid="mobile-tab-editor"
+          >
+            <span>Editor</span>
+            {hasOpenEditorFile ? (
+              <>
+                <span className="hl-editor-dot" aria-hidden="true" />
+                <span className="visually-hidden"> (archivo abierto)</span>
               </>
             ) : null}
           </button>
@@ -389,6 +458,25 @@ export function Desktop({
               data-testid="side-tab-status"
             >
               Misión
+            </button>
+            <button
+              type="button"
+              role="tab"
+              tabIndex={sideTab === "editor" ? 0 : -1}
+              aria-selected={sideTab === "editor"}
+              className={sideTab === "editor" ? "hl-btn hl-btn--primary" : "hl-btn"}
+              style={{ flex: "1 1 auto", fontSize: "0.76rem", padding: "4px 8px" }}
+              onClick={() => setSideTab("editor")}
+              onKeyDown={(e) => handleTabListKeyDown(e, SIDE_TABS, sideTab, setSideTab)}
+              data-testid="side-tab-editor"
+            >
+              <span>Editor</span>
+              {hasOpenEditorFile ? (
+                <>
+                  <span className="hl-editor-dot" aria-hidden="true" />
+                  <span className="visually-hidden"> (archivo abierto)</span>
+                </>
+              ) : null}
             </button>
             <button
               type="button"
@@ -484,6 +572,21 @@ export function Desktop({
             </button>
             <button
               type="button"
+              className={hasOpenEditorFile ? "hl-btn hl-btn--primary" : "hl-btn"}
+              style={{ fontSize: "0.78rem", padding: "4px 10px" }}
+              onClick={() => openWindow("editor")}
+              data-testid="taskbar-editor-btn"
+            >
+              <span>Editor</span>
+              {hasOpenEditorFile ? (
+                <>
+                  <span className="hl-editor-dot" aria-hidden="true" />
+                  <span className="visually-hidden"> (archivo abierto)</span>
+                </>
+              ) : null}
+            </button>
+            <button
+              type="button"
               className="hl-btn"
               style={{ fontSize: "0.78rem", padding: "4px 10px" }}
               onClick={() => openWindow("guide")}
@@ -520,6 +623,29 @@ export function Desktop({
             flexWrap: "wrap",
           }}
         >
+          {effectivePythonStatus === "loading" || effectivePythonStatus === "running" ? (
+            <div
+              className="hl-badge hl-badge--accent hl-python-status"
+              role="status"
+              aria-live="polite"
+              data-testid="taskbar-python-status"
+              data-python-status={effectivePythonStatus}
+            >
+              <progress
+                className="hl-python-spinner"
+                aria-label={
+                  effectivePythonStatus === "loading"
+                    ? "Cargando el intérprete de Python…"
+                    : "Ejecutando script de Python…"
+                }
+              />
+              <span>
+                {effectivePythonStatus === "loading"
+                  ? "Cargando el intérprete de Python…"
+                  : "Ejecutando Python…"}
+              </span>
+            </div>
+          ) : null}
           <span
             className="hl-badge hl-tabular"
             style={{ color: "var(--color-credits)", borderColor: "rgba(0, 255, 136, 0.35)" }}
