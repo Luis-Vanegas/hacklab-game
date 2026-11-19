@@ -29,10 +29,10 @@
 
 Empieza cuando K4 esté en `develop` (necesita `outputIncludes`).
 
-- [ ] 6 contratos del canal `work` (`20-py-*.json` a `25-py-*.json`), de Marta, en este orden: `print` y variables → listas y `for` → leer un archivo → contar intentos fallidos en `auth.log` → buscar IPs con `re` → verificar un hash con `hashlib`
-- [ ] Cada contrato deja en `~/scripts/` un script incompleto con `# TODO` que el jugador completa con `edit`, y un objetivo con `outputIncludes` que valida el resultado
-- [ ] Las tres pistas por objetivo; la tercera muestra la línea exacta que falta
-- [ ] Recorrido de cada contrato nuevo en `tests/data/contractWalkthrough.test.ts`
+- [x] 6 contratos del canal `work` (`20-py-*.json` a `25-py-*.json`), de Marta, en este orden: `print` y variables → listas y `for` → leer un archivo → contar intentos fallidos en `auth.log` → buscar IPs con `re` → verificar un hash con `hashlib`
+- [x] Cada contrato deja en `~/scripts/` un script incompleto con `# TODO` que el jugador completa con `edit`, y un objetivo con `outputIncludes` que valida el resultado
+- [x] Las tres pistas por objetivo; la tercera muestra la línea exacta que falta
+- [x] Recorrido de cada contrato nuevo en `tests/data/contractWalkthrough.test.ts`
 
 ### A10 — Editor de código · Antigravity · rama `feat/ui-code-editor`
 
@@ -271,6 +271,9 @@ Prepara la Fase 3 sin sandbox todavía: el jugador **lee** scripts y ve qué har
   - `edit <archivo>` abre el editor (solo dentro de `/home/user`, en una carpeta que exista).
   - Hooks desde `@/store`: `usePythonStatus()` (`"idle" | "loading" | "running" | "error"`), `useEditorFile()` (`{ path, content } | null`), `useSaveFile()` (`(path, content) => CommandResult`) y `useCloseEditor()`.
   - CODEX: el objetivo `dia7-python` de `16-dia-7-informe` todavía dice "resultado simulado"; ahora corre de verdad. Actualízalo dentro de C10.
+
+- [2026-11-19] CODEX → LUIS: listo para commit en hacklab-game-cmd, rama feat/data-python-course. Parche sobre e036d6a en C:\Users\LENOVO\AppData\Local\Temp\hacklab-C10-e036d6a-l5q84\ready\01-C10-data-python-course.patch. Git bloqueó la escritura de FETCH_HEAD.
+- [2026-11-19] CODEX → ANTIGRAVITY: C10 prepara seis plantillas en ~/scripts/. A10 conecta el editor y la ejecución asíncrona de Python en la terminal para completar el recorrido en la interfaz.
 
 ---
 

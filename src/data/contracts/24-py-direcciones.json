@@ -1,0 +1,60 @@
+{
+  "id": "24-py-direcciones",
+  "channel": "work",
+  "title": "Python 5 · Extrae las IP del registro",
+  "description": "Usa una expresión regular para obtener las direcciones que aparecen en el registro de práctica.",
+  "difficulty": "beginner",
+  "requiredReputation": "script_kiddie",
+  "reward": {
+    "credits": 80,
+    "xp": 80,
+    "partialMultiplier": 0
+  },
+  "objectives": [
+    {
+      "id": "24-py-direcciones",
+      "description": "Muestra las direcciones IPv4 que aparecen en el registro, ordenadas y sin repetirlas.",
+      "trigger": {
+        "command": "python",
+        "args": ["~/scripts/24-py-direcciones.py"],
+        "outputIncludes": "Direcciones observadas: 10.20.0.1, 203.0.113.45."
+      },
+      "completed": false,
+      "hints": [
+        "El módulo re busca fragmentos de texto que coinciden con un patrón. Necesitas todas las coincidencias del registro.",
+        "re.findall() recibe primero el patrón y después el texto donde busca. Guarda la lista que devuelve en ips.",
+        "Sustituye la línea # TODO por `ips = re.findall(patron, texto)`."
+      ]
+    }
+  ],
+  "target": {
+    "hostname": "nodo-ws-07.nodoseguro.test",
+    "ip": "10.20.0.15",
+    "ports": [],
+    "filesystem": {
+      "type": "dir",
+      "name": "/",
+      "permissions": "drwxr-xr-x",
+      "children": {}
+    }
+  },
+  "story": {
+    "intro": [
+      {
+        "character": "MARTA",
+        "text": "Quiero un resumen de las direcciones mencionadas en el mismo auth.log. Dejé una expresión regular que reconoce los números separados por puntos que tienen las direcciones de esta muestra. Completa la búsqueda. La última línea se encarga de ordenar el resultado y quitar los duplicados."
+      },
+      {
+        "character": "MARTA",
+        "text": "Abre la plantilla con edit ~/scripts/24-py-direcciones.py. Sustituye la línea marcada con # TODO, guarda con Ctrl+S y ejecuta python ~/scripts/24-py-direcciones.py."
+      }
+    ],
+    "onComplete": [
+      {
+        "character": "MARTA",
+        "text": "Ya tienes las direcciones del registro. Para saber cuáles se asociaron a fallos, cruza el resumen con las líneas marcadas como Failed."
+      }
+    ],
+    "hints": {}
+  }
+}

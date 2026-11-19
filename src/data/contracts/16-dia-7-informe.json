@@ -13,7 +13,7 @@
   "objectives": [
     {
       "id": "dia7-python",
-      "description": "Consulta el resultado simulado de contar_fallidos.py.",
+      "description": "Ejecuta contar_fallidos.py y observa el total de fallos de la muestra.",
       "trigger": {
         "command": "python",
         "args": ["~/scripts/contar_fallidos.py"]
