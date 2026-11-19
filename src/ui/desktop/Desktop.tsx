@@ -445,7 +445,11 @@ export function Desktop({
                   >
                     {effectiveFindingsCount}
                   </span>
-                  <span className="visually-hidden"> ({effectiveFindingsCount} hallazgos)</span>
+                  <span className="visually-hidden">
+                    {" "}
+                    ({effectiveFindingsCount}{" "}
+                    {effectiveFindingsCount === 1 ? "hallazgo" : "hallazgos"})
+                  </span>
                 </>
               ) : null}
             </button>
@@ -556,7 +560,11 @@ export function Desktop({
                     >
                       {effectiveFindingsCount}
                     </span>
-                    <span className="visually-hidden"> ({effectiveFindingsCount} hallazgos)</span>
+                    <span className="visually-hidden">
+                      {" "}
+                      ({effectiveFindingsCount}{" "}
+                      {effectiveFindingsCount === 1 ? "hallazgo" : "hallazgos"})
+                    </span>
                   </>
                 ) : null}
               </button>
@@ -690,7 +698,11 @@ export function Desktop({
                     >
                       {effectiveFindingsCount}
                     </span>
-                    <span className="visually-hidden"> ({effectiveFindingsCount} hallazgos)</span>
+                    <span className="visually-hidden">
+                      {" "}
+                      ({effectiveFindingsCount}{" "}
+                      {effectiveFindingsCount === 1 ? "hallazgo" : "hallazgos"})
+                    </span>
                   </>
                 ) : null}
               </button>

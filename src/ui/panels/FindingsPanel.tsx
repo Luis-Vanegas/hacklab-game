@@ -38,7 +38,9 @@ export function FindingsPanel({
           }
           data-testid="findings-count"
         >
-          {findings.length > 0 ? `${findings.length} MARCAS` : "SIN MARCAS"}
+          {findings.length > 0
+            ? `${findings.length} ${findings.length === 1 ? "MARCA" : "MARCAS"}`
+            : "SIN MARCAS"}
         </span>
       </div>
 

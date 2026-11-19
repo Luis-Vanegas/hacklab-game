@@ -1,18 +1,17 @@
 // Pantalla de título de HackLab Game.
 // Muestra el logo en fuente pixel ("Press Start 2P" / "VT323"), pide el nombre de usuario
-// antes de iniciar una nueva partida (validado con newGame) y permite continuar si hay partida.
+// antes de iniciar una nueva partida (lo valida el contenedor) y permite continuar si hay partida.
 
 import { useEffect, useId, useRef, useState, type FormEvent } from "react";
-import { useNewGame } from "@/store";
 
 export interface TitleScreenProps {
   readonly hasSavedGame?: boolean;
-  readonly onNewGame: ((playerName?: string) => string | null) | (() => void);
+  /** Crea la partida con el nombre y devuelve el error de validación, o null si avanzó. */
+  readonly onNewGame: (playerName: string) => string | null;
   readonly onContinue?: () => void;
 }
 
 export function TitleScreen({ hasSavedGame = false, onNewGame, onContinue }: TitleScreenProps) {
-  const storeNewGame = useNewGame();
   const [username, setUsername] = useState("");
   const [error, setError] = useState<string | null>(null);
 
@@ -43,33 +42,10 @@ export function TitleScreen({ hasSavedGame = false, onNewGame, onContinue }: Tit
 
   const handleNewGameSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const trimmed = username.trim();
-
-    // Si el contenedor ya recibe el nombre (K3), delegamos validación y navegación en él
-    if (onNewGame.length >= 1) {
-      const callbackError = (onNewGame as (playerName?: string) => string | null)(trimmed);
-      if (typeof callbackError === "string" && callbackError.length > 0) {
-        setError(callbackError);
-        inputRef.current?.focus();
-        return;
-      }
-      setError(null);
-      return;
-    }
-
-    // Compatibilidad con App.tsx actual (() => { newGame(); setScreen("intro"); })
-    const validationError = storeNewGame(trimmed);
-    if (validationError) {
-      setError(validationError);
-      inputRef.current?.focus();
-      return;
-    }
-
-    setError(null);
-    (onNewGame as () => void)();
-    if (trimmed.length > 0) {
-      storeNewGame(trimmed);
-    }
+    // El contenedor crea la partida una sola vez y devuelve el error de validación, si lo hay
+    const validationError = onNewGame(username.trim());
+    setError(validationError);
+    if (validationError) inputRef.current?.focus();
   };
 
   return (

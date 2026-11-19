@@ -30,7 +30,7 @@ describe("FindingsPanel", () => {
     );
 
     expect(screen.getByTestId("findings-panel")).toBeInTheDocument();
-    expect(screen.getByTestId("findings-count")).toHaveTextContent("1 MARCAS");
+    expect(screen.getByTestId("findings-count")).toHaveTextContent("1 MARCA");
     expect(screen.getByText("ftp")).toBeInTheDocument();
     expect(screen.getByText("FTP transmite credenciales sin cifrar.")).toBeInTheDocument();
     expect(screen.getByText("$ nmap 10.20.0.10")).toBeInTheDocument();
