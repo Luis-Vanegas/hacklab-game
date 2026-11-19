@@ -1,4 +1,4 @@
-// Escena 3D "La oficina" (Nodo Seguro, Medellín).
+// Escena 3D "La oficina" (Nodo Seguro).
 // Renderiza una oficina low-poly con estilo pixelado (<Canvas dpr={0.35}> + image-rendering: pixelated),
 // el personaje del jugador sentado frente a su computador, al menos 2 compañeros caminando por rutas
 // fijas, iluminación día/noche (prop `night`) y transición de cámara de ~1,2 s hacia el monitor
@@ -578,7 +578,7 @@ export function OfficeScene({
               color: "var(--color-text)",
             }}
           >
-            Medellín — Piso de Operaciones SOC
+            Piso de Operaciones SOC
           </span>
         </div>
       </header>
