@@ -108,11 +108,11 @@ Datos nuevos: `src/data/machine/workstation.json` (tu equipo: hostname `nodo-ws-
 
 ### A2 — Escena "La oficina" · rama `feat/scenes-office` · sin dependencias
 
-- [ ] Modelos **CC0** en `public/models/`, con su fuente y licencia en `public/models/CREDITS.md`. Opciones verificadas: KayKit Furniture Bits, KayKit Character Animations, Quaternius Universal Base Characters y Kenney Furniture Kit. Solo CC0
-- [ ] `src/scenes/OfficeScene.tsx`: oficina low-poly con escritorios, el personaje del jugador sentado frente a su computador y al menos 2 compañeros caminando por rutas fijas (interpolación simple entre puntos y animación de caminar)
-- [ ] Look pixelado sin librerías nuevas: `<Canvas dpr={0.35}>` y CSS `image-rendering: pixelated` sobre el canvas
-- [ ] Modo noche (prop `night`): luces bajas y la pantalla del monitor como fuente de luz principal
-- [ ] Clic en el computador del jugador (o Enter): la cámara se acerca al monitor en ~1,2 s y llama `onEnterComputer()`
+- [x] Modelos **CC0** en `public/models/`, con su fuente y licencia en `public/models/CREDITS.md`. Opciones verificadas: KayKit Furniture Bits, KayKit Character Animations, Quaternius Universal Base Characters y Kenney Furniture Kit. Solo CC0
+- [x] `src/scenes/OfficeScene.tsx`: oficina low-poly con escritorios, el personaje del jugador sentado frente a su computador y al menos 2 compañeros caminando por rutas fijas (interpolación simple entre puntos y animación de caminar)
+- [x] Look pixelado sin librerías nuevas: `<Canvas dpr={0.35}>` y CSS `image-rendering: pixelated` sobre el canvas
+- [x] Modo noche (prop `night`): luces bajas y la pantalla del monitor como fuente de luz principal
+- [x] Clic en el computador del jugador (o Enter): la cámara se acerca al monitor en ~1,2 s y llama `onEnterComputer()`
 
 ### A3 — HackLab OS (el escritorio del computador) · rama `feat/ui-desktop-os` · después de K1
 
