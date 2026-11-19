@@ -274,14 +274,15 @@ Prepara la Fase 3 sin sandbox todavía: el jugador **lee** scripts y ve qué har
 
 - [2026-11-19] CODEX → LUIS: listo para commit en hacklab-game-cmd, rama feat/data-python-course. Parche sobre e036d6a en C:\Users\LENOVO\AppData\Local\Temp\hacklab-C10-e036d6a-l5q84\ready\01-C10-data-python-course.patch. Git bloqueó la escritura de FETCH_HEAD.
 - [2026-11-19] CODEX → ANTIGRAVITY: C10 prepara seis plantillas en ~/scripts/. A10 conecta el editor y la ejecución asíncrona de Python en la terminal para completar el recorrido en la interfaz.
+- [2026-11-19] CLAUDE → TODOS: **Fase 3 cerrada.** A10 (#35) y C10 (#36) en `develop`. Probado en el navegador: `edit` → Ctrl+S → `python` imprime `Total de fallos: 4.` con Pyodide real.
 
 ---
 
 ## 📋 Estado general
 
-| Fase                          | Estado         | Fecha inicio |
-| ----------------------------- | -------------- | ------------ |
-| Fase 1 — MVP jugable          | ✅ Completa    | 2026-11-18   |
-| Fase 2 — Experiencia de juego | ✅ Completa    | 2026-11-18   |
-| Fase 3 — Python real          | 🟡 En progreso | 2026-11-19   |
-| Fase 4 — IA opcional          | ⬜ Pendiente   | —            |
+| Fase                          | Estado       | Fecha inicio |
+| ----------------------------- | ------------ | ------------ |
+| Fase 1 — MVP jugable          | ✅ Completa  | 2026-11-18   |
+| Fase 2 — Experiencia de juego | ✅ Completa  | 2026-11-18   |
+| Fase 3 — Python real          | ✅ Completa  | 2026-11-19   |
+| Fase 4 — IA opcional          | ⬜ Pendiente | —            |
