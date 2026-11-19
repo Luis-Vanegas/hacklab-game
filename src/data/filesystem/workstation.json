@@ -16,7 +16,7 @@
             ".bashrc": {
               "type": "file",
               "name": ".bashrc",
-              "content": "# Configuración de la terminal de HackLab\nexport PS1='hacklab@darknet:~$ '\n",
+              "content": "# Configuración de la terminal de HackLab\nexport PS1='practicante@nodo-ws-07:~$ '\n",
               "permissions": "-rw-r--r--",
               "hidden": true
             },

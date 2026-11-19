@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import machine from "@/data/machine/workstation.json";
 import shopData from "@/data/tools/shop.json";
 import {
   acceptContract as acceptInEngine,
@@ -38,6 +39,9 @@ const contractModules = import.meta.glob<Contract>("@/data/contracts/*.json", {
   eager: true,
   import: "default",
 });
+// Equipo del jugador en Nodo Seguro: es el host del prompt mientras no esté conectado a otro
+export const LOCAL_HOST: string = machine.hostname;
+
 export const CONTRACTS: readonly Contract[] = Object.keys(contractModules)
   .sort()
   .map((path) => contractModules[path] as Contract);
@@ -168,7 +172,7 @@ function buildContext(session: GameSession): CommandContext {
     currentDir: session.currentDir,
     filesystem: session.filesystem,
     user: session.game.player.username,
-    hostname: session.game.connectedTo ?? "darknet",
+    hostname: session.game.connectedTo ?? LOCAL_HOST,
     connectedTo: session.game.connectedTo,
     difficulty: session.game.difficulty,
     history: session.history,
