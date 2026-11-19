@@ -15,6 +15,7 @@ import {
 import { applyChanges, resolve } from "@/engine/filesystem";
 import { collectFiles, fileChanges } from "@/engine/scripting";
 import { HOME_DIR } from "@/engine/session";
+import { DEFAULT_USERNAME, setUsername, validateUsername } from "@/engine/state";
 import { emit } from "@/lib/events";
 import { load, save } from "@/lib/persistence";
 import { getAllTiers } from "@/engine/reputation";
@@ -22,6 +23,7 @@ import type {
   CommandContext,
   CommandResult,
   Contract,
+  Finding,
   GameDifficulty,
   GamePhase,
   GameState,
@@ -69,6 +71,23 @@ export const COMMAND_GUIDE: readonly CommandManual[] = commands.map(({ run, ...m
 const MAX_HISTORY = 500;
 // ponytail: si la UI no descarta avisos, solo se guardan los últimos
 const MAX_EVENTS = 20;
+// ponytail: el panel muestra los últimos; los más viejos ya se leyeron
+const MAX_FINDINGS = 30;
+
+// Suma los hallazgos de un comando: el más reciente primero, sin repetir el mismo texto
+export function addFindings(
+  current: readonly Finding[],
+  result: CommandResult,
+  command: string,
+): readonly Finding[] {
+  if (result.error !== undefined) return current;
+  const fresh = (result.highlights ?? []).flatMap((h) =>
+    h.kind === "finding" && h.note ? [{ text: h.text, note: h.note, command }] : [],
+  );
+  if (fresh.length === 0) return current;
+  const seen = new Set(fresh.map((f) => f.text));
+  return [...fresh, ...current.filter((f) => !seen.has(f.text))].slice(0, MAX_FINDINGS);
+}
 
 // Deben declararse antes de crear el store: create() llama a loadSession() al importar
 // el módulo, y con una partida guardada isGameState las usa en ese mismo momento.
@@ -82,6 +101,8 @@ export interface GameStore extends GameSession {
   readonly pythonStatus: PythonStatus;
   // Archivo abierto en el editor. No se guarda: es de la sesión en curso.
   readonly editorFile: { readonly path: string; readonly content: string } | null;
+  // Hallazgos marcados en esta partida (S3). No se guardan: son de la sesión en curso.
+  readonly findings: readonly Finding[];
   runCommand(input: string): CommandResult;
   // Igual que runCommand, pero `python` espera al intérprete. `onNotice` avisa mientras carga.
   runCommandAsync(input: string, onNotice?: (message: string) => void): Promise<CommandResult>;
@@ -89,7 +110,8 @@ export interface GameStore extends GameSession {
   closeEditor(): void;
   acceptContract(contractId: string): boolean;
   submitContract(): void;
-  newGame(): void;
+  // Devuelve el error si el nombre no es válido; en ese caso no crea partida (S1)
+  newGame(name?: string): string | null;
   dismissEvent(id: number): void;
   markIntroSeen(): void;
 }
@@ -121,6 +143,8 @@ export const useGameStore = create<GameStore>()((set, get) => {
       ok: result.error === undefined,
     });
     if (result.openEditor && result.error === undefined) set({ editorFile: result.openEditor });
+    const findings = addFindings(get().findings, result, input);
+    if (findings !== get().findings) set({ findings });
   };
 
   return {
@@ -128,6 +152,7 @@ export const useGameStore = create<GameStore>()((set, get) => {
     events: [],
     pythonStatus: "idle",
     editorFile: null,
+    findings: [],
 
     runCommand(input) {
       const parsed = parseCommand(input);
@@ -244,10 +269,15 @@ export const useGameStore = create<GameStore>()((set, get) => {
       commit({ ...session, game: submitInEngine(session.game) }, "store.contract.submitted", {});
     },
 
-    newGame() {
-      commit(createSession(), "game.new", {});
-      // Los avisos y el editor de la partida anterior ya no aplican
-      set({ events: [], editorFile: null });
+    newGame(name) {
+      const username = name?.trim() || DEFAULT_USERNAME;
+      const error = validateUsername(username);
+      if (error) return error;
+      const session = createSession();
+      commit({ ...session, game: setUsername(session.game, username) }, "game.new", { username });
+      // Los avisos, el editor y los hallazgos de la partida anterior ya no aplican
+      set({ events: [], editorFile: null, findings: [] });
+      return null;
     },
 
     dismissEvent(id) {

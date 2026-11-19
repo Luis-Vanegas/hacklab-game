@@ -1,3 +1,4 @@
+import { marksFindings } from "@/engine/reputation";
 import { useGameStore } from "./gameStore";
 
 // Hooks públicos para la UI. Cada uno se suscribe solo a su porción del estado,
@@ -34,3 +35,7 @@ export function useGameEvents() {
   const dismiss = useGameStore((s) => s.dismissEvent);
   return { events, dismiss };
 }
+
+// Terminal legible: hallazgos de la partida y si todavía se marcan (S3/S4)
+export const useFindings = () => useGameStore((s) => s.findings);
+export const useShowFindings = () => useGameStore((s) => marksFindings(s.game.player.reputation));
