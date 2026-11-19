@@ -1,0 +1,153 @@
+{
+  "hosts": [
+    {
+      "hostname": "gateway.nodoseguro.test",
+      "ip": "10.20.0.1",
+      "latenciesMs": [1, 1, 1, 1],
+      "route": [
+        {
+          "ip": "10.20.0.1",
+          "elapsedMs": 1
+        }
+      ]
+    },
+    {
+      "hostname": "intranet.nodoseguro.test",
+      "ip": "10.20.0.80",
+      "latenciesMs": [2, 2, 3, 2],
+      "route": [
+        {
+          "ip": "10.20.0.80",
+          "elapsedMs": 2
+        }
+      ]
+    },
+    {
+      "hostname": "dns.nodoseguro.test",
+      "ip": "10.20.0.53",
+      "latenciesMs": [1, 2, 1, 2],
+      "route": [
+        {
+          "ip": "10.20.0.53",
+          "elapsedMs": 1
+        }
+      ]
+    },
+    {
+      "hostname": "acme.example",
+      "ip": "192.0.2.11",
+      "latenciesMs": [14, 16, 15, 14],
+      "route": [
+        {
+          "ip": "10.20.0.1",
+          "elapsedMs": 1
+        },
+        {
+          "ip": "192.0.2.1",
+          "elapsedMs": 8
+        },
+        {
+          "ip": "192.0.2.11",
+          "elapsedMs": 14
+        }
+      ]
+    },
+    {
+      "hostname": "archivo.example",
+      "ip": "198.51.100.22",
+      "latenciesMs": [19, 21, 20, 19],
+      "route": [
+        {
+          "ip": "10.20.0.1",
+          "elapsedMs": 1
+        },
+        {
+          "ip": "198.51.100.1",
+          "elapsedMs": 10
+        },
+        {
+          "ip": "198.51.100.22",
+          "elapsedMs": 19
+        }
+      ]
+    },
+    {
+      "hostname": "nodo-ws-07.nodoseguro.test",
+      "aliases": ["nodo-ws-07", "tutorial.nodoseguro.test"],
+      "ip": "10.20.0.15",
+      "latenciesMs": [1, 1, 1, 1],
+      "route": [
+        {
+          "ip": "10.20.0.15",
+          "elapsedMs": 1
+        }
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "protocol": "TCP",
+      "local": "10.20.0.15:51020",
+      "remote": "10.20.0.80:443",
+      "state": "ESTABLECIDA"
+    },
+    {
+      "protocol": "TCP",
+      "local": "10.20.0.15:51021",
+      "remote": "203.0.113.45:4444",
+      "state": "ESTABLECIDA"
+    }
+  ],
+  "responses": [
+    {
+      "url": "https://intranet.nodoseguro.test/",
+      "status": 200,
+      "reason": "Correcto",
+      "headers": {
+        "Content-Type": "text/html; charset=utf-8"
+      },
+      "body": "<h1>Intranet de Nodo Seguro</h1>"
+    },
+    {
+      "url": "http://intranet.nodoseguro.test/",
+      "status": 200,
+      "reason": "Correcto",
+      "headers": {
+        "Content-Type": "text/html; charset=utf-8"
+      },
+      "body": "<h1>Intranet de Nodo Seguro</h1>"
+    },
+    {
+      "url": "https://acme.example/",
+      "status": 200,
+      "reason": "Correcto",
+      "headers": {
+        "Content-Type": "text/html; charset=utf-8"
+      },
+      "body": "<h1>Bienvenido a Acme</h1>"
+    }
+  ],
+  "registrations": [
+    {
+      "domain": "nodoseguro.test",
+      "owner": "Nodo Seguro",
+      "createdAt": "2024-02-19",
+      "updatedAt": "2026-02-19",
+      "expiresAt": "2027-02-19"
+    },
+    {
+      "domain": "acme.example",
+      "owner": "Acme",
+      "createdAt": "2023-06-12",
+      "updatedAt": "2026-06-12",
+      "expiresAt": "2027-06-12"
+    },
+    {
+      "domain": "archivo.example",
+      "owner": "Nodo de continuidad",
+      "createdAt": "2025-04-08",
+      "updatedAt": "2026-04-08",
+      "expiresAt": "2027-04-08"
+    }
+  ]
+}

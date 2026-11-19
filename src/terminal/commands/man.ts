@@ -1,5 +1,5 @@
 import type { CommandResult } from "@/lib/types";
-import { commandError } from "./shared";
+import { commandError, findCommand } from "./shared";
 import type { CommandManual } from "./shared";
 
 export default function createMan(getCommands: () => readonly CommandManual[]) {
@@ -7,7 +7,7 @@ export default function createMan(getCommands: () => readonly CommandManual[]) {
     const [name] = args;
     if (args.length !== 1 || !name) return commandError("Uso: man <comando>");
 
-    const command = getCommands().find((entry) => entry.name === name.toLowerCase());
+    const command = findCommand(getCommands(), name);
     if (!command) return commandError("Sin manual para: " + name);
 
     return {

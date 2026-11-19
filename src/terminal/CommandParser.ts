@@ -1,6 +1,6 @@
 import type { CommandContext, CommandResult } from "@/lib/types";
 import { commands } from "./commands";
-import { commandError } from "./commands/shared";
+import { commandError, findCommand } from "./commands/shared";
 
 export type ParsedCommand = { readonly command: string; readonly args: readonly string[] };
 
@@ -34,7 +34,8 @@ export function parseCommand(input: string): ParsedCommand | { error: string } |
   if (command === undefined) return null;
   if (command === "") return { error: "El nombre del comando está vacío." };
 
-  return { command: command.toLowerCase(), args };
+  const name = command.toLowerCase();
+  return { command: findCommand(commands, name)?.name ?? name, args };
 }
 
 export function executeCommand(input: string, ctx: CommandContext): CommandResult {
