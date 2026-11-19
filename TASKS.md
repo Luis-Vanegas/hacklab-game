@@ -58,15 +58,15 @@ Datos nuevos: `src/data/machine/workstation.json` (tu equipo: hostname `nodo-ws-
 
 ### C2 — Archivos y texto · rama `feat/terminal-files` · sin dependencias
 
-- [ ] `head` y `tail`, con `-n <número>`
-- [ ] `grep <patrón> <archivo>`, con `-i` (ignora mayúsculas) y `-c` (cuenta coincidencias)
-- [ ] `find <ruta> -name <patrón>`
-- [ ] `wc`, con `-l`
-- [ ] `echo <texto>`
-- [ ] `touch <archivo>` y `mkdir <directorio>`: crean con `filesystemChanges`; repetirlos no duplica
-- [ ] `file <archivo>`: dice si es texto, script o binario
-- [ ] `base64 <texto>`, con `-d` para decodificar
-- [ ] `sha256sum <archivo>`: hash real del contenido (Web Crypto no es síncrono: usa una implementación pura pequeña o un hash precalculado en los datos)
+- [x] `head` y `tail`, con `-n <número>`
+- [x] `grep <patrón> <archivo>`, con `-i` (ignora mayúsculas) y `-c` (cuenta coincidencias)
+- [x] `find <ruta> -name <patrón>`
+- [x] `wc`, con `-l`
+- [x] `echo <texto>`
+- [x] `touch <archivo>` y `mkdir <directorio>`: crean con `filesystemChanges`; repetirlos no duplica
+- [x] `file <archivo>`: dice si es texto, script o binario
+- [x] `base64 <texto>`, con `-d` para decodificar
+- [x] `sha256sum <archivo>`: hash real del contenido (Web Crypto no es síncrono: usa una implementación pura pequeña o un hash precalculado en los datos)
 
 ### C3 — Sistema y ayuda en el juego · rama `feat/terminal-system` · sin dependencias
 

@@ -1,6 +1,17 @@
 import type { CommandDefinition } from "./shared";
 import buy from "./buy";
 import cat from "./cat";
+import head from "./head";
+import tail from "./tail";
+import grep from "./grep";
+import find from "./find";
+import wc from "./wc";
+import echo from "./echo";
+import touch from "./touch";
+import mkdir from "./mkdir";
+import file from "./file";
+import base64 from "./base64";
+import sha256sum from "./sha256sum";
 import cd from "./cd";
 import clear from "./clear";
 import crack from "./crack";
@@ -67,6 +78,84 @@ export const commands: readonly CommandDefinition[] = [
     description: "Copiar un archivo ficticio al directorio del jugador.",
     example: "download /archivo.txt",
     run: download,
+  },
+  {
+    name: "head",
+    usage: "head [-n <número>] <archivo>",
+    description: "Mostrar las primeras líneas de un archivo virtual.",
+    example: "head -n 5 /var/log/auth.log",
+    run: head,
+  },
+  {
+    name: "tail",
+    usage: "tail [-n <número>] <archivo>",
+    description: "Mostrar las últimas líneas de un archivo virtual.",
+    example: "tail -n 5 /var/log/auth.log",
+    run: tail,
+  },
+  {
+    name: "grep",
+    usage: "grep [-i] [-c] <patrón> <archivo>",
+    description: "Buscar texto literal o contar las líneas que lo contienen.",
+    example: "grep -c Failed /var/log/auth.log",
+    run: grep,
+  },
+  {
+    name: "find",
+    usage: "find <ruta> -name <patrón>",
+    description:
+      "Buscar nombres con patrones de asterisco e interrogación y mostrar sus rutas virtuales.",
+    example: 'find /home/user -name "*.txt"',
+    run: find,
+  },
+  {
+    name: "wc",
+    usage: "wc [-l] <archivo>",
+    description: "Contar saltos de línea, palabras y bytes UTF-8.",
+    example: "wc -l notes",
+    run: wc,
+  },
+  {
+    name: "echo",
+    usage: "echo <texto>",
+    description: "Mostrar el texto en la terminal.",
+    example: "echo Hola Medellín",
+    run: echo,
+  },
+  {
+    name: "touch",
+    usage: "touch <archivo>",
+    description: "Crear un archivo virtual vacío si no existe.",
+    example: "touch bitacora.txt",
+    run: touch,
+  },
+  {
+    name: "mkdir",
+    usage: "mkdir <directorio>",
+    description: "Crear un directorio virtual si no existe.",
+    example: "mkdir informes",
+    run: mkdir,
+  },
+  {
+    name: "file",
+    usage: "file <archivo>",
+    description: "Distinguir texto, scripts, binarios y directorios.",
+    example: "file /home/user/.bashrc",
+    run: file,
+  },
+  {
+    name: "base64",
+    usage: "base64 [-d] <texto>",
+    description: "Codificar o decodificar texto UTF-8 en Base64.",
+    example: "base64 -d SG9sYQ==",
+    run: base64,
+  },
+  {
+    name: "sha256sum",
+    usage: "sha256sum <archivo>",
+    description: "Calcular la suma SHA-256 de un archivo virtual.",
+    example: "sha256sum notes",
+    run: sha256sum,
   },
   {
     name: "help",
