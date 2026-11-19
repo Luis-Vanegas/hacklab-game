@@ -116,9 +116,9 @@ Datos nuevos: `src/data/machine/workstation.json` (tu equipo: hostname `nodo-ws-
 
 ### A3 — HackLab OS (el escritorio del computador) · rama `feat/ui-desktop-os` · después de K1
 
-- [ ] `src/ui/desktop/Desktop.tsx`: ventanas para Terminal, Bandeja (tickets de Marta y mensajes de CIPHER), Guía de comandos, Mapa de red y Tienda. Barra de tareas con hora del juego, trace y créditos
-- [ ] Separar contratos por canal: "Trabajo" (Nodo Seguro) y "Darknet" (CIPHER), con estilos distintos
-- [ ] En móvil, las ventanas pasan a pestañas
+- [x] `src/ui/desktop/Desktop.tsx`: ventanas para Terminal, Bandeja (tickets de Marta y mensajes de CIPHER), Guía de comandos, Mapa de red y Tienda. Barra de tareas con hora del juego, trace y créditos
+- [x] Separar contratos por canal: "Trabajo" (Nodo Seguro) y "Darknet" (CIPHER), con estilos distintos
+- [x] En móvil, las ventanas pasan a pestañas
 
 ### A4 — Guía de comandos · rama `feat/ui-command-guide` · después de K1 y C4
 
