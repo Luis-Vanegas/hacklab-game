@@ -4,11 +4,23 @@ import { commands } from "@/terminal/commands";
 import { makeContext } from "./fixtures";
 
 describe("help", () => {
-  it("presenta exactamente el registro y es determinista", () => {
+  it("agrupa todos los comandos por categoría en orden estable", () => {
     const ctx = makeContext();
     const result = executeCommand("help", ctx);
+    const sections = [
+      ["Red", "red"],
+      ["Archivos", "archivos"],
+      ["Sistema", "sistema"],
+      ["Seguridad", "seguridad"],
+      ["Juego", "juego"],
+    ];
     expect(result.output).toEqual(
-      commands.map((command) => command.usage + " — " + command.description),
+      sections.flatMap(([title, category]) => [
+        title,
+        ...commands
+          .filter((command) => command.category === category)
+          .map((command) => "  " + command.usage + " — " + command.description),
+      ]),
     );
     expect(executeCommand("help", ctx)).toEqual(result);
   });

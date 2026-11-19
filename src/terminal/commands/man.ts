@@ -1,14 +1,6 @@
 import type { CommandResult, ReputationTier } from "@/lib/types";
-import { commandError, findCommand } from "./shared";
-import type { CommandCategory, CommandManual } from "./shared";
-
-const categoryLabels: Record<CommandCategory, string> = {
-  red: "Red",
-  archivos: "Archivos",
-  sistema: "Sistema",
-  seguridad: "Seguridad",
-  juego: "Juego",
-};
+import { commandCategoryLabels, commandError, findCommand } from "./shared";
+import type { CommandManual } from "./shared";
 
 const rankLabels: Record<ReputationTier, string> = {
   script_kiddie: "Aprendiz",
@@ -31,7 +23,7 @@ export default function createMan(getCommands: () => readonly CommandManual[]) {
         "Uso: " + command.usage,
         command.description,
         "Ejemplo: " + command.example,
-        "Categoría: " + categoryLabels[command.category],
+        "Categoría: " + commandCategoryLabels[command.category],
         "Qué aprendes: " + command.learn,
         "En la vida real: " + command.realWorld,
         "Rango de desbloqueo: " + rankLabels[command.unlockRank],

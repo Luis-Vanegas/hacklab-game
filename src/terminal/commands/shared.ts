@@ -2,6 +2,14 @@ import type { CommandContext, CommandResult, ReputationTier } from "@/lib/types"
 
 export type CommandCategory = "red" | "archivos" | "sistema" | "seguridad" | "juego";
 
+export const commandCategoryLabels: Readonly<Record<CommandCategory, string>> = {
+  red: "Red",
+  archivos: "Archivos",
+  sistema: "Sistema",
+  seguridad: "Seguridad",
+  juego: "Juego",
+};
+
 export interface CommandManual {
   readonly name: string;
   readonly aliases?: readonly string[];

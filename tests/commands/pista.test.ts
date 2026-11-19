@@ -10,10 +10,15 @@ function context(contract: Contract, storyFlags: Record<string, boolean> = {}): 
 
 describe("pista", () => {
   it("acepta el campo hint de los contratos anteriores", () => {
-    const ctx = context(acmeContract);
+    const objectives = acmeContract.objectives.map((objective) => ({
+      ...objective,
+      hints: undefined,
+      hint: "Ayuda de una partida anterior.",
+    }));
+    const ctx = context({ ...acmeContract, objectives });
     const result = pista([], ctx);
     expect(result).toMatchObject({
-      output: ["Pista: Compra el visor con buy nmap y escribe nmap acme.example."],
+      output: ["Pista: Ayuda de una partida anterior."],
       stateChanges: { storyFlags: { "hint:01-first-hack:acme-01:1": true } },
     });
     expect(pista([], ctx)).toEqual(result);
@@ -54,6 +59,7 @@ describe("pista", () => {
     const objectives = acmeContract.objectives.map((objective) => ({
       ...objective,
       hint: undefined,
+      hints: undefined,
     }));
     expect(pista([], context({ ...acmeContract, objectives }))).toMatchObject({
       error: "El objetivo actual no tiene pistas.",

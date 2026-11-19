@@ -173,7 +173,10 @@ export default function App() {
         }
         storyOverlay={storyOverlay}
         commandHintOverlay={
-          <CommandHint hint={nextObjective?.hint ?? null} difficulty={difficulty} />
+          <CommandHint
+            hint={nextObjective?.hints?.[0] ?? nextObjective?.hint ?? null}
+            difficulty={difficulty}
+          />
         }
         onOpenShop={() => setShopOpen(true)}
         shopModal={
