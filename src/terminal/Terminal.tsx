@@ -14,6 +14,7 @@ import {
   usePlayer,
   useRunCommand,
 } from "@/store/hooks";
+import { playSound } from "@/ui/feedback/soundEffects";
 import { getTerminalTheme } from "./themes";
 
 export interface TerminalProps {
@@ -171,6 +172,7 @@ export function Terminal({
         if (!term) return;
 
         if (data === "\r") {
+          playSound("key");
           const line = inputBufferRef.current;
           inputBufferRef.current = "";
           historyIndexRef.current = -1;
@@ -225,6 +227,7 @@ export function Terminal({
         // Backspace
         if (data === "\u007f" || data === "\b") {
           if (inputBufferRef.current.length > 0) {
+            playSound("key");
             inputBufferRef.current = inputBufferRef.current.slice(0, -1);
             term.write("\b \b");
           }
@@ -267,6 +270,7 @@ export function Terminal({
         // Caracteres imprimibles (incluyendo pegado de texto en una sola línea)
         const printable = data.replace(/[\r\n]+/g, "");
         if (printable.length > 0) {
+          playSound("key");
           inputBufferRef.current += printable;
           term.write(printable);
         }

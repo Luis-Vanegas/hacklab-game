@@ -1,10 +1,12 @@
 // Avisos tipo videojuego (GameNotifications.tsx).
 // Consume useGameEvents() y useTraceLevel() desde @/store para mostrar notificaciones
 // de "¡Objetivo completado! +50 XP", "Contrato completado", subida de rango animada
-// y alarma roja visual cuando el rastreo alcanza o supera el 75 %.
+// y alarma roja visual cuando el rastreo alcanza o supera el 75 %, disparando sonidos Web Audio.
 
+import { useEffect, useRef } from "react";
 import type { ReputationTier } from "@/lib/types";
 import { useGameEvents, useTraceLevel, type QueuedGameAlert } from "@/store";
+import { playSound } from "./soundEffects";
 
 export interface GameNotificationsProps {
   readonly events?: readonly QueuedGameAlert[];
@@ -69,6 +71,25 @@ export function GameNotifications({
   const dismiss = propOnDismiss ?? storeEvents.dismiss;
   const traceLevel = propTraceLevel ?? storeTrace;
 
+  const seenAlertIdsRef = useRef<Set<number>>(new Set());
+
+  useEffect(() => {
+    const seen = seenAlertIdsRef.current;
+    for (const alert of events) {
+      if (seen.has(alert.id)) {
+        continue;
+      }
+      seen.add(alert.id);
+      if (alert.type === "rank_up") {
+        playSound("rank_up");
+      } else if (alert.type === "trace_alarm") {
+        playSound("trace_alarm");
+      } else {
+        playSound("objective");
+      }
+    }
+  }, [events]);
+
   const hasHighTrace =
     traceLevel >= 75 || events.some((event) => event.type === "trace_alarm" && event.level >= 75);
 
@@ -118,7 +139,7 @@ export function GameNotifications({
                   type="button"
                   className="hl-btn"
                   style={{ padding: "2px 8px", fontSize: "0.75rem" }}
-                  aria-label="Cerrar aviso"
+                  aria-label={`Cerrar aviso: ${meta.title}`}
                   onClick={() => dismiss(alert.id)}
                   data-testid={`dismiss-alert-${alert.id}`}
                 >
