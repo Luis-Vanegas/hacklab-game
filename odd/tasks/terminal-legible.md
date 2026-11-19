@@ -28,7 +28,7 @@ Rama base: `develop`. Entrega: una rama por tarea, PR a `develop`. Pruebas: Vite
 | ID  | Specs                                            | Quién           | Rama                           | Estado                        |
 | --- | ------------------------------------------------ | --------------- | ------------------------------ | ----------------------------- |
 | K5  | S1, S2, S3 (terminal), S4                        | Claude (inline) | `feat/engine-terminal-legible` | en curso                      |
-| C11 | S2 (`ls`), S3 (`nmap` y datos), S6               | Codex           | `feat/terminal-highlights`     | pendiente (espera K5)         |
+| C11 | S2 (`ls`), S3 (`nmap` y datos), S6               | Codex           | `feat/terminal-highlights`     | listo (e5bf7a7)               |
 | A11 | S1 (campo de nombre), S3 (panel «Hallazgos»), S5 | Antigravity     | `feat/ui-terminal-legible`     | pendiente (puede maquetar ya) |
 
 ## Log
@@ -38,4 +38,5 @@ Rama base: `develop`. Entrega: una rama por tarea, PR a `develop`. Pruebas: Vite
 - **L3** (2026-11-19, Luis): "sii, pero ojo te di un ejemplo sobre eso no se si e sverdad, pero seria marcas coss que le de pistas a los nuevos, y asi. ya depsues se quita cuando avanza, hacer es distincio de terminal, y bajarle la trasparecnia para que quede una teminal bonita, y agradable."
 - **L4** (2026-11-19): mapa del código. Todo sale verde porque el tema `beginner` usa `foreground #00ff41`; el tema `elite` pone todos los colores en gris; `formatOutputLine` no colorea en `elite`/`anonymous`. La dificultad nunca cambia (siempre `beginner`), por eso S4 usa la reputación. `ls` y `nmap` no marcan nada; `PortInfo.vulnerable` existe y no se usa. xterm 6 trae `registerLinkProvider` con `hover`/`leave` (verificado en `xterm.d.ts`), sin dependencias nuevas.
 - **L5** (2026-11-19): K5 listo. `src/terminal/format.ts` (puro) pinta prompt, `outputType` y `highlights`; las marcas solo calzan palabras completas (`ftp` no dentro de `sftp`). Paleta de Linux común en `themes/palette.ts`; élite ya tiene colores. Recuadro con `registerLinkProvider` de xterm. Engine: `validateUsername`, `setUsername`, `marksFindings`. Store: `newGame(name?)` devuelve el error, `findings` (máx. 30, no se guardan), `useFindings`, `useShowFindings`. Check: 70 archivos, 225 pruebas. Navegador: texto gris, prompt verde/azul, error rojo.
-- **Siguiente paso:** C11 (Codex) y A11 (Antigravity).
+- **L6** (2026-11-19): C11 listo. `ls` marca carpetas y ejecutables; `nmap` muestra columnas y marca `ftp` (Acme) y `smb` (archivo de turno) con su nota. Fuentes verificadas: RFC 2577 §6, Cisco TSA18-106A, Microsoft Learn SMBv1, CISA #StopRansomware p. 7, NIST SP 800-40r4. Check: 228 pruebas. Navegador: carpetas azules, `ftp` subrayado y recuadro al pasar el mouse.
+- **Siguiente paso:** A11 (Antigravity); luego K6.

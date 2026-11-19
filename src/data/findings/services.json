@@ -1,0 +1,22 @@
+{
+  "ftp": {
+    "note": "El FTP estándar transmite datos y contraseñas sin cifrar. Quien pueda observar el tráfico podría leerlos.",
+    "source": "https://www.rfc-editor.org/rfc/rfc2577.html#section-6"
+  },
+  "telnet": {
+    "note": "Telnet envía la sesión en texto claro. Para administrar un equipo de forma remota, usa SSH para cifrar la conexión.",
+    "source": "https://www.cisco.com/c/en/us/support/docs/csa/cisco-sa-20180416-tsa18-106a.html"
+  },
+  "smb": {
+    "note": "Si está habilitado SMBv1, una versión antigua del protocolo de archivos compartidos, revisa cómo deshabilitarlo y migrar a una versión compatible.",
+    "source": "https://learn.microsoft.com/es-es/windows-server/storage/file-server/troubleshoot/detect-enable-and-disable-smbv1-v2-v3"
+  },
+  "rdp": {
+    "note": "El Escritorio remoto (RDP) expuesto o mal protegido puede facilitar accesos no autorizados. Restringe el acceso y exige autenticación multifactor cuando sea necesario usarlo.",
+    "source": "https://www.cisa.gov/sites/default/files/2025-03/StopRansomware-Guide%20508.pdf#page=7"
+  },
+  "legacy": {
+    "note": "Revisa si la versión sigue recibiendo actualizaciones y tiene los parches disponibles. Las versiones sin mantenimiento pueden dejar fallas conocidas sin corregir.",
+    "source": "https://csrc.nist.gov/pubs/sp/800/40/r4/final"
+  }
+}

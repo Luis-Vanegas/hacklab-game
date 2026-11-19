@@ -63,6 +63,12 @@
     "ip": "192.0.2.11",
     "ports": [
       {
+        "port": 21,
+        "service": "ftp",
+        "version": "FTP estándar (sin TLS)",
+        "vulnerable": true
+      },
+      {
         "port": 22,
         "service": "ssh",
         "version": "simulación Acme"
