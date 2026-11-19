@@ -13,6 +13,6 @@
 ## Checklist
 
 - [ ] `npm run check` pasa en local
-- [ ] Solo toqué archivos de mi zona (ver `AGENTS.md`)
-- [ ] Actualicé `TASKS.md` si cerré o abrí tareas
+- [ ] Las pruebas cubren el cambio
 - [ ] Commits en formato Conventional Commits
+- [ ] Si eres un agente: solo toqué archivos de mi zona (`AGENTS.md`) y actualicé `TASKS.md`
