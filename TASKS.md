@@ -128,9 +128,9 @@ Datos nuevos: `src/data/machine/workstation.json` (tu equipo: hostname `nodo-ws-
 
 ### A5 — Sensación de juego · rama `feat/ui-game-feedback` · después de K1
 
-- [ ] Avisos tipo videojuego con `useGameEvents()`: "¡Objetivo completado! +50 XP", "Contrato completado", subida de rango animada y alarma roja cuando el trace pasa de 75 %
-- [ ] Retratos pixel de Marta y CIPHER (SVG o CSS, sin imágenes pesadas) en `StoryDialog`
-- [ ] Secuencia de arranque de HackLab OS al entrar al computador (2–3 s, se puede saltar)
+- [x] Avisos tipo videojuego con `useGameEvents()`: "¡Objetivo completado! +50 XP", "Contrato completado", subida de rango animada y alarma roja cuando el trace pasa de 75 %
+- [x] Retratos pixel de Marta y CIPHER (SVG o CSS, sin imágenes pesadas) en `StoryDialog`
+- [x] Secuencia de arranque de HackLab OS al entrar al computador (2–3 s, se puede saltar)
 
 ---
 
@@ -164,7 +164,7 @@ Prepara la Fase 3 sin sandbox todavía: el jugador **lee** scripts y ve qué har
 
 ### A6 — Entregar A1–A5 (primero esto) · tus ramas actuales
 
-- [ ] Encadenar A1 → A2 → A3 → A4 → A5 con rebase, resolver el choque de `src/styles/tokens.css` entre A1 y A2, y abrir un PR por rama hacia `develop` en ese orden, indicando de cuál depende cada uno
+- [x] Encadenar A1 → A2 → A3 → A4 → A5 con rebase, resolver el choque de `src/styles/tokens.css` entre A1 y A2, y abrir un PR por rama hacia `develop` en ese orden, indicando de cuál depende cada uno
 
 ### A7 — La Bandeja · rama `feat/ui-inbox`
 

@@ -13,7 +13,13 @@ export {
   type CommandGuideItem,
   type CommandGuideCategory,
 } from "./guides/CommandGuide";
-export { StoryDialog, type StoryDialogProps } from "./guides/StoryDialog";
+export {
+  StoryDialog,
+  resolveAvatarKind,
+  resolveCharacterDisplayName,
+  type StoryDialogProps,
+  type CharacterAvatarKind,
+} from "./guides/StoryDialog";
 export { GameLayout, type GameLayoutProps } from "./layout/GameLayout";
 export { TitleScreen, type TitleScreenProps } from "./title/TitleScreen";
 export {
@@ -29,3 +35,5 @@ export {
   type DesktopWindowId,
   type SidePanelTab,
 } from "./desktop/Desktop";
+export { GameNotifications, type GameNotificationsProps } from "./feedback/GameNotifications";
+export { BootSequence, type BootSequenceProps } from "./feedback/BootSequence";
