@@ -56,6 +56,13 @@ export function BootSequence({ durationMs = 2400, onComplete }: BootSequenceProp
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Enter" || event.key === "Escape" || event.key === " ") {
+        if (
+          (event.key === "Enter" || event.key === " ") &&
+          event.target instanceof HTMLElement &&
+          event.target.closest("button")
+        ) {
+          return;
+        }
         event.preventDefault();
         handleFinish();
       }
@@ -108,7 +115,12 @@ export function BootSequence({ durationMs = 2400, onComplete }: BootSequenceProp
           <span className="hl-badge hl-tabular">{progressPercent}%</span>
         </div>
 
-        <progress className="hl-progress" max={100} value={progressPercent} />
+        <progress
+          className="hl-progress"
+          aria-label="Progreso de arranque de HackLab OS"
+          max={100}
+          value={progressPercent}
+        />
 
         <div
           style={{

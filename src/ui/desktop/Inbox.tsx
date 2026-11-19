@@ -5,8 +5,13 @@
 import { useState } from "react";
 import type { Contract, ContractChannel, ReputationTier } from "@/lib/types";
 import { CHARACTERS, type CharacterId } from "@/store";
+import { handleTabListKeyDown } from "../a11y/keyboardTabs";
 import { PixelPortrait } from "../guides/StoryDialog";
 import { ReputationBadge } from "../hud/ReputationBadge";
+
+type InboxChannelTab = "all" | ContractChannel;
+
+const CHANNEL_TABS: readonly InboxChannelTab[] = ["all", "work", "darknet"];
 
 export interface InboxProps {
   readonly contracts: readonly Contract[];
@@ -131,7 +136,17 @@ export function Inbox({
         : [{ character: sender.key, text: openedContract.description }];
 
     return (
-      <aside className="hl-panel" aria-label="Detalle del correo" data-testid="inbox-detail">
+      <aside
+        className="hl-panel"
+        aria-label="Detalle del correo"
+        data-testid="inbox-detail"
+        onKeyDown={(e) => {
+          if (e.key === "Escape") {
+            e.preventDefault();
+            setOpenedId(null);
+          }
+        }}
+      >
         <div className="hl-panel__header">
           <button
             type="button"
@@ -182,7 +197,7 @@ export function Inbox({
                   {sender.role}
                 </span>
               </div>
-              <h3
+              <h2
                 style={{
                   margin: 0,
                   fontFamily: "var(--font-mono)",
@@ -191,7 +206,7 @@ export function Inbox({
                 }}
               >
                 {openedContract.title}
-              </h3>
+              </h2>
             </div>
           </header>
 
@@ -214,10 +229,10 @@ export function Inbox({
           </div>
 
           <section
-            aria-label="Briefing del mensaje"
+            aria-label="Mensaje del contrato"
             style={{ display: "flex", flexDirection: "column", gap: "var(--space-xs)" }}
           >
-            <h4
+            <h3
               style={{
                 margin: 0,
                 fontFamily: "var(--font-mono)",
@@ -226,7 +241,7 @@ export function Inbox({
               }}
             >
               MENSAJE
-            </h4>
+            </h3>
             {briefingLines.map((line, idx) => (
               <p
                 key={`${openedContract.id}-line-${idx}`}
@@ -249,7 +264,7 @@ export function Inbox({
             aria-label="Objetivos del contrato"
             style={{ display: "flex", flexDirection: "column", gap: "var(--space-xs)" }}
           >
-            <h4
+            <h3
               style={{
                 margin: 0,
                 fontFamily: "var(--font-mono)",
@@ -258,7 +273,7 @@ export function Inbox({
               }}
             >
               OBJETIVOS ({openedContract.objectives.length})
-            </h4>
+            </h3>
             <ul
               style={{
                 listStyle: "none",
@@ -280,7 +295,11 @@ export function Inbox({
                     color: obj.completed ? "var(--color-primary)" : "var(--color-text)",
                   }}
                 >
-                  <span className="hl-tabular" aria-hidden="true">
+                  <span
+                    className="hl-tabular"
+                    aria-hidden="true"
+                    style={{ whiteSpace: "nowrap", flexShrink: 0 }}
+                  >
                     {obj.completed ? "[x]" : "[ ]"}
                   </span>
                   <span>{obj.description}</span>
@@ -305,6 +324,13 @@ export function Inbox({
                 type="button"
                 className={isActive ? "hl-btn" : "hl-btn hl-btn--primary"}
                 disabled={isLocked || isActive}
+                aria-label={
+                  isActive
+                    ? `En curso: ${openedContract.title}`
+                    : isLocked
+                      ? `Rango insuficiente para ${openedContract.title}`
+                      : `Aceptar contrato ${openedContract.title}`
+                }
                 onClick={() => onSelectContract(openedContract.id)}
                 data-testid="inbox-accept-btn"
               >
@@ -346,10 +372,14 @@ export function Inbox({
         <button
           type="button"
           role="tab"
+          tabIndex={selectedChannel === "all" ? 0 : -1}
           aria-selected={selectedChannel === "all"}
           className={selectedChannel === "all" ? "hl-btn hl-btn--primary" : "hl-btn"}
           style={{ fontSize: "0.76rem", padding: "4px 8px" }}
           onClick={() => setSelectedChannel("all")}
+          onKeyDown={(e) =>
+            handleTabListKeyDown(e, CHANNEL_TABS, selectedChannel, setSelectedChannel)
+          }
           data-testid="inbox-tab-all"
         >
           Todos ({contracts.length})
@@ -358,10 +388,14 @@ export function Inbox({
         <button
           type="button"
           role="tab"
+          tabIndex={selectedChannel === "work" ? 0 : -1}
           aria-selected={selectedChannel === "work"}
           className={selectedChannel === "work" ? "hl-btn hl-btn--primary" : "hl-btn"}
           style={{ fontSize: "0.76rem", padding: "4px 8px" }}
           onClick={() => setSelectedChannel("work")}
+          onKeyDown={(e) =>
+            handleTabListKeyDown(e, CHANNEL_TABS, selectedChannel, setSelectedChannel)
+          }
           data-testid="inbox-tab-work"
         >
           Trabajo · Nodo Seguro ({workCount})
@@ -370,10 +404,14 @@ export function Inbox({
         <button
           type="button"
           role="tab"
+          tabIndex={selectedChannel === "darknet" ? 0 : -1}
           aria-selected={selectedChannel === "darknet"}
           className={selectedChannel === "darknet" ? "hl-btn hl-btn--primary" : "hl-btn"}
           style={{ fontSize: "0.76rem", padding: "4px 8px" }}
           onClick={() => setSelectedChannel("darknet")}
+          onKeyDown={(e) =>
+            handleTabListKeyDown(e, CHANNEL_TABS, selectedChannel, setSelectedChannel)
+          }
           data-testid="inbox-tab-darknet"
         >
           Darknet · CIPHER ({darknetCount})

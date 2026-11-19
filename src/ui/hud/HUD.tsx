@@ -16,6 +16,7 @@ export interface HUDProps {
 export function HUD({ player, traceLevel, connectedTo = null, onOpenShop }: HUDProps) {
   return (
     <header
+      aria-label="Barra superior de estado"
       style={{
         display: "flex",
         flexWrap: "wrap",

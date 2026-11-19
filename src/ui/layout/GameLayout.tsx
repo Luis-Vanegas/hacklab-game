@@ -27,14 +27,22 @@ export function GameLayout({
 }: GameLayoutProps) {
   return (
     <div className="hl-layout" data-testid="game-layout">
+      <a href="#hacklab-terminal-main" className="hl-skip-link visually-hidden">
+        Ir a la terminal
+      </a>
       {backgroundScene ? <div className="hl-layout__scene">{backgroundScene}</div> : null}
 
       <div className="hl-layout__hud">{hud}</div>
 
-      <main className="hl-layout__workspace">
+      <main className="hl-layout__workspace" aria-label="Área principal de trabajo">
         <div className="hl-layout__board">{leftPanel}</div>
 
-        <section className="hl-layout__terminal" aria-label="Área de terminal interactiva">
+        <section
+          id="hacklab-terminal-main"
+          tabIndex={-1}
+          className="hl-layout__terminal"
+          aria-label="Área de terminal interactiva"
+        >
           {storyDialog}
           <div
             style={{ flex: "1 1 auto", minBlockSize: 0, display: "flex", flexDirection: "column" }}

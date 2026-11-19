@@ -129,6 +129,7 @@ export function Terminal({
       const fitAddon = new FitAddon();
       term.loadAddon(fitAddon);
       term.open(container);
+      term.textarea?.setAttribute("aria-label", "Entrada de comandos de la terminal");
       termRef.current = term;
 
       const writeCurrentPrompt = () => {
@@ -303,7 +304,7 @@ export function Terminal({
     <section
       className="hl-panel"
       aria-label="Consola de terminal"
-      style={{ flex: "1 1 auto", minBlockSize: "340px" }}
+      style={{ flex: "1 1 auto", minBlockSize: "260px" }}
       data-testid="terminal-panel"
       data-prompt={`${username}@${host}:${currentDir}$`}
     >
@@ -319,7 +320,7 @@ export function Terminal({
           flex: "1 1 auto",
           padding: "var(--space-sm)",
           backgroundColor: "var(--color-terminal-bg)",
-          minBlockSize: "280px",
+          minBlockSize: "200px",
           overflow: "clip",
         }}
         data-testid="xterm-container"

@@ -5,6 +5,7 @@
 
 import { useState, type ReactNode } from "react";
 import type { Contract, PlayerState } from "@/lib/types";
+import { handleTabListKeyDown } from "../a11y/keyboardTabs";
 import { useSoundMute } from "../feedback/soundEffects";
 import { ReputationBadge } from "../hud/ReputationBadge";
 import { TraceBar } from "../hud/TraceBar";
@@ -12,6 +13,11 @@ import { TraceBar } from "../hud/TraceBar";
 export type DesktopWindowId = "terminal" | "inbox" | "guide" | "map" | "shop";
 
 export type SidePanelTab = "status" | "guide" | "map";
+
+type MobileTabWindow = "terminal" | "inbox" | "guide" | "map";
+
+const MOBILE_TABS: readonly MobileTabWindow[] = ["terminal", "inbox", "guide", "map"];
+const SIDE_TABS: readonly SidePanelTab[] = ["status", "guide", "map"];
 
 export interface DesktopProps {
   readonly player: PlayerState;
@@ -182,16 +188,32 @@ export function Desktop({
   const isMuted = soundMuted ?? storedMuted;
   const handleToggleSound = onToggleSound ?? toggleStoredMute;
 
-  const openWindow = (target: DesktopWindowId) => {
-    if (target === "shop") {
-      onOpenShop?.();
-      return;
-    }
+  const selectMobileTab = (target: MobileTabWindow) => {
     setMobileWindow(target);
     if (target === "guide") {
       setSideTab("guide");
     } else if (target === "map") {
       setSideTab("map");
+    }
+  };
+
+  const openWindow = (target: DesktopWindowId) => {
+    if (target === "shop") {
+      onOpenShop?.();
+      return;
+    }
+    selectMobileTab(target);
+    if (target === "terminal" && typeof document !== "undefined") {
+      window.requestAnimationFrame(() => {
+        const input = document.querySelector<HTMLElement>(
+          "#hacklab-terminal-main .xterm-helper-textarea",
+        );
+        if (input) {
+          input.focus();
+        } else {
+          document.getElementById("hacklab-terminal-main")?.focus();
+        }
+      });
     }
   };
 
@@ -222,63 +244,91 @@ export function Desktop({
   };
 
   const isMobileSideActive = mobileWindow === "guide" || mobileWindow === "map";
+  const activeMobileTab: MobileTabWindow = mobileWindow === "shop" ? "terminal" : mobileWindow;
 
   return (
     <div className="hl-desktop" data-testid="hacklab-desktop">
+      <a href="#hacklab-terminal-main" className="hl-skip-link visually-hidden">
+        Ir a la terminal
+      </a>
       {backgroundScene ? <div className="hl-layout__scene">{backgroundScene}</div> : null}
 
       {/* Pestañas visibles en móvil (<= 720px) */}
       <nav
         className="hl-desktop__mobile-tabs"
-        role="tablist"
-        aria-label="Pestañas de HackLab OS"
+        aria-label="Navegación de ventanas de HackLab OS"
         data-testid="desktop-mobile-tabs"
       >
-        <button
-          type="button"
-          role="tab"
-          aria-selected={mobileWindow === "terminal"}
-          className={mobileWindow === "terminal" ? "hl-btn hl-btn--primary" : "hl-btn"}
-          onClick={() => openWindow("terminal")}
+        <div
+          role="tablist"
+          aria-label="Pestañas de HackLab OS"
+          style={{ display: "flex", flexWrap: "wrap", gap: "var(--space-xs)" }}
         >
-          Terminal
-        </button>
-        <button
-          type="button"
-          role="tab"
-          aria-selected={mobileWindow === "inbox"}
-          className={mobileWindow === "inbox" ? "hl-btn hl-btn--primary" : "hl-btn"}
-          onClick={() => openWindow("inbox")}
-        >
-          <span>Bandeja</span>
-          {unreadInboxCount > 0 ? (
-            <span
-              className="hl-unread-badge hl-tabular"
-              aria-label={`${unreadInboxCount} correos sin leer`}
-              data-testid="mobile-inbox-badge"
-            >
-              {unreadInboxCount}
-            </span>
-          ) : null}
-        </button>
-        <button
-          type="button"
-          role="tab"
-          aria-selected={mobileWindow === "guide"}
-          className={mobileWindow === "guide" ? "hl-btn hl-btn--primary" : "hl-btn"}
-          onClick={() => openWindow("guide")}
-        >
-          Guía de comandos
-        </button>
-        <button
-          type="button"
-          role="tab"
-          aria-selected={mobileWindow === "map"}
-          className={mobileWindow === "map" ? "hl-btn hl-btn--primary" : "hl-btn"}
-          onClick={() => openWindow("map")}
-        >
-          Mapa de red
-        </button>
+          <button
+            type="button"
+            role="tab"
+            tabIndex={mobileWindow === "terminal" ? 0 : -1}
+            aria-selected={mobileWindow === "terminal"}
+            className={mobileWindow === "terminal" ? "hl-btn hl-btn--primary" : "hl-btn"}
+            onClick={() => selectMobileTab("terminal")}
+            onKeyDown={(e) =>
+              handleTabListKeyDown(e, MOBILE_TABS, activeMobileTab, selectMobileTab)
+            }
+          >
+            Terminal
+          </button>
+          <button
+            type="button"
+            role="tab"
+            tabIndex={mobileWindow === "inbox" ? 0 : -1}
+            aria-selected={mobileWindow === "inbox"}
+            className={mobileWindow === "inbox" ? "hl-btn hl-btn--primary" : "hl-btn"}
+            onClick={() => selectMobileTab("inbox")}
+            onKeyDown={(e) =>
+              handleTabListKeyDown(e, MOBILE_TABS, activeMobileTab, selectMobileTab)
+            }
+          >
+            <span>Bandeja</span>
+            {unreadInboxCount > 0 ? (
+              <>
+                <span
+                  className="hl-unread-badge hl-tabular"
+                  aria-hidden="true"
+                  data-testid="mobile-inbox-badge"
+                >
+                  {unreadInboxCount}
+                </span>
+                <span className="visually-hidden"> ({unreadInboxCount} correos sin leer)</span>
+              </>
+            ) : null}
+          </button>
+          <button
+            type="button"
+            role="tab"
+            tabIndex={mobileWindow === "guide" ? 0 : -1}
+            aria-selected={mobileWindow === "guide"}
+            className={mobileWindow === "guide" ? "hl-btn hl-btn--primary" : "hl-btn"}
+            onClick={() => selectMobileTab("guide")}
+            onKeyDown={(e) =>
+              handleTabListKeyDown(e, MOBILE_TABS, activeMobileTab, selectMobileTab)
+            }
+          >
+            Guía de comandos
+          </button>
+          <button
+            type="button"
+            role="tab"
+            tabIndex={mobileWindow === "map" ? 0 : -1}
+            aria-selected={mobileWindow === "map"}
+            className={mobileWindow === "map" ? "hl-btn hl-btn--primary" : "hl-btn"}
+            onClick={() => selectMobileTab("map")}
+            onKeyDown={(e) =>
+              handleTabListKeyDown(e, MOBILE_TABS, activeMobileTab, selectMobileTab)
+            }
+          >
+            Mapa de red
+          </button>
+        </div>
         {onOpenShop ? (
           <button type="button" className="hl-btn" onClick={() => openWindow("shop")}>
             Tienda
@@ -288,6 +338,7 @@ export function Desktop({
 
       {/* Área de ventanas de escritorio */}
       <main className="hl-desktop__workspace" aria-label="Escritorio HackLab OS">
+        <h1 className="visually-hidden">Escritorio de HackLab OS</h1>
         <div
           className="hl-desktop__window hl-desktop__window--inbox"
           data-mobile-active={mobileWindow === "inbox" ? "true" : "false"}
@@ -296,6 +347,8 @@ export function Desktop({
         </div>
 
         <section
+          id="hacklab-terminal-main"
+          tabIndex={-1}
           className="hl-desktop__window hl-desktop__window--terminal"
           aria-label="Ventana de terminal"
           data-mobile-active={mobileWindow === "terminal" ? "true" : "false"}
@@ -327,10 +380,12 @@ export function Desktop({
             <button
               type="button"
               role="tab"
+              tabIndex={sideTab === "status" ? 0 : -1}
               aria-selected={sideTab === "status"}
               className={sideTab === "status" ? "hl-btn hl-btn--primary" : "hl-btn"}
               style={{ flex: "1 1 auto", fontSize: "0.76rem", padding: "4px 8px" }}
               onClick={() => setSideTab("status")}
+              onKeyDown={(e) => handleTabListKeyDown(e, SIDE_TABS, sideTab, setSideTab)}
               data-testid="side-tab-status"
             >
               Misión
@@ -338,10 +393,12 @@ export function Desktop({
             <button
               type="button"
               role="tab"
+              tabIndex={sideTab === "guide" ? 0 : -1}
               aria-selected={sideTab === "guide"}
               className={sideTab === "guide" ? "hl-btn hl-btn--primary" : "hl-btn"}
               style={{ flex: "1 1 auto", fontSize: "0.76rem", padding: "4px 8px" }}
               onClick={() => setSideTab("guide")}
+              onKeyDown={(e) => handleTabListKeyDown(e, SIDE_TABS, sideTab, setSideTab)}
               data-testid="side-tab-guide"
             >
               Guía de comandos
@@ -349,10 +406,12 @@ export function Desktop({
             <button
               type="button"
               role="tab"
+              tabIndex={sideTab === "map" ? 0 : -1}
               aria-selected={sideTab === "map"}
               className={sideTab === "map" ? "hl-btn hl-btn--primary" : "hl-btn"}
               style={{ flex: "1 1 auto", fontSize: "0.76rem", padding: "4px 8px" }}
               onClick={() => setSideTab("map")}
+              onKeyDown={(e) => handleTabListKeyDown(e, SIDE_TABS, sideTab, setSideTab)}
               data-testid="side-tab-map"
             >
               Mapa de red
@@ -393,7 +452,7 @@ export function Desktop({
           </span>
           <ReputationBadge tier={player.reputation} level={player.level} xp={player.xp} />
 
-          <div style={{ display: "flex", gap: "var(--space-xs)", flexWrap: "wrap" }}>
+          <div className="hl-taskbar__nav">
             <button
               type="button"
               className="hl-btn"
@@ -411,13 +470,16 @@ export function Desktop({
             >
               <span>Bandeja</span>
               {unreadInboxCount > 0 ? (
-                <span
-                  className="hl-unread-badge hl-tabular"
-                  aria-label={`${unreadInboxCount} correos sin leer`}
-                  data-testid="taskbar-inbox-badge"
-                >
-                  {unreadInboxCount}
-                </span>
+                <>
+                  <span
+                    className="hl-unread-badge hl-tabular"
+                    aria-hidden="true"
+                    data-testid="taskbar-inbox-badge"
+                  >
+                    {unreadInboxCount}
+                  </span>
+                  <span className="visually-hidden"> ({unreadInboxCount} correos sin leer)</span>
+                </>
               ) : null}
             </button>
             <button
@@ -471,7 +533,11 @@ export function Desktop({
             className="hl-btn"
             style={{ fontSize: "0.78rem", padding: "4px 10px" }}
             aria-pressed={isMuted}
-            aria-label={isMuted ? "Activar sonidos" : "Silenciar sonidos"}
+            aria-label={
+              isMuted
+                ? "Silencio: activar efectos de sonido"
+                : "Sonido: silenciar efectos de sonido"
+            }
             onClick={handleToggleSound}
             data-testid="taskbar-mute-btn"
           >

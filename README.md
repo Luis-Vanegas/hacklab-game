@@ -15,6 +15,12 @@ rompes sistemas simulados mientras aprendes seguridad, scripting e ingeniería d
 
 </div>
 
+![Recorrido del juego: título, oficina y terminal](docs/screenshots/walkthrough.gif)
+
+| Escritorio (1440 px)                                       | Celular (375 px)                                        |
+| ---------------------------------------------------------- | ------------------------------------------------------- |
+| ![Escritorio del juego](docs/screenshots/desktop-1440.png) | ![Terminal en celular](docs/screenshots/mobile-375.png) |
+
 ---
 
 ## Inicio rápido

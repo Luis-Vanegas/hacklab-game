@@ -189,9 +189,9 @@ Prepara la Fase 3 sin sandbox todavía: el jugador **lee** scripts y ve qué har
 
 ### A9 — Pulido final · rama `feat/ui-polish`
 
-- [ ] Revisión de accesibilidad: foco visible, navegación con teclado en todas las ventanas, `aria-label` en español y contraste AA
+- [x] Revisión de accesibilidad: foco visible, navegación con teclado en todas las ventanas, `aria-label` en español y contraste AA
 - [ ] Revisar a 375 px y a 1440 px. Informe de Lighthouse (rendimiento ≥ 90 en escritorio) en el PR
-- [ ] Capturas y un GIF corto del recorrido para el `README.md`
+- [x] Capturas y un GIF corto del recorrido para el `README.md`
 
 ---
 

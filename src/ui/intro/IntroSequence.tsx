@@ -127,14 +127,22 @@ export function IntroSequence({
 
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        event.preventDefault();
+        handleSkip();
+        return;
+      }
       if (event.key === "Enter") {
+        if (event.target instanceof HTMLElement && event.target.closest("button")) {
+          return;
+        }
         event.preventDefault();
         handleAdvance();
       }
     };
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
-  }, [handleAdvance]);
+  }, [handleAdvance, handleSkip]);
 
   if (normalized.length === 0 || !currentSlide) {
     return null;
@@ -148,6 +156,7 @@ export function IntroSequence({
       data-testid="intro-sequence"
       data-mood={currentSlide.mood ?? "day"}
     >
+      <h1 className="visually-hidden">Introducción narrativa de HackLab</h1>
       <article
         className="hl-intro-card"
         style={{
