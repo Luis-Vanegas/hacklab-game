@@ -6,4 +6,5 @@ export {
   getAllTiers,
   getTierConfig,
   getNextTier,
+  marksFindings,
 } from "./ReputationSystem";

@@ -28,9 +28,27 @@ export function transition(state: GameState, to: GamePhase): GameState {
   return { ...state, phase: to };
 }
 
+export const DEFAULT_USERNAME = "anonymous";
+
+// Regla de un usuario de Linux: va en el prompt (usuario@host), así que sin espacios ni tildes
+const USERNAME_PATTERN = /^[a-z][a-z0-9_-]{0,15}$/;
+
+export function validateUsername(name: string): string | null {
+  return USERNAME_PATTERN.test(name)
+    ? null
+    : "Usa de 1 a 16 caracteres: minúsculas, números, - y _, empezando por una letra.";
+}
+
+// Idempotente: el mismo nombre devuelve el mismo estado
+export function setUsername(state: GameState, username: string): GameState {
+  if (state.player.username === username) return state;
+  logStateChange("player.username", state.player.username, username);
+  return { ...state, player: { ...state.player, username } };
+}
+
 export function createInitialState(): GameState {
   const player: PlayerState = {
-    username: "anonymous",
+    username: DEFAULT_USERNAME,
     credits: 500,
     xp: 0,
     level: 1,

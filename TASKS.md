@@ -1,8 +1,8 @@
 # Tareas — HackLab Game
 
 > Archivo de coordinación entre agentes. Leer antes de empezar. Actualizar al terminar.
-> **Fase actual: 3 — Python real.** Specs (S1–S8) y contratos entre capas en
-> [`odd/tasks/fase-3-python.md`](odd/tasks/fase-3-python.md). Léelo antes de tu primera tarea.
+> **Fase actual: terminal legible.** Specs (S1–S6) y contrato entre capas en
+> [`odd/tasks/terminal-legible.md`](odd/tasks/terminal-legible.md). Léelo antes de tu primera tarea.
 
 ## Reglas (todos)
 
@@ -12,6 +12,34 @@
 4. **Todo texto visible en español** (S6). Identificadores en inglés.
 5. **Nada real como objetivo.** IPs solo de rangos privados (`10.x`, `192.168.x`) o de documentación (`192.0.2.x`, `198.51.100.x`, `203.0.113.x`). Dominios ficticios terminados en `.test` o `.example`. Así nadie aprende a atacar sistemas reales.
 6. **Si te falta un tipo o un hook**, no lo inventes en tu zona: escríbelo en 📬 Mensajes y sigue con otra tarea.
+
+---
+
+## 🖥️ Terminal legible
+
+Luis pidió que la terminal se lea como una de Linux, poder poner su nombre y que los nuevos vean
+marcadas las pistas importantes. Specs en [`odd/tasks/terminal-legible.md`](odd/tasks/terminal-legible.md).
+
+### K5 — Contrato y terminal · Claude · rama `feat/engine-terminal-legible`
+
+- [x] `CommandResult.highlights` y la terminal que los pinta (`dir`, `exec`, `finding` con recuadro al pasar el mouse)
+- [x] Colores de Linux en los tres temas: texto gris claro, prompt verde/azul/blanco, colores también en élite
+- [x] `validateUsername`, `newGame(name)`, `useFindings()` y `useShowFindings()` (marcas hasta `hacker`)
+
+### C11 — Hallazgos en los comandos · Codex · rama `feat/terminal-highlights` · después de K5
+
+- [ ] `ls`: `highlights` con `kind: "dir"` para carpetas y `kind: "exec"` para archivos con permiso `x`
+- [ ] `nmap`: salida en columnas (`PUERTO  ESTADO  SERVICIO  VERSIÓN`) y un `finding` por cada puerto riesgoso, con su `note`
+- [ ] `src/data/findings/services.json`: servicio → explicación corta (FTP, Telnet, SMB, RDP, versiones viejas). **Cada explicación con su fuente** (OWASP, NIST, documentación oficial) en un comentario del PR. Nada inventado (S6)
+- [ ] Marca `vulnerable: true` en los puertos de los contratos que lo sean y prueba que `nmap` los resalta
+
+### A11 — Nombre, panel de hallazgos y transparencia · Antigravity · rama `feat/ui-terminal-legible`
+
+Puedes maquetar ya; los hooks llegan con K5.
+
+- [ ] «Nueva partida» pide el nombre del jugador antes de la intro: un campo con la regla visible (minúsculas, números, `-` y `_`, hasta 16) y el error que devuelve `newGame(name)`
+- [ ] Pestaña lateral «Hallazgos» (también en móvil) con `useFindings()`: texto marcado, explicación y comando que lo encontró. Se oculta cuando `useShowFindings()` es `false`
+- [ ] Paneles al 75–80 % de opacidad con `backdrop-filter: blur(...)`; el texto mantiene contraste AA (S5). Captura antes/después y Lighthouse de accesibilidad
 
 ---
 
@@ -277,6 +305,12 @@ Prepara la Fase 3 sin sandbox todavía: el jugador **lee** scripts y ve qué har
 - [2026-11-19] CLAUDE → TODOS: **Fase 3 cerrada.** A10 (#35) y C10 (#36) en `develop`. Probado en el navegador: `edit` → Ctrl+S → `python` imprime `Total de fallos: 4.` con Pyodide real.
 
 ---
+
+- [2026-11-19] CLAUDE → CODEX y ANTIGRAVITY: **K5 listo** (rama `feat/engine-terminal-legible`). Desbloquea C11 y A11 cuando llegue a `develop`:
+  - `CommandResult.highlights?: { text, kind: "dir" | "exec" | "finding", note? }[]`. La salida sigue en texto plano; la terminal pinta solo palabras completas.
+  - `useFindings()` → `{ text, note, command }[]` (más reciente primero) y `useShowFindings()` → `boolean` (hasta reputación `hacker`).
+  - `newGame(name?: string): string | null` devuelve el error de `validateUsername` y no crea partida si el nombre no vale. Vacío = `anonymous`.
+  - CODEX: en `nmap`, `text` debe ser la palabra que se ve en la salida (por ejemplo `ftp`), no la línea entera.
 
 ## 📋 Estado general
 

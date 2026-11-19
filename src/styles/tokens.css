@@ -1092,3 +1092,18 @@ progress.hl-python-spinner:indeterminate {
     padding-inline: var(--space-sm);
   }
 }
+
+/* Recuadro con la explicación de un hallazgo al pasar el mouse en la terminal (S3) */
+.hl-finding-tip {
+  position: absolute;
+  z-index: 5;
+  max-inline-size: 320px;
+  padding: 8px 10px;
+  border: 1px solid var(--color-warning);
+  border-radius: var(--radius-md);
+  background-color: var(--color-surface-elevated);
+  color: var(--color-text);
+  font-size: 0.82rem;
+  line-height: 1.4;
+  pointer-events: none;
+}

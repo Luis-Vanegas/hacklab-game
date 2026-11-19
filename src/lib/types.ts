@@ -41,6 +41,24 @@ export interface CommandResult {
   readonly clearScreen?: boolean;
   // Pide abrir el editor con este archivo. Lo usa `edit`; el store lo publica a la UI.
   readonly openEditor?: { readonly path: string; readonly content: string };
+  // Textos de la salida que la terminal pinta (carpetas, ejecutables, hallazgos).
+  // La salida sigue en texto plano para que objetivos y pruebas la comparen tal cual.
+  readonly highlights?: readonly Highlight[];
+}
+
+// "dir" y "exec" son colores de Linux (siempre); "finding" es una pista para
+// principiantes (S3/S4) y trae su explicación en `note`.
+export interface Highlight {
+  readonly text: string;
+  readonly kind: "dir" | "exec" | "finding";
+  readonly note?: string;
+}
+
+// Hallazgo ya visto en la partida, para el panel «Hallazgos» (S3)
+export interface Finding {
+  readonly text: string;
+  readonly note: string;
+  readonly command: string;
 }
 
 export type CommandHandler = (
