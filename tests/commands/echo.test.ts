@@ -9,6 +9,24 @@ describe("echo", () => {
     expect(result.output).toEqual(["Hola  Medellín desde acá"]);
     expect(executeCommand('echo "Hola  Medellín" desde acá', ctx)).toEqual(result);
     expect(executeCommand('echo ""', ctx).output).toEqual([""]);
+    expect(executeCommand('echo inicio ">" fin', ctx)).toEqual({ output: ["inicio > fin"] });
+  });
+
+  it("solo devuelve cambios virtuales al redirigir y conserva los permisos al modificar", () => {
+    const ctx = makeContext();
+    const result = executeCommand('echo "nota nueva" > ~/informe.txt', ctx);
+    expect(result.filesystemChanges).toMatchObject([
+      { path: "/home/user/informe.txt", action: "create", node: { content: "nota nueva\n" } },
+    ]);
+    expect(executeCommand("echo revisar > /home/user/notes", ctx).filesystemChanges).toMatchObject([
+      {
+        path: "/home/user/notes",
+        action: "modify",
+        node: { permissions: "-rw-r--r--", content: "revisar\n" },
+      },
+    ]);
+    expect(executeCommand("echo revisar > /etc", ctx).filesystemChanges).toBeUndefined();
+    expect(executeCommand("echo revisar > a > b", ctx).error).toMatch(/^Uso:/u);
   });
 
   it("indica cómo usarlo cuando falta el texto", () => {

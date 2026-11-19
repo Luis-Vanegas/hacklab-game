@@ -5,6 +5,10 @@ import archivo from "@/data/contracts/02-data-heist.json";
 import dayOne from "@/data/contracts/10-dia-1-bienvenida.json";
 import dayTwo from "@/data/contracts/11-dia-2-logs.json";
 import dayThree from "@/data/contracts/12-dia-3-proceso-raro.json";
+import dayFour from "@/data/contracts/13-dia-4-phishing.json";
+import dayFive from "@/data/contracts/14-dia-5-logs-web.json";
+import daySix from "@/data/contracts/15-dia-6-contrasenas.json";
+import daySeven from "@/data/contracts/16-dia-7-informe.json";
 import progression from "@/data/levels/progression.json";
 import shopData from "@/data/tools/shop.json";
 import beginner from "@/data/tutorials/beginner.json";
@@ -13,7 +17,18 @@ import { parseCommand } from "@/terminal/CommandParser";
 import { commands } from "@/terminal/commands";
 import { findVirtualNode } from "@/terminal/commands/virtualPath";
 
-const contracts = [tutorial, acme, archivo, dayOne, dayTwo, dayThree] as readonly Contract[];
+const contracts = [
+  tutorial,
+  acme,
+  archivo,
+  dayOne,
+  dayTwo,
+  dayThree,
+  dayFour,
+  dayFive,
+  daySix,
+  daySeven,
+] as readonly Contract[];
 const shop: readonly ToolDefinition[] = shopData;
 const tiers = progression.tiers as readonly ReputationConfig[];
 
