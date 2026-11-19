@@ -11,7 +11,7 @@ export interface IntroSlide {
 export const INTRO: readonly IntroSlide[] = [
   {
     id: "call",
-    text: "Medellín, 2026. Después de meses enviando hojas de vida, por fin te llamaron.",
+    text: "2026. Después de meses enviando hojas de vida, por fin te llamaron.",
     mood: "day",
   },
   {

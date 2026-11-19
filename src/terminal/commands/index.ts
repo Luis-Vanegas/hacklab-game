@@ -181,7 +181,7 @@ export const commands: readonly CommandDefinition[] = [
     unlockRank: "script_kiddie",
     usage: "echo <texto> [> <archivo-virtual>]",
     description: "Mostrar el texto en la terminal.",
-    example: "echo Hola Medellín",
+    example: "echo Hola mundo",
     run: echo,
   },
   {

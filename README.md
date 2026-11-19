@@ -43,7 +43,7 @@ Abre `http://localhost:5173`. No necesitas cuentas, servidores ni API keys.
 
 ## Cómo se juega
 
-Eres analista en **Nodo Seguro**, en Medellín.
+Eres analista en **Nodo Seguro** y de día defiendes tu ciudad.
 
 - **De día**, Marta Ríos te asigna tickets del canal _Trabajo_: revisar logs, detectar
   procesos raros, analizar phishing y aprender Python.
