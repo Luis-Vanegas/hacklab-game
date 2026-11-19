@@ -44,7 +44,11 @@ export function applyCommandResult(
   const history = [...session.history, executed.input];
   if (result.error !== undefined) return { ...session, history };
 
-  const game = trackObjectives(applyStateChanges(session.game, result.stateChanges), executed);
+  const game = trackObjectives(
+    applyStateChanges(session.game, result.stateChanges),
+    executed,
+    result.output,
+  );
   return {
     game,
     filesystem: applyChanges(session.filesystem, result.filesystemChanges ?? []),
@@ -78,17 +82,29 @@ function applyStateChanges(game: GameState, changes?: Partial<MutableGameFields>
   return next;
 }
 
-function trackObjectives(game: GameState, executed: ExecutedCommand): GameState {
+function trackObjectives(
+  game: GameState,
+  executed: ExecutedCommand,
+  output: readonly string[],
+): GameState {
   const pending = game.activeContract?.objectives.filter(
-    (objective) => !objective.completed && matches(objective, executed, game),
+    (objective) => !objective.completed && matches(objective, executed, game, output),
   );
   return (pending ?? []).reduce((state, objective) => completeObjective(state, objective.id), game);
 }
 
-function matches(objective: Objective, executed: ExecutedCommand, game: GameState): boolean {
+function matches(
+  objective: Objective,
+  executed: ExecutedCommand,
+  game: GameState,
+  output: readonly string[],
+): boolean {
   const { trigger } = objective;
   if (trigger.command !== executed.command) return false;
   if (trigger.requiresConnection && game.connectedTo === null) return false;
+  if (trigger.outputIncludes !== undefined && !output.join("\n").includes(trigger.outputIncludes)) {
+    return false;
+  }
   if (!trigger.args) return true;
   return (
     trigger.args.length === executed.args.length &&

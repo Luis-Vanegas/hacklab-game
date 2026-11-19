@@ -39,6 +39,8 @@ export interface CommandResult {
   readonly cwd?: string;
   // Pide a la terminal visual que limpie la pantalla. Lo usa `clear`.
   readonly clearScreen?: boolean;
+  // Pide abrir el editor con este archivo. Lo usa `edit`; el store lo publica a la UI.
+  readonly openEditor?: { readonly path: string; readonly content: string };
 }
 
 export type CommandHandler = (
@@ -165,6 +167,8 @@ export interface ObjectiveTrigger {
   readonly command: string; // Comando que dispara
   readonly args?: readonly string[]; // Args específicos (opcional)
   readonly requiresConnection?: boolean;
+  // La salida debe contener este texto: valida el resultado de un script, no solo que corrió
+  readonly outputIncludes?: string;
 }
 
 export interface TargetServer {

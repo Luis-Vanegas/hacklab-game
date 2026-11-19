@@ -22,10 +22,12 @@ describe("python", () => {
     ).toMatch(/^SHA-256 de muestra: [a-f0-9]{64}$/u);
   });
 
-  it("explica que los scripts desconocidos esperan la Fase 3 y rechaza opciones de ejecución", () => {
+  it("sin intérprete, avisa que no hay salida guardada y rechaza opciones de ejecución", () => {
     const ctx = makeContext({ filesystem });
-    expect(executeCommand("python ~/scripts/otro.py", ctx).error).toContain("Fase 3");
-    expect(executeCommand("python -c texto", ctx).error).toBe("Uso: python <script-virtual>");
-    expect(executeCommand("python", ctx).error).toBe("Uso: python <script-virtual>");
+    expect(executeCommand("python ~/scripts/otro.py", ctx).error).toContain(
+      "No hay salida guardada",
+    );
+    expect(executeCommand("python -c texto", ctx).error).toBe("Uso: python <script>");
+    expect(executeCommand("python", ctx).error).toBe("Uso: python <script>");
   });
 });

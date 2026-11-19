@@ -8,13 +8,15 @@ const outputByPath: Readonly<Record<string, readonly string[]>> = examples;
 export default function python(args: readonly string[], ctx: CommandContext): CommandResult {
   const [script] = args;
   if (args.length !== 1 || !script || script.startsWith("-")) {
-    return commandError("Uso: python <script-virtual>");
+    return commandError("Uso: python <script>");
   }
 
   const path = resolveVirtualPath(ctx.currentDir, script);
   const output = outputByPath[path];
   if (!output || findVirtualNode(ctx.filesystem, path)?.type !== "file") {
-    return commandError("Script desconocido. La ejecución real llega en la Fase 3.");
+    return commandError(
+      "No hay salida guardada para este script y el intérprete de Python no está disponible.",
+    );
   }
 
   return { output: ["Salida simulada:", ...output] };

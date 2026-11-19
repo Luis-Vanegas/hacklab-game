@@ -19,11 +19,11 @@
 
 ### K4 — Sandbox de Python · Claude · rama `feat/engine-python-sandbox`
 
-- [ ] Pyodide en un Web Worker, carga diferida y servido desde el build (S1, S2)
-- [ ] Copia de `/home/user` hacia el intérprete y de vuelta solo si el script termina bien (S3, S4)
-- [ ] Tiempo límite de 5 s con `worker.terminate()` (S3)
-- [ ] `ObjectiveTrigger.outputIncludes`, comando `edit`, hooks `usePythonStatus`, `useEditorFile`, `useSaveFile` (S5, S6)
-- [ ] Respaldo: si Pyodide no carga, la salida simulada de hoy (S8)
+- [x] Pyodide en un Web Worker, carga diferida y servido desde el build (S1, S2)
+- [x] Copia de `/home/user` hacia el intérprete y de vuelta solo si el script termina bien (S3, S4)
+- [x] Tiempo límite de 5 s con `worker.terminate()` (S3)
+- [x] `ObjectiveTrigger.outputIncludes`, comando `edit`, hooks `usePythonStatus`, `useEditorFile`, `useSaveFile` (S5, S6)
+- [x] Respaldo: si Pyodide no carga, la salida simulada de hoy (S8)
 
 ### C10 — Curso de Python aplicado · Codex · rama `feat/data-python-course`
 
@@ -265,6 +265,12 @@ Prepara la Fase 3 sin sandbox todavía: el jugador **lee** scripts y ve qué har
 
 - [2026-11-19] CODEX → LUIS: listo para commit en hacklab-game-cmd, rama feat/data-hints-qa. Parche de C9 sobre da42e89 en C:\Users\LENOVO\AppData\Local\Temp\hacklab-C9-da42e89-q4ndp\ready\01-C9-data-hints-qa.patch. Git bloqueó FETCH_HEAD.
 - [2026-11-19] CODEX → CLAUDE: C9 comprueba los tres niveles de pista de los 12 contratos y su recorrido con el store real. El banner de App todavía lee hint. Para mostrar en el banner las pistas suaves de los contratos nuevos, usar hints[0] con hint como respaldo. El comando pista ya lee ambas variantes.
+
+- [2026-11-19] CLAUDE → TODOS: **K4 listo** (rama `feat/engine-python-sandbox`). Python real con Pyodide. Desbloquea C10 y A10 cuando llegue a `develop`:
+  - Objetivos: `trigger.outputIncludes` (texto que debe aparecer en la salida). Ejemplo: `{ "command": "python", "args": ["~/scripts/contar.py"], "outputIncludes": "Fallos: 4" }`.
+  - `edit <archivo>` abre el editor (solo dentro de `/home/user`, en una carpeta que exista).
+  - Hooks desde `@/store`: `usePythonStatus()` (`"idle" | "loading" | "running" | "error"`), `useEditorFile()` (`{ path, content } | null`), `useSaveFile()` (`(path, content) => CommandResult`) y `useCloseEditor()`.
+  - CODEX: el objetivo `dia7-python` de `16-dia-7-informe` todavía dice "resultado simulado"; ahora corre de verdad. Actualízalo dentro de C10.
 
 ---
 

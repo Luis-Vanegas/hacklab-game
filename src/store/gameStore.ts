@@ -12,6 +12,9 @@ import {
   diffGameEvents,
   type GameSession,
 } from "@/engine/session";
+import { applyChanges, resolve } from "@/engine/filesystem";
+import { collectFiles, fileChanges } from "@/engine/scripting";
+import { HOME_DIR } from "@/engine/session";
 import { emit } from "@/lib/events";
 import { load, save } from "@/lib/persistence";
 import { getAllTiers } from "@/engine/reputation";
@@ -26,9 +29,21 @@ import type {
   ReputationTier,
   ToolDefinition,
 } from "@/lib/types";
-import { executeCommand, parseCommand } from "@/terminal/CommandParser";
+import { executeCommand, parseCommand, type ParsedCommand } from "@/terminal/CommandParser";
 import { commands } from "@/terminal/commands";
-import type { CommandManual } from "@/terminal/commands/shared";
+import { editablePathError, MAX_FILE_CHARS } from "@/terminal/commands/edit";
+import { commandError, type CommandManual } from "@/terminal/commands/shared";
+import { findVirtualNode, resolveVirtualPath } from "@/terminal/commands/virtualPath";
+import { createWorkerRunner, type PythonRunner, type PythonStatus } from "./python/pythonRunner";
+
+export const PYTHON_TIMEOUT_MESSAGE = "Tiempo agotado: el script tardó más de 5 s y se detuvo.";
+const PYTHON_LOADING_MESSAGE = "Cargando el intérprete de Python…";
+
+// El worker real no existe en jsdom: las pruebas inyectan un runner falso
+let pythonRunner: PythonRunner | null = null;
+export function setPythonRunner(runner: PythonRunner | null): void {
+  pythonRunner = runner;
+}
 
 // Capa de integración: une parser, comandos y engine, y es lo único con efectos
 // (persistencia y eventos). La UI solo habla con este store a través de los hooks.
@@ -64,7 +79,14 @@ const TIERS: readonly ReputationTier[] = getAllTiers().map((t) => t.tier);
 export interface GameStore extends GameSession {
   // Avisos pendientes para la UI. No se guardan: son de la sesión en curso.
   readonly events: readonly QueuedGameAlert[];
+  readonly pythonStatus: PythonStatus;
+  // Archivo abierto en el editor. No se guarda: es de la sesión en curso.
+  readonly editorFile: { readonly path: string; readonly content: string } | null;
   runCommand(input: string): CommandResult;
+  // Igual que runCommand, pero `python` espera al intérprete. `onNotice` avisa mientras carga.
+  runCommandAsync(input: string, onNotice?: (message: string) => void): Promise<CommandResult>;
+  saveFile(path: string, content: string): CommandResult;
+  closeEditor(): void;
   acceptContract(contractId: string): boolean;
   submitContract(): void;
   newGame(): void;
@@ -85,23 +107,120 @@ export const useGameStore = create<GameStore>()((set, get) => {
     emit(event, payload, "gameStore");
   };
 
+  // Registra un comando ya ejecutado sobre el estado actual: historial, objetivos y archivos
+  const record = (
+    input: string,
+    parsed: ParsedCommand | { error: string },
+    result: CommandResult,
+  ) => {
+    const session = currentSession(get());
+    const executed = "error" in parsed ? { input, command: "", args: [] } : { input, ...parsed };
+    const next = applyCommandResult(session, executed, result);
+    commit({ ...next, history: next.history.slice(-MAX_HISTORY) }, "command.executed", {
+      command: executed.command,
+      ok: result.error === undefined,
+    });
+    if (result.openEditor && result.error === undefined) set({ editorFile: result.openEditor });
+  };
+
   return {
     ...loadSession(),
     events: [],
+    pythonStatus: "idle",
+    editorFile: null,
 
     runCommand(input) {
       const parsed = parseCommand(input);
-      const session = currentSession(get());
-      const result = executeCommand(input, buildContext(session));
-      if (parsed === null) return result;
-
-      const executed = "error" in parsed ? { input, command: "", args: [] } : { input, ...parsed };
-      const next = applyCommandResult(session, executed, result);
-      commit({ ...next, history: next.history.slice(-MAX_HISTORY) }, "command.executed", {
-        command: executed.command,
-        ok: result.error === undefined,
-      });
+      const result = executeCommand(input, buildContext(currentSession(get())));
+      if (parsed !== null) record(input, parsed, result);
       return result;
+    },
+
+    async runCommandAsync(input, onNotice) {
+      const parsed = parseCommand(input);
+      const session = currentSession(get());
+      const script =
+        parsed && !("error" in parsed) && parsed.command === "python"
+          ? pythonScriptPath(parsed.args, session)
+          : null;
+      if (!parsed || "error" in parsed || script === null) return get().runCommand(input);
+
+      const { pythonStatus } = get();
+      if (pythonStatus === "loading" || pythonStatus === "running") {
+        return commandError("Ya hay un script de Python en ejecución.");
+      }
+
+      const before = collectFiles(session.filesystem, HOME_DIR);
+      pythonRunner ??= createWorkerRunner();
+      const outcome = await pythonRunner.run(
+        { files: before, script, cwd: session.currentDir },
+        (status) => {
+          set({ pythonStatus: status });
+          if (status === "loading") onNotice?.(PYTHON_LOADING_MESSAGE);
+        },
+      );
+
+      if (outcome.kind === "unavailable") {
+        set({ pythonStatus: "error" });
+        emit("python.unavailable", { reason: outcome.message }, "gameStore");
+        // Plan B (S8): la salida guardada de los scripts de ejemplo
+        const fallback = get().runCommand(input);
+        return {
+          ...fallback,
+          output: ["No se pudo cargar el intérprete de Python.", ...fallback.output],
+        };
+      }
+
+      set({ pythonStatus: "idle" });
+      let result: CommandResult;
+      if (outcome.kind === "timeout") {
+        result = commandError(PYTHON_TIMEOUT_MESSAGE);
+      } else if (!outcome.response.ok) {
+        // Un script que falla no deja archivos a medias (atomicidad)
+        result = {
+          output: [...outcome.response.output],
+          error: "El script terminó con error.",
+          outputType: "error",
+        };
+      } else {
+        result = {
+          output: [...outcome.response.output],
+          filesystemChanges: fileChanges(
+            currentSession(get()).filesystem,
+            before,
+            outcome.response.files,
+          ),
+        };
+      }
+      record(input, parsed, result);
+      return result;
+    },
+
+    saveFile(path, content) {
+      const session = currentSession(get());
+      const error =
+        editablePathError(session.filesystem, path) ??
+        (content.length > MAX_FILE_CHARS
+          ? `El archivo supera ${MAX_FILE_CHARS} caracteres.`
+          : null);
+      if (error) return commandError(error);
+
+      const name = path.slice(path.lastIndexOf("/") + 1);
+      const existing = resolve(session.filesystem, path);
+      const filesystem = applyChanges(session.filesystem, [
+        {
+          path,
+          action: existing ? "modify" : "create",
+          node: { type: "file", name, content, permissions: "-rw-r--r--" },
+        },
+      ]);
+      commit({ ...session, filesystem }, "file.saved", { path });
+      set({ editorFile: { path, content } });
+      return { output: ["Guardado: " + path], outputType: "success" };
+    },
+
+    closeEditor() {
+      set({ editorFile: null });
     },
 
     acceptContract(contractId) {
@@ -127,8 +246,8 @@ export const useGameStore = create<GameStore>()((set, get) => {
 
     newGame() {
       commit(createSession(), "game.new", {});
-      // Los avisos de la partida anterior ya no aplican
-      set({ events: [] });
+      // Los avisos y el editor de la partida anterior ya no aplican
+      set({ events: [], editorFile: null });
     },
 
     dismissEvent(id) {
@@ -164,6 +283,16 @@ function currentSession(store: GameStore): GameSession {
     currentDir: store.currentDir,
     history: store.history,
   };
+}
+
+// Solo se ejecuta de verdad un archivo de /home/user: es lo único que se copia al sandbox.
+// Cualquier otro caso sigue por el comando síncrono, que da el mensaje de error.
+function pythonScriptPath(args: readonly string[], session: GameSession): string | null {
+  const [arg] = args;
+  if (args.length !== 1 || !arg || arg.startsWith("-")) return null;
+  const path = resolveVirtualPath(session.currentDir, arg);
+  if (!path.startsWith(HOME_DIR + "/")) return null;
+  return findVirtualNode(session.filesystem, path)?.type === "file" ? path : null;
 }
 
 function buildContext(session: GameSession): CommandContext {

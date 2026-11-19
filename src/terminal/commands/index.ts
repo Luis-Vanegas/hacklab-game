@@ -7,6 +7,7 @@ import grep from "./grep";
 import find from "./find";
 import wc from "./wc";
 import echo from "./echo";
+import edit from "./edit";
 import touch from "./touch";
 import mkdir from "./mkdir";
 import file from "./file";
@@ -182,6 +183,18 @@ export const commands: readonly CommandDefinition[] = [
     description: "Mostrar el texto en la terminal.",
     example: "echo Hola Medellín",
     run: echo,
+  },
+  {
+    name: "edit",
+    category: "sistema",
+    learn: "Escribes y corriges tus propios scripts antes de ejecutarlos.",
+    realWorld:
+      "Editar un script en el servidor, guardarlo y volver a correrlo es el ciclo diario de quien automatiza.",
+    unlockRank: "script_kiddie",
+    usage: "edit <archivo>",
+    description: "Abrir un archivo de /home/user en el editor para escribirlo o corregirlo.",
+    example: "edit ~/scripts/hola.py",
+    run: edit,
   },
   {
     name: "touch",
@@ -392,12 +405,12 @@ export const commands: readonly CommandDefinition[] = [
   {
     name: "python",
     category: "sistema",
-    learn: "Lees scripts cortos y comparas su salida simulada con una herramienta de la terminal.",
+    learn: "Ejecutas scripts de Python de verdad y lees su salida o el error que muestran.",
     realWorld:
       "Python ayuda a automatizar tareas repetitivas como resumir registros o verificar archivos.",
     unlockRank: "script_kiddie",
-    usage: "python <script-virtual>",
-    description: "Mostrar la salida simulada de un ejemplo de Python.",
+    usage: "python <script>",
+    description: "Ejecutar un script de Python de /home/user (máximo 5 segundos).",
     example: "python ~/scripts/contar_fallidos.py",
     run: python,
   },
