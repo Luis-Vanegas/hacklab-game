@@ -63,21 +63,21 @@ Pantalla de título ─► Intro narrativa (texto tipo máquina de escribir, 5 v
 
 ## Tasks
 
-| ID  | Specs          | Agente      | Ruta                       | Estado                  |
-| --- | -------------- | ----------- | -------------------------- | ----------------------- |
-| K1  | S1, S2, S4, S8 | Claude      | `feat/engine-game-events`  | listo: c150616, 41ee7e9 |
-| K2  | S1, S2         | Claude      | `feat/engine-story-intro`  | pendiente               |
-| K3  | todas          | Claude      | integración y revisión     | pendiente               |
-| C1  | S5             | Codex       | `feat/terminal-network`    | pendiente               |
-| C2  | S5             | Codex       | `feat/terminal-files`      | pendiente               |
-| C3  | S5             | Codex       | `feat/terminal-system`     | pendiente               |
-| C4  | S4             | Codex       | `feat/terminal-guide-data` | pendiente               |
-| C5  | S1, S5         | Codex       | `feat/data-day-one`        | pendiente               |
-| A1  | S2, S6         | Antigravity | `feat/ui-title-intro`      | pendiente               |
-| A2  | S3, S7         | Antigravity | `feat/scenes-office`       | pendiente               |
-| A3  | S2, S7         | Antigravity | `feat/ui-desktop-os`       | pendiente               |
-| A4  | S4             | Antigravity | `feat/ui-command-guide`    | pendiente               |
-| A5  | S8             | Antigravity | `feat/ui-game-feedback`    | pendiente               |
+| ID  | Specs          | Agente      | Ruta                       | Estado                                          |
+| --- | -------------- | ----------- | -------------------------- | ----------------------------------------------- |
+| K1  | S1, S2, S4, S8 | Claude      | `feat/engine-game-events`  | listo: c150616, 41ee7e9                         |
+| K2  | S1, S2         | Claude      | `feat/engine-story-intro`  | intro y diálogos listos; filesystem espera a C5 |
+| K3  | todas          | Claude      | integración y revisión     | pendiente                                       |
+| C1  | S5             | Codex       | `feat/terminal-network`    | pendiente                                       |
+| C2  | S5             | Codex       | `feat/terminal-files`      | pendiente                                       |
+| C3  | S5             | Codex       | `feat/terminal-system`     | pendiente                                       |
+| C4  | S4             | Codex       | `feat/terminal-guide-data` | pendiente                                       |
+| C5  | S1, S5         | Codex       | `feat/data-day-one`        | pendiente                                       |
+| A1  | S2, S6         | Antigravity | `feat/ui-title-intro`      | pendiente                                       |
+| A2  | S3, S7         | Antigravity | `feat/scenes-office`       | pendiente                                       |
+| A3  | S2, S7         | Antigravity | `feat/ui-desktop-os`       | pendiente                                       |
+| A4  | S4             | Antigravity | `feat/ui-command-guide`    | pendiente                                       |
+| A5  | S8             | Antigravity | `feat/ui-game-feedback`    | pendiente                                       |
 
 El detalle de cada tarea, con criterios de aceptación, está en `TASKS.md`.
 
