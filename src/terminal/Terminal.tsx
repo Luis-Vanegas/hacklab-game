@@ -13,7 +13,7 @@ import {
   useCurrentDir,
   useDifficulty,
   usePlayer,
-  useRunCommand,
+  useRunCommandAsync,
 } from "@/store/hooks";
 import { playSound } from "@/ui/feedback/soundEffects";
 import { getTerminalTheme } from "./themes";
@@ -23,7 +23,10 @@ export interface TerminalProps {
   readonly connectedTo?: string | null;
   readonly currentDir?: string;
   readonly difficulty?: GameDifficulty;
-  readonly onRunCommand?: (input: string) => CommandResult;
+  readonly onRunCommand?: (
+    input: string,
+    onNotice?: (message: string) => void,
+  ) => CommandResult | Promise<CommandResult>;
   readonly welcomeBanner?: readonly string[];
 }
 
@@ -87,7 +90,7 @@ export function Terminal({
   const storeConnectedTo = useConnectedTo();
   const storeCurrentDir = useCurrentDir();
   const storeDifficulty = useDifficulty();
-  const storeRunCommand = useRunCommand();
+  const storeRunCommand = useRunCommandAsync();
 
   const username = propUsername ?? storePlayer.username;
   const host = (propConnectedTo !== undefined ? propConnectedTo : storeConnectedTo) ?? LOCAL_HOST;
@@ -100,6 +103,8 @@ export function Terminal({
   const inputBufferRef = useRef<string>("");
   const localHistoryRef = useRef<string[]>([]);
   const historyIndexRef = useRef<number>(-1);
+  // Mientras corre un script de Python la terminal no acepta otra línea
+  const busyRef = useRef(false);
 
   // Refs sincronizados en useEffect para que el listener de xterm siempre lea el estado más reciente
   const promptStateRef = useRef({ username, host, currentDir, difficulty, runCommand });
@@ -170,8 +175,29 @@ export function Terminal({
       };
       window.addEventListener(TERMINAL_DRAFT_EVENT, onDraftEvent);
 
+      // Escribe la salida y el prompt siguiente; lo usan los comandos síncronos y los de Python
+      const showResult = (t: XTerm, result: CommandResult, diff: GameDifficulty) => {
+        if (result.clearScreen) {
+          t.clear();
+        } else {
+          for (const outLine of result.output) {
+            t.writeln(formatOutputLine(outLine, result.outputType, diff));
+          }
+        }
+
+        // Si el comando cambió cwd o conexión, los hooks/refs o el resultado traen el nuevo estado
+        const nextDir =
+          result.error === undefined && result.cwd ? result.cwd : promptStateRef.current.currentDir;
+        const nextHost =
+          result.error === undefined && result.stateChanges?.connectedTo !== undefined
+            ? (result.stateChanges.connectedTo ?? LOCAL_HOST)
+            : promptStateRef.current.host;
+
+        t.write(formatPrompt(promptStateRef.current.username, nextHost, nextDir));
+      };
+
       const disposable = term.onData((data) => {
-        if (!term) return;
+        if (!term || busyRef.current) return;
 
         if (data === "\r") {
           playSound("key");
@@ -185,27 +211,21 @@ export function Terminal({
           }
 
           const { runCommand: exec, difficulty: diff } = promptStateRef.current;
-          const result = exec(line);
-
-          if (result.clearScreen) {
-            term.clear();
+          const pending = exec(line, (notice) =>
+            term?.writeln(formatOutputLine(notice, "info", diff)),
+          );
+          if (pending instanceof Promise) {
+            busyRef.current = true;
+            void pending
+              .then((result) => {
+                if (term) showResult(term, result, diff);
+              })
+              .finally(() => {
+                busyRef.current = false;
+              });
           } else {
-            for (const outLine of result.output) {
-              term.writeln(formatOutputLine(outLine, result.outputType, diff));
-            }
+            showResult(term, pending, diff);
           }
-
-          // Si el comando cambió cwd o conexión, los hooks/refs o el resultado traen el nuevo estado
-          const nextDir =
-            result.error === undefined && result.cwd
-              ? result.cwd
-              : promptStateRef.current.currentDir;
-          const nextHost =
-            result.error === undefined && result.stateChanges?.connectedTo !== undefined
-              ? (result.stateChanges.connectedTo ?? LOCAL_HOST)
-              : promptStateRef.current.host;
-
-          term.write(formatPrompt(promptStateRef.current.username, nextHost, nextDir));
           return;
         }
 

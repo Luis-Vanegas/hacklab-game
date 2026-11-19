@@ -21,6 +21,13 @@ export const useNewGame = () => useGameStore((s) => s.newGame);
 export const useIntroSeen = () => useGameStore((s) => s.game.storyFlags.introSeen === true);
 export const useMarkIntroSeen = () => useGameStore((s) => s.markIntroSeen);
 
+// Python (Fase 3): la terminal usa runCommandAsync; el editor, el archivo abierto y el guardado
+export const useRunCommandAsync = () => useGameStore((s) => s.runCommandAsync);
+export const usePythonStatus = () => useGameStore((s) => s.pythonStatus);
+export const useEditorFile = () => useGameStore((s) => s.editorFile);
+export const useSaveFile = () => useGameStore((s) => s.saveFile);
+export const useCloseEditor = () => useGameStore((s) => s.closeEditor);
+
 // Avisos tipo videojuego. La UI muestra `events` y llama `dismiss(id)` al cerrarlos.
 export function useGameEvents() {
   const events = useGameStore((s) => s.events);
