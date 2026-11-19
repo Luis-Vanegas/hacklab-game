@@ -19,6 +19,7 @@ export interface DesktopProps {
   readonly gameClock?: string;
   readonly activeContract?: Contract | null;
   readonly contracts?: readonly Contract[];
+  readonly unreadInboxCount?: number;
   readonly terminalWindow: ReactNode;
   readonly inboxWindow: ReactNode;
   readonly statusWindow?: ReactNode;
@@ -158,6 +159,7 @@ export function Desktop({
   gameClock = "08:00 // TURNO ACTIVO",
   activeContract = null,
   contracts = [],
+  unreadInboxCount = 0,
   terminalWindow,
   inboxWindow,
   statusWindow,
@@ -240,7 +242,16 @@ export function Desktop({
           className={mobileWindow === "inbox" ? "hl-btn hl-btn--primary" : "hl-btn"}
           onClick={() => openWindow("inbox")}
         >
-          Bandeja
+          <span>Bandeja</span>
+          {unreadInboxCount > 0 ? (
+            <span
+              className="hl-unread-badge hl-tabular"
+              aria-label={`${unreadInboxCount} correos sin leer`}
+              data-testid="mobile-inbox-badge"
+            >
+              {unreadInboxCount}
+            </span>
+          ) : null}
         </button>
         <button
           type="button"
@@ -388,8 +399,18 @@ export function Desktop({
               className="hl-btn"
               style={{ fontSize: "0.78rem", padding: "4px 10px" }}
               onClick={() => openWindow("inbox")}
+              data-testid="taskbar-inbox-btn"
             >
-              Bandeja
+              <span>Bandeja</span>
+              {unreadInboxCount > 0 ? (
+                <span
+                  className="hl-unread-badge hl-tabular"
+                  aria-label={`${unreadInboxCount} correos sin leer`}
+                  data-testid="taskbar-inbox-badge"
+                >
+                  {unreadInboxCount}
+                </span>
+              ) : null}
             </button>
             <button
               type="button"

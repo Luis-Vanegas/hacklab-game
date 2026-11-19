@@ -15,6 +15,7 @@ export {
 } from "./guides/CommandGuide";
 export {
   StoryDialog,
+  PixelPortrait,
   resolveAvatarKind,
   resolveCharacterDisplayName,
   type StoryDialogProps,
@@ -35,5 +36,12 @@ export {
   type DesktopWindowId,
   type SidePanelTab,
 } from "./desktop/Desktop";
+export {
+  Inbox,
+  countUnreadContracts,
+  resolveSenderForContract,
+  type InboxProps,
+  type ContractSenderInfo,
+} from "./desktop/Inbox";
 export { GameNotifications, type GameNotificationsProps } from "./feedback/GameNotifications";
 export { BootSequence, type BootSequenceProps } from "./feedback/BootSequence";
