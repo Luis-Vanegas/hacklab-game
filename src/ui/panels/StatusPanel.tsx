@@ -106,7 +106,11 @@ export function StatusPanel({
                 }}
                 data-testid={`objective-${objective.id}`}
               >
-                <span className="hl-tabular" aria-hidden="true">
+                <span
+                  className="hl-tabular"
+                  aria-hidden="true"
+                  style={{ whiteSpace: "nowrap", flexShrink: 0 }}
+                >
                   {objective.completed ? "[x]" : "[ ]"}
                 </span>
                 <span

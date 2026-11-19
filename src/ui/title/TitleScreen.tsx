@@ -2,6 +2,8 @@
 // Muestra el logo en fuente pixel ("Press Start 2P" / "VT323") y permite iniciar
 // una nueva partida o continuar si existe una partida guardada.
 
+import { useEffect } from "react";
+
 export interface TitleScreenProps {
   readonly hasSavedGame?: boolean;
   readonly onNewGame: () => void;
@@ -9,6 +11,26 @@ export interface TitleScreenProps {
 }
 
 export function TitleScreen({ hasSavedGame = false, onNewGame, onContinue }: TitleScreenProps) {
+  useEffect(() => {
+    if (
+      typeof document === "undefined" ||
+      (typeof navigator !== "undefined" && /jsdom/i.test(navigator.userAgent)) ||
+      document.querySelector('link[data-hacklab-fonts="pixel"]')
+    ) {
+      return;
+    }
+
+    const link = document.createElement("link");
+    link.rel = "stylesheet";
+    link.href = "https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap";
+    link.media = "print";
+    link.setAttribute("data-hacklab-fonts", "pixel");
+    link.onload = () => {
+      link.media = "all";
+    };
+    document.head.appendChild(link);
+  }, []);
+
   return (
     <main className="hl-title-screen" aria-label="Pantalla de título" data-testid="title-screen">
       <div className="hl-title-card">
@@ -32,7 +54,7 @@ export function TitleScreen({ hasSavedGame = false, onNewGame, onContinue }: Tit
             margin: 0,
             fontSize: "0.9rem",
             color: "var(--color-text-secondary)",
-            maxInlineSize: "46ch",
+            maxInlineSize: "48ch",
           }}
         >
           De día defiendes redes autorizadas en Medellín. De noche respondes a los encargos de la

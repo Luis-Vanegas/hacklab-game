@@ -78,7 +78,7 @@ export function ToolShop({
           <div
             style={{
               display: "grid",
-              gridTemplateColumns: "repeat(auto-fill, minmax(240px, 1fr))",
+              gridTemplateColumns: "repeat(auto-fill, minmax(min(240px, 100%), 1fr))",
               gap: "var(--space-md)",
             }}
           >
@@ -186,6 +186,15 @@ export function ToolShop({
                         type="button"
                         className={isOwned ? "hl-btn" : "hl-btn hl-btn--primary"}
                         disabled={!canBuy}
+                        aria-label={
+                          isOwned
+                            ? `Adquirida: ${tool.name}`
+                            : !meetsLevel
+                              ? `Req. NIV ${tool.requiredLevel} para ${tool.name}`
+                              : !canAfford
+                                ? `Créditos insuficientes para ${tool.name}`
+                                : `Comprar ${tool.name} por ${tool.price} créditos`
+                        }
                         onClick={() => onBuyTool(tool.id)}
                       >
                         {isOwned
