@@ -79,10 +79,10 @@ Pantalla de título ─► Intro narrativa (texto tipo máquina de escribir, 5 v
 | A4    | S4             | Antigravity                    | `feat/ui-command-guide`                    | listo: PR #18–#22            |
 | A5    | S8             | Antigravity                    | `feat/ui-game-feedback`                    | listo: PR #18–#22            |
 | C6–C8 | S1, S5         | Codex                          | `feat/data-*`, `feat/terminal-python-read` | listo: PR #25–#27            |
-| C9    | S4, S5         | Codex                          | `feat/data-hints-qa`                       | pendiente                    |
+| C9    | S4, S5         | Codex                          | `feat/data-hints-qa`                       | listo: PR #29                |
 | A7    | S2             | Antigravity                    | `feat/ui-inbox`                            | listo: PR #24                |
 | A8    | S8             | Claude (tomada de Antigravity) | `feat/game-flow`                           | listo: ffb5eb7               |
-| A9    | S6, S7         | Antigravity                    | accesibilidad y capturas                   | pendiente                    |
+| A9    | S6, S7         | Antigravity                    | accesibilidad y capturas                   | listo: PR #30                |
 
 El detalle de cada tarea, con criterios de aceptación, está en `TASKS.md`.
 
