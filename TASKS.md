@@ -122,9 +122,9 @@ Datos nuevos: `src/data/machine/workstation.json` (tu equipo: hostname `nodo-ws-
 
 ### A4 — Guía de comandos · rama `feat/ui-command-guide` · después de K1 y C4
 
-- [ ] `src/ui/guides/CommandGuide.tsx`: tarjetas agrupadas por categoría, con nombre, qué hace, cómo se usa, ejemplo, "En la vida real" y botón **Probar**, que escribe el ejemplo en la terminal sin ejecutarlo
-- [ ] Las tarjetas bloqueadas muestran "Se desbloquea en rango X"
-- [ ] Buscador por nombre o descripción
+- [x] `src/ui/guides/CommandGuide.tsx`: tarjetas agrupadas por categoría, con nombre, qué hace, cómo se usa, ejemplo, "En la vida real" y botón **Probar**, que escribe el ejemplo en la terminal sin ejecutarlo
+- [x] Las tarjetas bloqueadas muestran "Se desbloquea en rango X"
+- [x] Buscador por nombre o descripción
 
 ### A5 — Sensación de juego · rama `feat/ui-game-feedback` · después de K1
 

@@ -25,6 +25,14 @@ export interface TerminalProps {
   readonly welcomeBanner?: readonly string[];
 }
 
+export const TERMINAL_DRAFT_EVENT = "hacklab:terminal-draft";
+
+// Escribe un comando de ejemplo en la línea de entrada de la terminal sin ejecutarlo (botón "Probar" de la guía)
+export function injectTerminalDraft(commandText: string): void {
+  if (typeof window === "undefined") return;
+  window.dispatchEvent(new CustomEvent<string>(TERMINAL_DRAFT_EVENT, { detail: commandText }));
+}
+
 const ANSI_RESET = "\x1b[0m";
 const ANSI_BOLD_CYAN = "\x1b[1;36m";
 const ANSI_BOLD_GREEN = "\x1b[1;32m";
@@ -150,6 +158,15 @@ export function Terminal({
       });
       resizeObserver.observe(container);
 
+      const onDraftEvent = (event: Event) => {
+        const custom = event as CustomEvent<string>;
+        if (typeof custom.detail === "string") {
+          replaceInputLine(custom.detail);
+          term?.focus();
+        }
+      };
+      window.addEventListener(TERMINAL_DRAFT_EVENT, onDraftEvent);
+
       const disposable = term.onData((data) => {
         if (!term) return;
 
@@ -256,6 +273,7 @@ export function Terminal({
       });
 
       return () => {
+        window.removeEventListener(TERMINAL_DRAFT_EVENT, onDraftEvent);
         resizeObserver.disconnect();
         disposable.dispose();
         term?.dispose();
