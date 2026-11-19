@@ -29,6 +29,7 @@ import ping from "./ping";
 import traceroute from "./traceroute";
 import whois from "./whois";
 import pwd from "./pwd";
+import python from "./python";
 import ssh from "./ssh";
 import trace from "./trace";
 import date from "./date";
@@ -387,6 +388,18 @@ export const commands: readonly CommandDefinition[] = [
     description: "Mostrar el directorio virtual actual.",
     example: "pwd",
     run: pwd,
+  },
+  {
+    name: "python",
+    category: "sistema",
+    learn: "Lees scripts cortos y comparas su salida simulada con una herramienta de la terminal.",
+    realWorld:
+      "Python ayuda a automatizar tareas repetitivas como resumir registros o verificar archivos.",
+    unlockRank: "script_kiddie",
+    usage: "python <script-virtual>",
+    description: "Mostrar la salida simulada de un ejemplo de Python.",
+    example: "python ~/scripts/contar_fallidos.py",
+    run: python,
   },
   {
     name: "ssh",

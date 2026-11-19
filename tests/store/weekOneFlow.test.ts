@@ -70,6 +70,9 @@ describe("Primera semana de Nodo Seguro, días 4 a 7", () => {
 
   it("escribe, lee y entrega el informe sin tocar archivos reales", () => {
     openTicket(daySeven.id);
+    const script = run("python ~/scripts/contar_fallidos.py");
+    const counted = run("grep -c Failed /var/log/auth.log");
+    expect(script).toEqual(["Salida simulada:", "Fallos de autenticación: " + counted[0]]);
     const summary =
       "Dominio sospechoso: nodoseguro-pagos.example; intentos web: 3; MD5 debe retirarse.";
     expect(store().runCommand("cat ~/informe.txt").error).toBeDefined();

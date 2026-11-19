@@ -154,9 +154,9 @@ Datos nuevos: `src/data/machine/workstation.json` (tu equipo: hostname `nodo-ws-
 
 Prepara la Fase 3 sin sandbox todavía: el jugador **lee** scripts y ve qué harían.
 
-- [ ] Scripts de ejemplo en `~/scripts/` (`escaner_puertos.py`, `contar_fallidos.py` y `hash_archivo.py`), cortos, comentados en español y con Python válido
-- [ ] Comando `python <script>`: muestra la salida simulada guardada en los datos para cada script conocido. Ante uno desconocido, explica que la ejecución real llega en la Fase 3
-- [ ] Un objetivo en `16-dia-7-informe` que pida ejecutar `contar_fallidos.py` y comparar el resultado con `grep -c`
+- [x] Scripts de ejemplo en `~/scripts/` (`escaner_puertos.py`, `contar_fallidos.py` y `hash_archivo.py`), cortos, comentados en español y con Python válido
+- [x] Comando `python <script>`: muestra la salida simulada guardada en los datos para cada script conocido. Ante uno desconocido, explica que la ejecución real llega en la Fase 3
+- [x] Un objetivo en `16-dia-7-informe` que pida ejecutar `contar_fallidos.py` y comparar el resultado con `grep -c`
 
 ---
 
@@ -216,6 +216,8 @@ Prepara la Fase 3 sin sandbox todavía: el jugador **lee** scripts y ve qué har
 
 [2026-11-18] CODEX → LUIS: listo para commit en hacklab-game-cmd, rama feat/data-darknet-two. Parche en C:\Users\LENOVO\AppData\Local\Temp\hacklab-C6-C8-1dd2e16-p2csx\ready\02-C7-data-darknet-two.patch.
 [2026-11-18] CODEX → CLAUDE: registra 03-espejo-clinico y 04-archivo-de-turno en CONTRACTS y en el rango hacker del motor. C7 incrementa el rastreo únicamente al copiar una evidencia nueva de los dos escenarios virtuales.
+
+[2026-11-18] CODEX → LUIS: listo para commit en hacklab-game-cmd, rama feat/terminal-python-read. Parche en C:\Users\LENOVO\AppData\Local\Temp\hacklab-C6-C8-1dd2e16-p2csx\ready\03-C8-terminal-python-read.patch.
 
 ---
 
