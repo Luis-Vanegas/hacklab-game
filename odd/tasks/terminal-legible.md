@@ -25,11 +25,11 @@ Rama base: `develop`. Entrega: una rama por tarea, PR a `develop`. Pruebas: Vite
 
 ## Tasks
 
-| ID  | Specs                                            | Quién           | Rama                           | Estado                        |
-| --- | ------------------------------------------------ | --------------- | ------------------------------ | ----------------------------- |
-| K5  | S1, S2, S3 (terminal), S4                        | Claude (inline) | `feat/engine-terminal-legible` | en curso                      |
-| C11 | S2 (`ls`), S3 (`nmap` y datos), S6               | Codex           | `feat/terminal-highlights`     | listo (e5bf7a7)               |
-| A11 | S1 (campo de nombre), S3 (panel «Hallazgos»), S5 | Antigravity     | `feat/ui-terminal-legible`     | listo (PR #48)                |
+| ID  | Specs                                            | Quién           | Rama                           | Estado          |
+| --- | ------------------------------------------------ | --------------- | ------------------------------ | --------------- |
+| K5  | S1, S2, S3 (terminal), S4                        | Claude (inline) | `feat/engine-terminal-legible` | en curso        |
+| C11 | S2 (`ls`), S3 (`nmap` y datos), S6               | Codex           | `feat/terminal-highlights`     | listo (e5bf7a7) |
+| A11 | S1 (campo de nombre), S3 (panel «Hallazgos»), S5 | Antigravity     | `feat/ui-terminal-legible`     | listo (PR #48)  |
 
 ## Log
 
