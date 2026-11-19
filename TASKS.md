@@ -190,7 +190,7 @@ Prepara la Fase 3 sin sandbox todavía: el jugador **lee** scripts y ve qué har
 ### A9 — Pulido final · rama `feat/ui-polish`
 
 - [x] Revisión de accesibilidad: foco visible, navegación con teclado en todas las ventanas, `aria-label` en español y contraste AA
-- [ ] Revisar a 375 px y a 1440 px. Informe de Lighthouse (rendimiento ≥ 90 en escritorio) en el PR
+- [x] Revisar a 375 px y a 1440 px. Informe de Lighthouse (rendimiento ≥ 90 en escritorio) en el PR
 - [x] Capturas y un GIF corto del recorrido para el `README.md`
 
 ---
@@ -240,9 +240,9 @@ Prepara la Fase 3 sin sandbox todavía: el jugador **lee** scripts y ve qué har
 
 ## 📋 Estado general
 
-| Fase                          | Estado         | Fecha inicio |
-| ----------------------------- | -------------- | ------------ |
-| Fase 1 — MVP jugable          | ✅ Completa    | 2026-11-18   |
-| Fase 2 — Experiencia de juego | 🟡 En progreso | 2026-11-18   |
-| Fase 3 — Python + Blue Team   | ⬜ Pendiente   | —            |
-| Fase 4 — IA opcional          | ⬜ Pendiente   | —            |
+| Fase                          | Estado       | Fecha inicio |
+| ----------------------------- | ------------ | ------------ |
+| Fase 1 — MVP jugable          | ✅ Completa  | 2026-11-18   |
+| Fase 2 — Experiencia de juego | ✅ Completa  | 2026-11-18   |
+| Fase 3 — Python + Blue Team   | ⬜ Pendiente | —            |
+| Fase 4 — IA opcional          | ⬜ Pendiente | —            |
