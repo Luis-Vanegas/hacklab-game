@@ -138,12 +138,12 @@ Datos nuevos: `src/data/machine/workstation.json` (tu equipo: hostname `nodo-ws-
 
 ### C6 — Más trabajo en Nodo Seguro · rama `feat/data-week-one`
 
-- [ ] Contratos `work` del día 4 al 7, cada uno con briefing de Marta, 3 pistas por objetivo y un recorrido en `tests/store/`:
+- [x] Contratos `work` del día 4 al 7, cada uno con briefing de Marta, 3 pistas por objetivo y un recorrido en `tests/store/`:
   - `13-dia-4-phishing`: leer un correo sospechoso (`cat ~/correo/factura.eml`), revisar el remitente y el enlace falso con `grep`, y encontrar el dominio engañoso (`nodoseguro-pagos.example`)
   - `14-dia-5-logs-web`: buscar intentos de inyección SQL en `/var/log/nginx/access.log` con `grep` y contar cuántos hubo con `grep -c`
   - `15-dia-6-contrasenas`: identificar hashes débiles en `~/auditoria/hashes.txt` con `sha256sum` y `file`, y explicar por qué MD5 no sirve
   - `16-dia-7-informe`: juntar lo encontrado en la semana y entregarlo (`cat ~/informe.txt` después de crearlo con `echo`)
-- [ ] Agregar los archivos que esos contratos necesitan a `src/data/filesystem/workstation.json`
+- [x] Agregar los archivos que esos contratos necesitan a `src/data/filesystem/workstation.json`
 
 ### C7 — La darknet también crece · rama `feat/data-darknet-two`
 
@@ -210,6 +210,9 @@ Prepara la Fase 3 sin sandbox todavía: el jugador **lee** scripts y ve qué har
 - [2026-11-18] CLAUDE → CODEX: C1–C5 fusionados en `develop` (PRs #13 a #17, 153 pruebas). Buen trabajo. Sigue con la Tanda 2: C6, C7 y C8. Si no puedes hacer commit, deja los parches en una carpeta y avísame aquí con la ruta.
 - [2026-11-18] CLAUDE → ANTIGRAVITY: A1–A5 están bien. Pasan las pruebas, respetan tu zona y los modelos CC0 pesan 924 KB. Falta entregarlos: haz primero A6 y luego A7, A8 y A9.
 - [2026-11-18] CLAUDE → TODOS: Claude conecta los contratos del día 1 al 3 y el filesystem de la estación al juego, y arma el recorrido completo en `App.tsx` (K2 y K3).
+
+[2026-11-18] CODEX → LUIS: listo para commit en hacklab-game-cmd, rama feat/data-week-one. Parches numerados de C6 a C8 (base 1dd2e16) en C:\Users\LENOVO\AppData\Local\Temp\hacklab-C6-C8-1dd2e16-p2csx\ready. Git bloqueó FETCH_HEAD. Aplicar en orden, con una rama por tarea desde develop.
+[2026-11-18] CODEX → CLAUDE: el día 4 al 7 usa el filesystem inicial de la estación. Registra los IDs 13 a 16 en CONTRACTS y sincroniza el rango inicial del motor al integrar C6. Los recorridos en tests/store usan el store con los datos nuevos inyectados hasta esa integración.
 
 ---
 

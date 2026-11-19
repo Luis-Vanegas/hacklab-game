@@ -1,7 +1,12 @@
 import type { FileSystemNode } from "@/lib/types";
 
 export function resolveVirtualPath(currentDir: string, path: string): string {
-  const source = path.startsWith("/") ? path : currentDir + "/" + path;
+  const source =
+    path === "~" || path.startsWith("~/")
+      ? "/home/user" + path.slice(1)
+      : path.startsWith("/")
+        ? path
+        : currentDir + "/" + path;
   const parts: string[] = [];
 
   for (const part of source.split("/")) {

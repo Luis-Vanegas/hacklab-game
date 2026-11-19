@@ -38,6 +38,38 @@
               "name": "bienvenida.txt",
               "content": "Bienvenido a Nodo Seguro.\n\nSoy Marta Ríos y voy a acompañarte en tu primera semana. Hoy vas a familiarizarte con esta estación de Medellín y con la red de práctica.\n\nEl alcance de los tickets está en la bandeja. Deja constancia de lo que observas antes de proponer cambios.\n\nMarta",
               "permissions": "-rw-r--r--"
+            },
+            "correo": {
+              "type": "dir",
+              "name": "correo",
+              "permissions": "drwxr-xr-x",
+              "children": {
+                "factura.eml": {
+                  "type": "file",
+                  "name": "factura.eml",
+                  "content": "From: Facturación de Nodo Seguro <avisos@nodoseguro-pagos.example>\nTo: Equipo de Seguridad <seguridad@nodoseguro.test>\nSubject: Factura pendiente\n\nSe adjunta el aviso de cobro de práctica. Destino declarado: https://nodoseguro-pagos.example/factura\nMensaje ficticio conservado como evidencia.\n",
+                  "permissions": "-rw-r--r--"
+                }
+              }
+            },
+            "auditoria": {
+              "type": "dir",
+              "name": "auditoria",
+              "permissions": "drwxr-xr-x",
+              "children": {
+                "hashes.txt": {
+                  "type": "file",
+                  "name": "hashes.txt",
+                  "content": "Inventario de práctica. Huellas de archivos de muestra, sin secretos.\nMD5 | muestra-a.txt | 900150983cd24fb0d6963f7d28e17f72\nSHA-256 | muestra-b.txt | ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad\n",
+                  "permissions": "-rw-r--r--"
+                },
+                "criterios.txt": {
+                  "type": "file",
+                  "name": "criterios.txt",
+                  "content": "MD5: es rápido y tiene debilidades de colisión. No es adecuado para almacenar contraseñas. Para ellas se usa una función de derivación con sal y coste ajustable.\nSHA-256: una huella simple permite comprobar la integridad de un archivo.\n",
+                  "permissions": "-rw-r--r--"
+                }
+              }
             }
           }
         }
@@ -77,6 +109,19 @@
               "name": "auth.log",
               "content": "[2026-11-18 08:09:56] sshd: Accepted password for user from 10.20.0.1\n[2026-11-18 08:11:10] sshd: Failed password for user from 203.0.113.45 port 54210\n[2026-11-18 08:11:12] sshd: Failed password for user from 203.0.113.45 port 54211\n[2026-11-18 08:11:14] sshd: Failed password for user from 203.0.113.45 port 54212\n[2026-11-18 08:11:16] sshd: Failed password for user from 203.0.113.45 port 54213\n[2026-11-18 08:12:01] sshd: Accepted password for user from 10.20.0.1\n",
               "permissions": "-rw-r-----"
+            },
+            "nginx": {
+              "type": "dir",
+              "name": "nginx",
+              "permissions": "drwxr-xr-x",
+              "children": {
+                "access.log": {
+                  "type": "file",
+                  "name": "access.log",
+                  "content": "10.20.0.15 - [18/Nov/2026:09:10:01 -0500] \"GET /inicio HTTP/1.1\" 200\n198.51.100.47 - [18/Nov/2026:09:11:03 -0500] \"GET /catalogo HTTP/1.1\" 403 alerta=sql_injection consulta=omitida\n10.20.0.15 - [18/Nov/2026:09:11:07 -0500] \"GET /ayuda HTTP/1.1\" 200\n198.51.100.47 - [18/Nov/2026:09:12:11 -0500] \"GET /catalogo HTTP/1.1\" 403 alerta=sql_injection consulta=omitida\n198.51.100.47 - [18/Nov/2026:09:12:12 -0500] \"GET /busqueda HTTP/1.1\" 403 alerta=sql_injection consulta=omitida\n",
+                  "permissions": "-rw-r--r--"
+                }
+              }
             }
           }
         }

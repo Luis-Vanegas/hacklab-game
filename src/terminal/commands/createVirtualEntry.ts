@@ -6,6 +6,7 @@ export function createVirtualEntry(
   path: string,
   type: FileSystemNode["type"],
   ctx: CommandContext,
+  fileContent?: string,
 ): CommandResult {
   const destination = resolveVirtualPath(ctx.currentDir, path);
   const separator = destination.lastIndexOf("/");
@@ -18,13 +19,26 @@ export function createVirtualEntry(
   if (parent?.type !== "dir") return commandError("El directorio padre no existe: " + path);
 
   const existing = findVirtualNode(ctx.filesystem, destination);
+  if (
+    existing?.type === "file" &&
+    type === "file" &&
+    fileContent !== undefined &&
+    existing.content !== fileContent
+  ) {
+    return {
+      output: [],
+      filesystemChanges: [
+        { path: destination, action: "modify", node: { ...existing, content: fileContent } },
+      ],
+    };
+  }
   if (existing?.type === type) return { output: [] };
   if (existing) return commandError("Ya existe una entrada de otro tipo: " + path);
 
   const hidden = name.startsWith(".");
   const node: FileSystemNode =
     type === "file"
-      ? { type, name, hidden, permissions: "-rw-r--r--", content: "" }
+      ? { type, name, hidden, permissions: "-rw-r--r--", content: fileContent ?? "" }
       : { type, name, hidden, permissions: "drwxr-xr-x", children: {} };
 
   return { output: [], filesystemChanges: [{ path: destination, action: "create", node }] };

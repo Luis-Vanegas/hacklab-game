@@ -177,7 +177,7 @@ export const commands: readonly CommandDefinition[] = [
     learn: "Muestras un texto de entrada en la terminal.",
     realWorld: "Es común para mostrar mensajes de avance al ejecutar tareas o scripts.",
     unlockRank: "script_kiddie",
-    usage: "echo <texto>",
+    usage: "echo <texto> [> <archivo-virtual>]",
     description: "Mostrar el texto en la terminal.",
     example: "echo Hola Medellín",
     run: echo,

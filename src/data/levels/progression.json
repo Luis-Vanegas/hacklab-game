@@ -10,7 +10,11 @@
         "01-first-hack",
         "10-dia-1-bienvenida",
         "11-dia-2-logs",
-        "12-dia-3-proceso-raro"
+        "12-dia-3-proceso-raro",
+        "13-dia-4-phishing",
+        "14-dia-5-logs-web",
+        "15-dia-6-contrasenas",
+        "16-dia-7-informe"
       ],
       "unlocksTools": ["nmap", "ssh"]
     },
