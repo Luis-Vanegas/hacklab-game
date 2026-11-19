@@ -7,7 +7,7 @@ Rama de integración: `develop` · Entrega: un PR por agente y por bloque · Pru
 
 **Historia: doble vida.** Combina lo que ya existe con un trabajo real.
 
-- **De día** eres practicante en **Nodo Seguro**, una empresa de ciberseguridad en Medellín. Recibes tickets de tu jefa y de clientes, todo autorizado y con alcance definido. Así aprendes el oficio de verdad.
+- **De día** eres practicante en **Nodo Seguro**, una empresa de ciberseguridad de tu ciudad. Recibes tickets de tu jefa y de clientes, todo autorizado y con alcance definido. Así aprendes el oficio de verdad.
 - **De noche**, **CIPHER**, un contacto anónimo de la darknet, te ofrece contratos mejor pagados y más riesgosos. Son los contratos `00`, `01` y `02` que ya existen.
 - **La tensión del juego:** el trabajo da _confianza_ y rangos. La darknet da créditos rápidos, pero sube el _trace_. Si te rastrean, pierdes. El jugador aprende la diferencia entre un pentest autorizado y un delito porque vive las consecuencias.
 

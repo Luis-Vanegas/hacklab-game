@@ -1,8 +1,8 @@
 // Terminal interactiva visual basada en xterm.js.
 // Consume los hooks de @/store para armar el prompt dinámico, aplicar el tema según
-// dificultad y ejecutar cada línea de comando respetando clearScreen y outputType.
+// dificultad, pintar la salida con colores de Linux y explicar los hallazgos al pasar el mouse.
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { FitAddon } from "@xterm/addon-fit";
 import { Terminal as XTerm } from "@xterm/xterm";
 import "@xterm/xterm/css/xterm.css";
@@ -14,8 +14,10 @@ import {
   useDifficulty,
   usePlayer,
   useRunCommandAsync,
+  useShowFindings,
 } from "@/store/hooks";
 import { playSound } from "@/ui/feedback/soundEffects";
+import { findingRanges, formatOutputLine, formatPrompt } from "./format";
 import { getTerminalTheme } from "./themes";
 
 export interface TerminalProps {
@@ -38,18 +40,6 @@ export function injectTerminalDraft(commandText: string): void {
   window.dispatchEvent(new CustomEvent<string>(TERMINAL_DRAFT_EVENT, { detail: commandText }));
 }
 
-const ANSI_RESET = "\x1b[0m";
-const ANSI_BOLD_CYAN = "\x1b[1;36m";
-const ANSI_BOLD_GREEN = "\x1b[1;32m";
-
-const OUTPUT_COLOR: Record<NonNullable<CommandResult["outputType"]>, string> = {
-  info: "\x1b[36m",
-  success: "\x1b[32m",
-  warning: "\x1b[33m",
-  error: "\x1b[31m",
-  hint: "\x1b[90m",
-};
-
 const DIFFICULTY_LABELS: Record<GameDifficulty, string> = {
   beginner: "PRINCIPIANTE",
   normal: "NORMAL",
@@ -61,22 +51,6 @@ const DEFAULT_WELCOME: readonly string[] = [
   `NODO SEGURO // ESTACIÓN ${LOCAL_HOST} // HACKLAB OS v2.6`,
   "Escribe 'help' para ver los comandos o abre la Bandeja para ver tus tickets.",
 ];
-
-export function formatPrompt(username: string, host: string, currentDir: string): string {
-  return `${ANSI_BOLD_GREEN}${username}@${host}${ANSI_RESET}:${ANSI_BOLD_CYAN}${currentDir}${ANSI_RESET}$ `;
-}
-
-export function formatOutputLine(
-  line: string,
-  outputType: CommandResult["outputType"],
-  difficulty: GameDifficulty,
-): string {
-  if (!outputType || difficulty === "elite" || difficulty === "anonymous") {
-    return line;
-  }
-  const color = OUTPUT_COLOR[outputType];
-  return `${color}${line}${ANSI_RESET}`;
-}
 
 export function Terminal({
   username: propUsername,
@@ -97,6 +71,10 @@ export function Terminal({
   const currentDir = propCurrentDir ?? storeCurrentDir;
   const difficulty = propDifficulty ?? storeDifficulty;
   const runCommand = propOnRunCommand ?? storeRunCommand;
+  const showFindings = useShowFindings();
+  // Explicación del hallazgo bajo el mouse; posición relativa al panel
+  const [tip, setTip] = useState<{ note: string; x: number; y: number } | null>(null);
+  const panelRef = useRef<HTMLElement | null>(null);
 
   const containerRef = useRef<HTMLDivElement | null>(null);
   const termRef = useRef<XTerm | null>(null);
@@ -107,10 +85,17 @@ export function Terminal({
   const busyRef = useRef(false);
 
   // Refs sincronizados en useEffect para que el listener de xterm siempre lea el estado más reciente
-  const promptStateRef = useRef({ username, host, currentDir, difficulty, runCommand });
+  const promptStateRef = useRef({
+    username,
+    host,
+    currentDir,
+    difficulty,
+    runCommand,
+    showFindings,
+  });
   useEffect(() => {
-    promptStateRef.current = { username, host, currentDir, difficulty, runCommand };
-  }, [username, host, currentDir, difficulty, runCommand]);
+    promptStateRef.current = { username, host, currentDir, difficulty, runCommand, showFindings };
+  }, [username, host, currentDir, difficulty, runCommand, showFindings]);
 
   useEffect(() => {
     const container = containerRef.current;
@@ -136,6 +121,31 @@ export function Terminal({
       term.open(container);
       term.textarea?.setAttribute("aria-label", "Entrada de comandos de la terminal");
       termRef.current = term;
+
+      // Hallazgos ya escritos en pantalla y su explicación, para el recuadro al pasar el mouse
+      const notes = new Map<string, string>();
+      const linkProvider = term.registerLinkProvider({
+        provideLinks(y, callback) {
+          const text = term?.buffer.active.getLine(y - 1)?.translateToString(true) ?? "";
+          if (!promptStateRef.current.showFindings || notes.size === 0) return callback(undefined);
+          const ranges = findingRanges(text, [...notes.keys()]);
+          callback(
+            ranges.map((r) => ({
+              range: { start: { x: r.start, y }, end: { x: r.end, y } },
+              text: r.text,
+              decorations: { pointerCursor: false, underline: false },
+              activate: () => undefined,
+              hover: (event: MouseEvent) => {
+                const box = panelRef.current?.getBoundingClientRect();
+                const note = notes.get(r.text);
+                if (box && note)
+                  setTip({ note, x: event.clientX - box.left, y: event.clientY - box.top });
+              },
+              leave: () => setTip(null),
+            })),
+          );
+        },
+      });
 
       const writeCurrentPrompt = () => {
         const { username: u, host: h, currentDir: dir } = promptStateRef.current;
@@ -176,13 +186,17 @@ export function Terminal({
       window.addEventListener(TERMINAL_DRAFT_EVENT, onDraftEvent);
 
       // Escribe la salida y el prompt siguiente; lo usan los comandos síncronos y los de Python
-      const showResult = (t: XTerm, result: CommandResult, diff: GameDifficulty) => {
+      const showResult = (t: XTerm, result: CommandResult) => {
+        const marks = promptStateRef.current.showFindings;
         if (result.clearScreen) {
           t.clear();
         } else {
           for (const outLine of result.output) {
-            t.writeln(formatOutputLine(outLine, result.outputType, diff));
+            t.writeln(formatOutputLine(outLine, result.outputType, result.highlights ?? [], marks));
           }
+        }
+        for (const h of result.highlights ?? []) {
+          if (marks && h.kind === "finding" && h.note) notes.set(h.text, h.note);
         }
 
         // Si el comando cambió cwd o conexión, los hooks/refs o el resultado traen el nuevo estado
@@ -210,21 +224,21 @@ export function Terminal({
             localHistoryRef.current.push(line);
           }
 
-          const { runCommand: exec, difficulty: diff } = promptStateRef.current;
+          const { runCommand: exec } = promptStateRef.current;
           const pending = exec(line, (notice) =>
-            term?.writeln(formatOutputLine(notice, "info", diff)),
+            term?.writeln(formatOutputLine(notice, "info", [], false)),
           );
           if (pending instanceof Promise) {
             busyRef.current = true;
             void pending
               .then((result) => {
-                if (term) showResult(term, result, diff);
+                if (term) showResult(term, result);
               })
               .finally(() => {
                 busyRef.current = false;
               });
           } else {
-            showResult(term, pending, diff);
+            showResult(term, pending);
           }
           return;
         }
@@ -302,6 +316,7 @@ export function Terminal({
         window.removeEventListener(TERMINAL_DRAFT_EVENT, onDraftEvent);
         resizeObserver.disconnect();
         disposable.dispose();
+        linkProvider.dispose();
         term?.dispose();
         termRef.current = null;
       };
@@ -322,9 +337,10 @@ export function Terminal({
 
   return (
     <section
+      ref={panelRef}
       className="hl-panel"
       aria-label="Consola de terminal"
-      style={{ flex: "1 1 auto", minBlockSize: "260px" }}
+      style={{ flex: "1 1 auto", minBlockSize: "260px", position: "relative" }}
       data-testid="terminal-panel"
       data-prompt={`${username}@${host}:${currentDir}$`}
     >
@@ -345,6 +361,16 @@ export function Terminal({
         }}
         data-testid="xterm-container"
       />
+      {tip ? (
+        <div
+          role="tooltip"
+          className="hl-finding-tip"
+          style={{ left: tip.x + 12, top: tip.y + 16 }}
+          data-testid="finding-tip"
+        >
+          {tip.note}
+        </div>
+      ) : null}
     </section>
   );
 }

@@ -93,3 +93,8 @@ export function getNextTier(current: ReputationTier): ReputationConfig | null {
   const idx = TIERS.findIndex((t) => t.tier === current);
   return TIERS[idx + 1] ?? null;
 }
+
+// Los hallazgos se marcan mientras el jugador empieza; desde elite_hacker ya debe leerlos solo (S4)
+export function marksFindings(tier: ReputationTier): boolean {
+  return tier === "script_kiddie" || tier === "hacker";
+}

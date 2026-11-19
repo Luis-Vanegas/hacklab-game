@@ -57,8 +57,8 @@ export function TitleScreen({ hasSavedGame = false, onNewGame, onContinue }: Tit
             maxInlineSize: "48ch",
           }}
         >
-          De día defiendes redes autorizadas en Medellín. De noche respondes a los encargos de la
-          darknet sin dejar rastro.
+          De día defiendes tu ciudad. De noche respondes a los encargos de la darknet sin dejar
+          rastro.
         </p>
 
         <div

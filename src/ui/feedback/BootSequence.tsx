@@ -9,7 +9,7 @@ export interface BootSequenceProps {
 }
 
 const BOOT_LINES: readonly string[] = [
-  "[OK] Inicializando kernel HackLab OS v2.6-medellin...",
+  "[OK] Inicializando kernel HackLab OS v2.6...",
   "[OK] Montando sistema de archivos virtual en /home/user...",
   "[OK] Verificando enlace corporativo Nodo Seguro (10.20.0.15/24)...",
   "[OK] Cargando túnel cifrado de bandeja y demonios de telemetría...",

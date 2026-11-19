@@ -36,7 +36,7 @@
             "bienvenida.txt": {
               "type": "file",
               "name": "bienvenida.txt",
-              "content": "Bienvenido a Nodo Seguro.\n\nSoy Marta Ríos y voy a acompañarte en tu primera semana. Hoy vas a familiarizarte con esta estación de Medellín y con la red de práctica.\n\nEl alcance de los tickets está en la bandeja. Deja constancia de lo que observas antes de proponer cambios.\n\nMarta",
+              "content": "Bienvenido a Nodo Seguro.\n\nSoy Marta Ríos y voy a acompañarte en tu primera semana. Hoy vas a familiarizarte con esta estación y con la red de práctica.\n\nEl alcance de los tickets está en la bandeja. Deja constancia de lo que observas antes de proponer cambios.\n\nMarta",
               "permissions": "-rw-r--r--"
             },
             "correo": {

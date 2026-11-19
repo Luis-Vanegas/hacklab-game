@@ -6,7 +6,7 @@ describe("file", () => {
   const ctx = makeContext({
     currentDir: "/",
     filesystem: directory("/", {
-      texto: file("texto", "Medellín\n"),
+      texto: file("texto", "Línea\n"),
       pasos: file("pasos", "#!/bin/sh\n"),
       "bytes.py": file("bytes.py", "PK\0\u0003"),
       carpeta: directory("carpeta", {}),
