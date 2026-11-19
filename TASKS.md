@@ -168,8 +168,8 @@ Prepara la Fase 3 sin sandbox todavía: el jugador **lee** scripts y ve qué har
 
 ### A7 — La Bandeja · rama `feat/ui-inbox`
 
-- [ ] `src/ui/desktop/Inbox.tsx`: lista de contratos por canal, como correos. Al abrir uno: remitente (Marta o CIPHER, con retrato), briefing (`story.intro`), objetivos con su estado y botón "Aceptar". Recibe todo por props
-- [ ] Correos leídos y no leídos con insignia en la barra de tareas
+- [x] `src/ui/desktop/Inbox.tsx`: lista de contratos por canal, como correos. Al abrir uno: remitente (Marta o CIPHER, con retrato), briefing (`story.intro`), objetivos con su estado y botón "Aceptar". Recibe todo por props
+- [x] Correos leídos y no leídos con insignia en la barra de tareas
 
 ### A8 — Sonido y transiciones · rama `feat/ui-sound-transitions`
 

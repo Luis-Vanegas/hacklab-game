@@ -627,3 +627,41 @@ body {
     animation: none;
   }
 }
+
+/* --- Bandeja de correos (A7: Inbox y contador de no leídos) --- */
+.hl-unread-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-inline-size: 18px;
+  block-size: 18px;
+  padding: 0 5px;
+  border-radius: 999px;
+  background-color: var(--color-accent);
+  color: #05070c;
+  font-size: 0.72rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.hl-inbox-item {
+  inline-size: 100%;
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-md);
+  border-radius: var(--radius-sm);
+  color: var(--color-text);
+  cursor: pointer;
+  transition:
+    border-color 0.15s ease,
+    background-color 0.15s ease;
+}
+
+.hl-inbox-item:hover {
+  border-color: var(--color-accent);
+}
+
+.hl-inbox-item--unread {
+  box-shadow: inset 3px 0 0 var(--color-accent);
+}

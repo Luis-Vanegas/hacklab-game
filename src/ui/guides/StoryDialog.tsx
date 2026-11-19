@@ -31,14 +31,21 @@ export function resolveCharacterDisplayName(characterKey: string): string {
   return characterKey;
 }
 
-function PixelPortrait({ character }: { readonly character: string }) {
+export function PixelPortrait({
+  character,
+  size = 48,
+}: {
+  readonly character: string;
+  readonly size?: number;
+}) {
   const kind = resolveAvatarKind(character);
 
   if (kind === "marta") {
     return (
       <svg
-        width="48"
-        height="48"
+        role="img"
+        width={size}
+        height={size}
         viewBox="0 0 16 16"
         shapeRendering="crispEdges"
         aria-label="Retrato pixel de Marta Ríos"
@@ -72,8 +79,9 @@ function PixelPortrait({ character }: { readonly character: string }) {
   if (kind === "cipher") {
     return (
       <svg
-        width="48"
-        height="48"
+        role="img"
+        width={size}
+        height={size}
         viewBox="0 0 16 16"
         shapeRendering="crispEdges"
         aria-label="Retrato pixel de CIPHER"
@@ -106,8 +114,9 @@ function PixelPortrait({ character }: { readonly character: string }) {
 
   return (
     <svg
-      width="48"
-      height="48"
+      role="img"
+      width={size}
+      height={size}
       viewBox="0 0 16 16"
       shapeRendering="crispEdges"
       aria-label={`Retrato pixel de ${character}`}
