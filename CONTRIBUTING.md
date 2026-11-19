@@ -1,6 +1,7 @@
 # Cómo contribuir
 
 Gracias por querer mejorar HackLab. Esta guía te lleva de cero a un PR aceptado.
+Al participar aceptas el [código de conducta](CODE_OF_CONDUCT.md).
 
 ## Ruta rápida
 
