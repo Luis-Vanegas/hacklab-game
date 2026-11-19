@@ -27,11 +27,11 @@ Fuera de alcance: Blue Team (defender contra un atacante), que va después; paqu
 
 ## Tasks
 
-| ID  | Specs     | Agente      | Ruta                         | Estado                                                 |
-| --- | --------- | ----------- | ---------------------------- | ------------------------------------------------------ |
-| K4  | S1–S6, S8 | Claude      | `feat/engine-python-sandbox` | listo                                                  |
-| C10 | S6, S7    | Codex       | `feat/data-python-course`    | pendiente (espera K4 para `outputIncludes`)            |
-| A10 | S2, S5    | Antigravity | `feat/ui-code-editor`        | pendiente (puede maquetar ya; los hooks llegan con K4) |
+| ID  | Specs     | Agente      | Ruta                         | Estado      |
+| --- | --------- | ----------- | ---------------------------- | ----------- |
+| K4  | S1–S6, S8 | Claude      | `feat/engine-python-sandbox` | listo       |
+| C10 | S6, S7    | Codex       | `feat/data-python-course`    | listo (#36) |
+| A10 | S2, S5    | Antigravity | `feat/ui-code-editor`        | listo (#35) |
 
 ## Log
 
@@ -39,4 +39,5 @@ Fuera de alcance: Blue Team (defender contra un atacante), que va después; paqu
 - **L2** (2026-11-19, Luis): eligió Pyodide frente a MicroPython y a seguir simulando ("si").
 - **L3** (2026-11-19): Verificado en npm: `pyodide` 314.0.8, 13,9 MB sin comprimir con todos los paquetes. La docs de Pyodide exige un worker de tipo módulo; para cortar código infinito se usa `worker.terminate()` (interrumpir con `SharedArrayBuffer` exigiría cabeceras COOP/COEP). Ver ADR-006.
 - **L4** (2026-11-19): K4 probado en el navegador: el script real cuenta 4 fallos, el error muestra solo el traceback del jugador, un `while True` se corta a los 5 s sin congelar el juego y un archivo creado por Python aparece con `cat`. Vite no deja importar módulos de `public/` en dev; por eso Pyodide lo sirve un plugin de `vite.config.ts`.
-- **Siguiente paso:** C10 (Codex) y A10 (Antigravity).
+- **L5** (2026-11-19): A10 y C10 revisados e integrados. Check completo verde (207 pruebas) y recorrido real en el navegador: la plantilla 23 editada imprime `Total de fallos: 4.`. Subí el tiempo de carga de Pyodide en los recorridos de C10 de 15 s a 120 s, como en `runScript.test`.
+- **Siguiente paso:** Fase 3 cerrada. Próxima: Fase 4 (IA opcional).
