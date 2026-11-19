@@ -70,6 +70,31 @@
                   "permissions": "-rw-r--r--"
                 }
               }
+            },
+            "scripts": {
+              "type": "dir",
+              "name": "scripts",
+              "permissions": "drwxr-xr-x",
+              "children": {
+                "escaner_puertos.py": {
+                  "type": "file",
+                  "name": "escaner_puertos.py",
+                  "permissions": "-rw-r--r--",
+                  "content": "# Inventario del laboratorio ficticio, sin abrir conexiones.\ninventario = [(22, \"ssh\"), (443, \"https\")]\n\nfor puerto, servicio in inventario:\n    print(f\"{puerto}/tcp {servicio}\")\n"
+                },
+                "contar_fallidos.py": {
+                  "type": "file",
+                  "name": "contar_fallidos.py",
+                  "permissions": "-rw-r--r--",
+                  "content": "# Muestra anonimizada del registro de práctica.\nregistro = [\n    \"Accepted acceso de práctica\",\n    \"Failed intento de práctica 1\",\n    \"Failed intento de práctica 2\",\n    \"Failed intento de práctica 3\",\n    \"Failed intento de práctica 4\",\n    \"Accepted acceso de práctica\",\n]\n\nfallidos = sum(\"Failed\" in linea for linea in registro)\nprint(f\"Fallos de autenticación: {fallidos}\")\n"
+                },
+                "hash_archivo.py": {
+                  "type": "file",
+                  "name": "hash_archivo.py",
+                  "permissions": "-rw-r--r--",
+                  "content": "from hashlib import sha256\n\n# Son los bytes de un archivo de muestra, no credenciales.\ncontenido = b\"abc\"\nhuella = sha256(contenido).hexdigest()\n\nprint(f\"SHA-256 de muestra: {huella}\")\n"
+                }
+              }
             }
           }
         }

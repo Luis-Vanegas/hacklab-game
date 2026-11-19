@@ -12,6 +12,34 @@
   },
   "objectives": [
     {
+      "id": "dia7-python",
+      "description": "Consulta el resultado simulado de contar_fallidos.py.",
+      "trigger": {
+        "command": "python",
+        "args": ["~/scripts/contar_fallidos.py"]
+      },
+      "completed": false,
+      "hints": [
+        "El ejemplo está en tu carpeta scripts.",
+        "Con cat puedes leer cómo el script cuenta las líneas de la muestra.",
+        "Ejecuta python ~/scripts/contar_fallidos.py."
+      ]
+    },
+    {
+      "id": "dia7-comparacion",
+      "description": "Compara ese total con grep en el registro de autenticación virtual.",
+      "trigger": {
+        "command": "grep",
+        "args": ["-c", "Failed", "/var/log/auth.log"]
+      },
+      "completed": false,
+      "hints": [
+        "Compara el número del script con el registro de autenticación.",
+        "grep -c cuenta las líneas que contienen Failed.",
+        "Ejecuta grep -c Failed /var/log/auth.log y compara ambos totales."
+      ]
+    },
+    {
       "id": "dia7-01",
       "description": "Escribe el resumen en ~/informe.txt.",
       "trigger": {
@@ -59,7 +87,7 @@
     "intro": [
       {
         "character": "MARTA",
-        "text": "Organiza un informe breve con el dominio sospechoso, el número de alertas web y el criterio sobre MD5. Guarda el archivo en tu carpeta personal y léelo antes de enviar."
+        "text": "Organiza un informe breve con el dominio sospechoso, el número de alertas web y el criterio sobre MD5. Guarda el archivo en tu carpeta personal y léelo antes de enviar. Antes de entregar, compara el total del ejemplo de Python con el que muestra grep en el registro virtual."
       }
     ],
     "onComplete": [
