@@ -1,5 +1,8 @@
-import { beforeEach, describe, expect, it } from "vitest";
+import { afterAll, beforeAll, beforeEach, describe, expect, it } from "vitest";
+import { loadPyodide } from "pyodide";
 import { CONTRACTS, useGameStore } from "@/store";
+import { setPythonRunner } from "@/store/gameStore";
+import { runScript } from "@/store/python/runScript";
 
 const store = () => useGameStore.getState();
 
@@ -73,11 +76,11 @@ describe("Catálogo completo de contratos", () => {
     store().newGame();
   });
 
-  it("registra los 12 contratos y tres pistas distintas por objetivo", () => {
+  it("registra los 18 contratos y tres pistas distintas por objetivo", () => {
     expect(CONTRACTS.map((contract) => contract.id).sort()).toEqual(
-      Object.keys(walkthrough).sort(),
+      [...Object.keys(walkthrough), ...pythonLessons.map(({ id }) => id)].sort(),
     );
-    expect(CONTRACTS).toHaveLength(12);
+    expect(CONTRACTS).toHaveLength(18);
 
     for (const contract of CONTRACTS) {
       expect(contract.objectives.length, contract.id).toBeGreaterThan(0);
@@ -123,4 +126,91 @@ describe("Catálogo completo de contratos", () => {
     expect(store().game.completedContracts).toEqual(Object.keys(walkthrough));
     expect(store().game.player).toMatchObject({ reputation: "elite_hacker", xp: 3260 });
   });
+});
+
+const pythonLessons = [
+  {
+    id: "20-py-variables",
+    line: "print(mensaje)",
+    output: ["Estación virtual preparada."],
+  },
+  {
+    id: "21-py-listas",
+    line: '    print(f"Control: {control}")',
+    output: ["Control: Inventario", "Control: Registros", "Control: Copia"],
+  },
+  {
+    id: "22-py-archivos",
+    line: 'print(ruta.read_text(encoding="utf-8").strip())',
+    output: ["Turno cerrado. Copia de respaldo revisada."],
+  },
+  {
+    id: "23-py-fallos",
+    line: "        fallos += 1",
+    output: ["Total de fallos: 4."],
+  },
+  {
+    id: "24-py-direcciones",
+    line: "ips = re.findall(patron, texto)",
+    output: ["Direcciones observadas: 10.20.0.1, 203.0.113.45."],
+  },
+  {
+    id: "25-py-integridad",
+    line: "huella = hashlib.sha256(contenido).hexdigest()",
+    output: ["Integridad: coincide."],
+  },
+];
+
+describe("Curso de Python de Marta", () => {
+  beforeAll(async () => {
+    const python = await loadPyodide();
+    setPythonRunner({
+      run(request, onStatus) {
+        onStatus("running");
+        return Promise.resolve({ kind: "done", response: runScript(python, request) });
+      },
+    });
+  }, 120_000);
+
+  beforeEach(() => {
+    localStorage.clear();
+    store().newGame();
+  });
+
+  afterAll(() => setPythonRunner(null));
+
+  it.each(pythonLessons)(
+    "completa $id con la salida del script editado",
+    async ({ id, line, output }) => {
+      const path = "~/scripts/" + id + ".py";
+      const command = "python " + path;
+      const contract = CONTRACTS.find((entry) => entry.id === id);
+      expect(contract?.channel).toBe("work");
+      expect(contract?.story.intro[0]?.character).toBe("MARTA");
+      expect(contract?.objectives[0]?.hints?.[2]).toContain("`" + line + "`");
+      expect(store().acceptContract(id)).toBe(true);
+
+      const starter = await store().runCommandAsync(command);
+      expect(starter.error).toBeUndefined();
+      expect(starter.output.join("\n")).not.toContain(output.join("\n"));
+      expect(store().game.activeContract?.objectives[0]?.completed).toBe(false);
+
+      expect(store().runCommand("edit " + path).error).toBeUndefined();
+      const editor = store().editorFile;
+      if (!editor) throw new Error("No se abrió la plantilla de " + id);
+      expect(editor.content.match(/^[ \t]*# TODO.*$/gmu)).toHaveLength(1);
+      const solved = editor.content.replace(/^[ \t]*# TODO.*$/mu, line);
+      expect(store().saveFile(editor.path, solved).error).toBeUndefined();
+      store().closeEditor();
+
+      const result = await store().runCommandAsync(command);
+      expect(result.error).toBeUndefined();
+      expect(result.output).toEqual(output);
+      expect(store().game.activeContract?.objectives[0]?.completed).toBe(true);
+      store().submitContract();
+      expect(store().game.activeContract).toBeNull();
+      expect(store().game.completedContracts).toContain(id);
+      expect(store().game.player.xp).toBe(contract?.reward.xp);
+    },
+  );
 });

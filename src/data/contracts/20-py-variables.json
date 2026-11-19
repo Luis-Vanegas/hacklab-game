@@ -1,0 +1,60 @@
+{
+  "id": "20-py-variables",
+  "channel": "work",
+  "title": "Python 1 · El primer mensaje",
+  "description": "Guarda un mensaje en una variable y muéstralo en la terminal.",
+  "difficulty": "beginner",
+  "requiredReputation": "script_kiddie",
+  "reward": {
+    "credits": 40,
+    "xp": 40,
+    "partialMultiplier": 0
+  },
+  "objectives": [
+    {
+      "id": "20-py-variables",
+      "description": "Muestra el mensaje de preparación que ya está guardado en la variable.",
+      "trigger": {
+        "command": "python",
+        "args": ["~/scripts/20-py-variables.py"],
+        "outputIncludes": "Estación virtual preparada."
+      },
+      "completed": false,
+      "hints": [
+        "El texto ya está entre comillas y tiene un nombre. Puedes usar ese nombre para recuperar su valor.",
+        "print() escribe en la terminal. Pasa la variable entre paréntesis, sin comillas.",
+        "Sustituye la línea # TODO por `print(mensaje)`."
+      ]
+    }
+  ],
+  "target": {
+    "hostname": "nodo-ws-07.nodoseguro.test",
+    "ip": "10.20.0.15",
+    "ports": [],
+    "filesystem": {
+      "type": "dir",
+      "name": "/",
+      "permissions": "drwxr-xr-x",
+      "children": {}
+    }
+  },
+  "story": {
+    "intro": [
+      {
+        "character": "MARTA",
+        "text": "Cada turno comienza con una confirmación de que la estación está lista. La plantilla ya guarda el mensaje en una variable llamada mensaje. Haz que aparezca en la terminal al ejecutar el script."
+      },
+      {
+        "character": "MARTA",
+        "text": "Abre la plantilla con edit ~/scripts/20-py-variables.py. Sustituye la línea marcada con # TODO, guarda con Ctrl+S y ejecuta python ~/scripts/20-py-variables.py."
+      }
+    ],
+    "onComplete": [
+      {
+        "character": "MARTA",
+        "text": "Ya tienes tu primer script. Si el mensaje cambia, podrás modificar el texto de la variable y seguir usando el mismo print()."
+      }
+    ],
+    "hints": {}
+  }
+}

@@ -14,7 +14,13 @@
         "13-dia-4-phishing",
         "14-dia-5-logs-web",
         "15-dia-6-contrasenas",
-        "16-dia-7-informe"
+        "16-dia-7-informe",
+        "20-py-variables",
+        "21-py-listas",
+        "22-py-archivos",
+        "23-py-fallos",
+        "24-py-direcciones",
+        "25-py-integridad"
       ],
       "unlocksTools": ["nmap", "ssh"]
     },

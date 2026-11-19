@@ -1,0 +1,60 @@
+{
+  "id": "25-py-integridad",
+  "channel": "work",
+  "title": "Python 6 · Comprueba la integridad",
+  "description": "Calcula una huella SHA-256 con hashlib y compárala con la referencia de Marta.",
+  "difficulty": "beginner",
+  "requiredReputation": "script_kiddie",
+  "reward": {
+    "credits": 90,
+    "xp": 90,
+    "partialMultiplier": 0
+  },
+  "objectives": [
+    {
+      "id": "25-py-integridad",
+      "description": "Confirma que la huella SHA-256 del archivo coincide con la referencia.",
+      "trigger": {
+        "command": "python",
+        "args": ["~/scripts/25-py-integridad.py"],
+        "outputIncludes": "Integridad: coincide."
+      },
+      "completed": false,
+      "hints": [
+        "El hash se calcula con los bytes del archivo, que la plantilla ya guarda en contenido.",
+        "Usa hashlib.sha256(contenido) para calcular la huella y .hexdigest() para obtenerla como texto hexadecimal.",
+        "Sustituye la línea # TODO por `huella = hashlib.sha256(contenido).hexdigest()`."
+      ]
+    }
+  ],
+  "target": {
+    "hostname": "nodo-ws-07.nodoseguro.test",
+    "ip": "10.20.0.15",
+    "ports": [],
+    "filesystem": {
+      "type": "dir",
+      "name": "/",
+      "permissions": "drwxr-xr-x",
+      "children": {}
+    }
+  },
+  "story": {
+    "intro": [
+      {
+        "character": "MARTA",
+        "text": "Dejé una evidencia de práctica en ~/scripts/datos-curso/evidencia.txt y su huella de referencia en la plantilla. El script ya lee sus bytes y compara huella con esperado. Completa el cálculo SHA-256 para que la comparación confirme el contenido."
+      },
+      {
+        "character": "MARTA",
+        "text": "Abre la plantilla con edit ~/scripts/25-py-integridad.py. Sustituye la línea marcada con # TODO, guarda con Ctrl+S y ejecuta python ~/scripts/25-py-integridad.py."
+      }
+    ],
+    "onComplete": [
+      {
+        "character": "MARTA",
+        "text": "La huella coincide con la referencia. Conserva la huella de confianza junto al informe para poder repetir la comprobación."
+      }
+    ],
+    "hints": {}
+  }
+}

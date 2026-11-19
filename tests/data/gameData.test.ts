@@ -2,37 +2,15 @@ import { describe, expect, it } from "vitest";
 import tutorial from "@/data/contracts/00-tutorial.json";
 import acme from "@/data/contracts/01-first-hack.json";
 import archivo from "@/data/contracts/02-data-heist.json";
-import clinical from "@/data/contracts/03-espejo-clinico.json";
-import shelter from "@/data/contracts/04-archivo-de-turno.json";
-import dayOne from "@/data/contracts/10-dia-1-bienvenida.json";
-import dayTwo from "@/data/contracts/11-dia-2-logs.json";
-import dayThree from "@/data/contracts/12-dia-3-proceso-raro.json";
-import dayFour from "@/data/contracts/13-dia-4-phishing.json";
-import dayFive from "@/data/contracts/14-dia-5-logs-web.json";
-import daySix from "@/data/contracts/15-dia-6-contrasenas.json";
-import daySeven from "@/data/contracts/16-dia-7-informe.json";
 import progression from "@/data/levels/progression.json";
 import shopData from "@/data/tools/shop.json";
 import beginner from "@/data/tutorials/beginner.json";
-import type { Contract, FileSystemNode, ReputationConfig, ToolDefinition } from "@/lib/types";
+import type { FileSystemNode, ReputationConfig, ToolDefinition } from "@/lib/types";
+import { CONTRACTS } from "@/store";
 import { parseCommand } from "@/terminal/CommandParser";
 import { commands } from "@/terminal/commands";
 import { findVirtualNode } from "@/terminal/commands/virtualPath";
 
-const contracts = [
-  clinical,
-  shelter,
-  tutorial,
-  acme,
-  archivo,
-  dayOne,
-  dayTwo,
-  dayThree,
-  dayFour,
-  dayFive,
-  daySix,
-  daySeven,
-] as readonly Contract[];
 const shop: readonly ToolDefinition[] = shopData;
 const tiers = progression.tiers as readonly ReputationConfig[];
 
@@ -53,10 +31,10 @@ function checkFilesystem(node: FileSystemNode, expectedName: string) {
 
 describe("Datos del juego", () => {
   it("valida contratos, objetivos, referencias narrativas y árboles virtuales", () => {
-    expect(new Set(contracts.map((contract) => contract.id)).size).toBe(contracts.length);
+    expect(new Set(CONTRACTS.map((contract) => contract.id)).size).toBe(CONTRACTS.length);
     // cd se registra cuando la integración exponga el cambio de directorio.
     const knownCommands = new Set([...commands.map((command) => command.name), "cd"]);
-    for (const contract of contracts) {
+    for (const contract of CONTRACTS) {
       expect(["work", "darknet"]).toContain(contract.channel);
       expect(contract.title).not.toBe("");
       expect(contract.description).not.toBe("");
@@ -106,7 +84,7 @@ describe("Datos del juego", () => {
     );
     expect(tiers[0]?.minXp).toBe(0);
     expect(tiers.flatMap((tier) => tier.unlocksContracts).sort()).toEqual(
-      contracts.map((contract) => contract.id).sort(),
+      CONTRACTS.map((contract) => contract.id).sort(),
     );
     expect(tiers.flatMap((tier) => tier.unlocksTools).sort()).toEqual(
       shop.map((tool) => tool.id).sort(),
@@ -114,7 +92,7 @@ describe("Datos del juego", () => {
     expect(new Set(shop.map((tool) => tool.id)).size).toBe(shop.length);
     for (const tier of tiers) {
       const level = Math.floor(tier.minXp / progression.xpPerLevel) + 1;
-      for (const contract of contracts.filter((entry) =>
+      for (const contract of CONTRACTS.filter((entry) =>
         tier.unlocksContracts.includes(entry.id),
       )) {
         expect(contract.requiredReputation).toBe(tier.tier);
