@@ -22,7 +22,7 @@
       "tier": "hacker",
       "label": "Hacker",
       "minXp": 500,
-      "unlocksContracts": ["02-data-heist"],
+      "unlocksContracts": ["02-data-heist", "03-espejo-clinico", "04-archivo-de-turno"],
       "unlocksTools": ["hydra", "sqlmap"]
     },
     {

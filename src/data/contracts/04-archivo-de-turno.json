@@ -1,0 +1,109 @@
+{
+  "id": "04-archivo-de-turno",
+  "channel": "darknet",
+  "title": "Archivo de turno",
+  "description": "Recupera una versión anonimizada de un incidente del refugio de práctica.",
+  "difficulty": "normal",
+  "requiredReputation": "hacker",
+  "reward": {
+    "credits": 520,
+    "xp": 360,
+    "partialMultiplier": 0.65
+  },
+  "objectives": [
+    {
+      "id": "04-01",
+      "description": "Consulta el inventario del escenario.",
+      "trigger": {
+        "command": "nmap",
+        "args": ["refugio-simulacion.example"]
+      },
+      "completed": false,
+      "hints": [
+        "Confirma que estás dentro del encargo activo.",
+        "Usa nmap con el nombre ficticio del espejo.",
+        "Ejecuta nmap refugio-simulacion.example."
+      ]
+    },
+    {
+      "id": "04-02",
+      "description": "Abre la sesión virtual autorizada del espejo.",
+      "trigger": {
+        "command": "ssh",
+        "args": ["refugio-simulacion.example"]
+      },
+      "completed": false,
+      "hints": [
+        "El espejo se abre desde la terminal virtual.",
+        "Usa la sesión de práctica que configuró el escenario.",
+        "Ejecuta ssh refugio-simulacion.example."
+      ]
+    },
+    {
+      "id": "04-03",
+      "description": "Copia únicamente la evidencia ya anonimizada.",
+      "trigger": {
+        "command": "download",
+        "args": ["/export/incidente-analizado.txt"],
+        "requiresConnection": true
+      },
+      "completed": false,
+      "hints": [
+        "El encargo solo comprende el resumen sin datos personales.",
+        "El archivo permitido está en /export del espejo virtual.",
+        "Ejecuta download /export/incidente-analizado.txt."
+      ]
+    }
+  ],
+  "target": {
+    "hostname": "refugio-simulacion.example",
+    "ip": "203.0.113.44",
+    "ports": [
+      {
+        "port": 22,
+        "service": "ssh",
+        "version": "simulación"
+      },
+      {
+        "port": 443,
+        "service": "https",
+        "version": "simulación"
+      }
+    ],
+    "filesystem": {
+      "type": "dir",
+      "name": "/",
+      "permissions": "drwxr-xr-x",
+      "children": {
+        "export": {
+          "type": "dir",
+          "name": "export",
+          "permissions": "drwxr-xr-x",
+          "children": {
+            "incidente-analizado.txt": {
+              "type": "file",
+              "name": "incidente-analizado.txt",
+              "permissions": "-rw-r--r--",
+              "content": "Ejercicio virtual. Se confirmó una alerta de acceso fuera del horario. Las identidades se sustituyeron por códigos antes de publicar el informe.\n"
+            }
+          }
+        }
+      }
+    }
+  },
+  "story": {
+    "intro": [
+      {
+        "character": "CIPHER",
+        "text": "El cliente quiere respuestas antes de que cierre el turno. Su lista interna identifica a voluntarios y personas alojadas. Elige si el dato personal aporta algo al caso. El alcance del espejo ficticio solo autoriza recuperar la evidencia anonimizada."
+      }
+    ],
+    "onComplete": [
+      {
+        "character": "CIPHER",
+        "text": "Ya tienes lo necesario para el análisis. Mantener nombres fuera del expediente deja evidencia sin poner a los voluntarios en riesgo."
+      }
+    ],
+    "hints": {}
+  }
+}

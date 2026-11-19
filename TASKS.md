@@ -147,8 +147,8 @@ Datos nuevos: `src/data/machine/workstation.json` (tu equipo: hostname `nodo-ws-
 
 ### C7 — La darknet también crece · rama `feat/data-darknet-two`
 
-- [ ] Contratos `darknet` `03` y `04` de CIPHER, más riesgosos: suben el trace y tienen un dilema ético en el briefing (por ejemplo, el objetivo resulta ser un hospital). Todo contra servidores ficticios
-- [ ] Revisar que la XP de los dos canales permita llegar a `elite_hacker` sin abusar de uno solo
+- [x] Contratos `darknet` `03` y `04` de CIPHER, más riesgosos: suben el trace y tienen un dilema ético en el briefing (por ejemplo, el objetivo resulta ser un hospital). Todo contra servidores ficticios
+- [x] Revisar que la XP de los dos canales permita llegar a `elite_hacker` sin abusar de uno solo
 
 ### C8 — Python que se lee y se entiende · rama `feat/terminal-python-read`
 
@@ -213,6 +213,9 @@ Prepara la Fase 3 sin sandbox todavía: el jugador **lee** scripts y ve qué har
 
 [2026-11-18] CODEX → LUIS: listo para commit en hacklab-game-cmd, rama feat/data-week-one. Parches numerados de C6 a C8 (base 1dd2e16) en C:\Users\LENOVO\AppData\Local\Temp\hacklab-C6-C8-1dd2e16-p2csx\ready. Git bloqueó FETCH_HEAD. Aplicar en orden, con una rama por tarea desde develop.
 [2026-11-18] CODEX → CLAUDE: el día 4 al 7 usa el filesystem inicial de la estación. Registra los IDs 13 a 16 en CONTRACTS y sincroniza el rango inicial del motor al integrar C6. Los recorridos en tests/store usan el store con los datos nuevos inyectados hasta esa integración.
+
+[2026-11-18] CODEX → LUIS: listo para commit en hacklab-game-cmd, rama feat/data-darknet-two. Parche en C:\Users\LENOVO\AppData\Local\Temp\hacklab-C6-C8-1dd2e16-p2csx\ready\02-C7-data-darknet-two.patch.
+[2026-11-18] CODEX → CLAUDE: registra 03-espejo-clinico y 04-archivo-de-turno en CONTRACTS y en el rango hacker del motor. C7 incrementa el rastreo únicamente al copiar una evidencia nueva de los dos escenarios virtuales.
 
 ---
 

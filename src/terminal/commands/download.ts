@@ -1,6 +1,9 @@
+import darknetTrace from "@/data/levels/darknet-trace.json";
 import type { CommandContext, CommandResult } from "@/lib/types";
 import { commandError } from "./shared";
 import { findVirtualNode, resolveVirtualPath } from "./virtualPath";
+
+const traceByContract: Readonly<Record<string, number>> = darknetTrace;
 
 export default function download(args: readonly string[], ctx: CommandContext): CommandResult {
   const [source] = args;
@@ -8,11 +11,12 @@ export default function download(args: readonly string[], ctx: CommandContext): 
     return commandError("Uso: download <ruta-virtual-absoluta>");
   }
 
-  const target = ctx.gameState.activeContract?.target;
-  if (!target || ctx.connectedTo !== target.hostname) {
+  const contract = ctx.gameState.activeContract;
+  if (!contract || ctx.connectedTo !== contract.target.hostname) {
     return commandError("Abre una sesión virtual en el servidor del contrato.");
   }
 
+  const { target } = contract;
   const sourcePath = resolveVirtualPath("/", source);
   const file = findVirtualNode(target.filesystem, sourcePath);
   const name = sourcePath.split("/").at(-1);
@@ -32,8 +36,14 @@ export default function download(args: readonly string[], ctx: CommandContext): 
   }
   if (existing) return commandError("Ya existe otra entrada en " + destination + ".");
 
+  const output = ["Copia virtual guardada en " + destination + "."];
+  const trace = traceByContract[contract.id] ?? 0;
+  const traceLevel = Math.min(100, ctx.gameState.traceLevel + trace);
+  if (trace > 0) output.push("Rastreo de la copia virtual: " + traceLevel + " %.");
+
   return {
-    output: ["Copia virtual guardada en " + destination + "."],
+    output,
+    ...(trace > 0 ? { stateChanges: { traceLevel } } : {}),
     outputType: "success",
     filesystemChanges: [{ path: destination, action: "create", node: { ...file, name } }],
   };
