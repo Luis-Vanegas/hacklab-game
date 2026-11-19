@@ -81,9 +81,10 @@ export default function App() {
     return (
       <TitleScreen
         hasSavedGame={introSeen}
-        onNewGame={() => {
-          newGame();
-          setScreen("intro");
+        onNewGame={(name) => {
+          const error = newGame(name);
+          if (!error) setScreen("intro");
+          return error;
         }}
         onContinue={() => setScreen("office")}
       />

@@ -1,16 +1,25 @@
 // Pantalla de título de HackLab Game.
-// Muestra el logo en fuente pixel ("Press Start 2P" / "VT323") y permite iniciar
-// una nueva partida o continuar si existe una partida guardada.
+// Muestra el logo en fuente pixel ("Press Start 2P" / "VT323"), pide el nombre de usuario
+// antes de iniciar una nueva partida (lo valida el contenedor) y permite continuar si hay partida.
 
-import { useEffect } from "react";
+import { useEffect, useId, useRef, useState, type FormEvent } from "react";
 
 export interface TitleScreenProps {
   readonly hasSavedGame?: boolean;
-  readonly onNewGame: () => void;
+  /** Crea la partida con el nombre y devuelve el error de validación, o null si avanzó. */
+  readonly onNewGame: (playerName: string) => string | null;
   readonly onContinue?: () => void;
 }
 
 export function TitleScreen({ hasSavedGame = false, onNewGame, onContinue }: TitleScreenProps) {
+  const [username, setUsername] = useState("");
+  const [error, setError] = useState<string | null>(null);
+
+  const inputId = useId();
+  const ruleId = useId();
+  const errorId = useId();
+  const inputRef = useRef<HTMLInputElement | null>(null);
+
   useEffect(() => {
     if (
       typeof document === "undefined" ||
@@ -30,6 +39,14 @@ export function TitleScreen({ hasSavedGame = false, onNewGame, onContinue }: Tit
     };
     document.head.appendChild(link);
   }, []);
+
+  const handleNewGameSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    // El contenedor crea la partida una sola vez y devuelve el error de validación, si lo hay
+    const validationError = onNewGame(username.trim());
+    setError(validationError);
+    if (validationError) inputRef.current?.focus();
+  };
 
   return (
     <main className="hl-title-screen" aria-label="Pantalla de título" data-testid="title-screen">
@@ -61,37 +78,81 @@ export function TitleScreen({ hasSavedGame = false, onNewGame, onContinue }: Tit
           rastro.
         </p>
 
-        <div
-          style={{
-            display: "flex",
-            flexWrap: "wrap",
-            justifyContent: "center",
-            gap: "var(--space-md)",
-            inlineSize: "100%",
-          }}
-        >
-          {hasSavedGame && onContinue ? (
-            <button
-              type="button"
-              className="hl-btn hl-btn--primary"
-              style={{ minInlineSize: "180px", padding: "10px 18px", fontSize: "0.95rem" }}
-              onClick={onContinue}
-              data-testid="title-continue-btn"
-            >
-              Continuar
-            </button>
-          ) : null}
+        <form className="hl-title-form" noValidate onSubmit={handleNewGameSubmit}>
+          <div className="hl-title-field">
+            <label htmlFor={inputId} className="hl-title-field__label">
+              Nombre de usuario
+            </label>
+            <span id={ruleId} className="hl-title-field__rule" data-testid="title-username-rule">
+              Minúsculas, números, <code>-</code> y <code>_</code>, hasta 16 caracteres (vacío usa{" "}
+              <code>anonymous</code>).
+            </span>
+            <input
+              ref={inputRef}
+              id={inputId}
+              type="text"
+              name="username"
+              autoComplete="username"
+              autoCapitalize="off"
+              autoCorrect="off"
+              spellCheck={false}
+              maxLength={24}
+              value={username}
+              placeholder="anonymous"
+              className="hl-search-input hl-title-field__input"
+              aria-invalid={error ? "true" : "false"}
+              aria-describedby={error ? `${ruleId} ${errorId}` : ruleId}
+              onChange={(event) => {
+                setUsername(event.target.value);
+                if (error) {
+                  setError(null);
+                }
+              }}
+              data-testid="title-username-input"
+            />
+            {error ? (
+              <p
+                id={errorId}
+                role="alert"
+                className="hl-title-field__error"
+                data-testid="title-username-error"
+              >
+                {error}
+              </p>
+            ) : null}
+          </div>
 
-          <button
-            type="button"
-            className={hasSavedGame ? "hl-btn" : "hl-btn hl-btn--primary"}
-            style={{ minInlineSize: "180px", padding: "10px 18px", fontSize: "0.95rem" }}
-            onClick={onNewGame}
-            data-testid="title-new-game-btn"
+          <div
+            style={{
+              display: "flex",
+              flexWrap: "wrap",
+              justifyContent: "center",
+              gap: "var(--space-md)",
+              inlineSize: "100%",
+            }}
           >
-            Nueva partida
-          </button>
-        </div>
+            {hasSavedGame && onContinue ? (
+              <button
+                type="button"
+                className="hl-btn hl-btn--primary"
+                style={{ minInlineSize: "180px", padding: "10px 18px", fontSize: "0.95rem" }}
+                onClick={onContinue}
+                data-testid="title-continue-btn"
+              >
+                Continuar
+              </button>
+            ) : null}
+
+            <button
+              type="submit"
+              className={hasSavedGame ? "hl-btn" : "hl-btn hl-btn--primary"}
+              style={{ minInlineSize: "180px", padding: "10px 18px", fontSize: "0.95rem" }}
+              data-testid="title-new-game-btn"
+            >
+              Nueva partida
+            </button>
+          </div>
+        </form>
       </div>
     </main>
   );

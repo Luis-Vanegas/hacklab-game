@@ -8,6 +8,9 @@
   --color-surface: #12121a;
   --color-surface-elevated: #171723;
   --color-surface-hover: #1d1d2c;
+  --color-panel-bg: rgba(18, 18, 26, 0.78);
+  --color-panel-bg-fallback: rgba(18, 18, 26, 0.9);
+  --color-terminal-panel-bg: rgba(13, 13, 20, 0.78);
   --color-border: #1a1a2e;
   --color-border-strong: #282846;
   --color-border-control: #5b6488;
@@ -289,16 +292,34 @@ body {
   }
 }
 
-/* --- Paneles y contenedores --- */
+/* --- Paneles y contenedores (S5: 75-80 % opacidad con desenfoque del fondo y contraste AA) --- */
 .hl-panel {
-  background-color: rgba(18, 18, 26, 0.92);
-  border: 1px solid var(--color-border);
+  background-color: var(--color-panel-bg-fallback);
+  border: 1px solid rgba(110, 128, 168, 0.28);
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-panel);
   display: flex;
   flex-direction: column;
   min-block-size: 0;
   overflow: clip;
+}
+
+@supports (backdrop-filter: blur(10px)) or (-webkit-backdrop-filter: blur(10px)) {
+  .hl-panel {
+    background-color: var(--color-panel-bg);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+  }
+
+  .hl-panel--terminal {
+    background-color: var(--color-terminal-panel-bg);
+  }
+}
+
+.hl-panel--terminal .xterm,
+.hl-panel--terminal .xterm .xterm-viewport,
+.hl-panel--terminal .xterm .xterm-screen {
+  background-color: transparent;
 }
 
 .hl-panel__header {
@@ -588,7 +609,9 @@ body {
   justify-content: space-between;
   gap: var(--space-sm);
   padding: var(--space-sm) var(--space-md);
-  background-color: rgba(12, 13, 20, 0.96);
+  background-color: rgba(12, 13, 20, 0.8);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
   border-block-start: 1px solid var(--color-border-strong);
 }
 
@@ -1013,13 +1036,13 @@ progress.hl-python-spinner:indeterminate {
   min-block-size: 200px;
   display: grid;
   grid-template-columns: auto minmax(0, 1fr);
-  background-color: var(--color-terminal-bg);
+  background-color: rgba(13, 13, 20, 0.76);
   overflow: hidden;
 }
 
 .hl-editor__gutter {
   padding: var(--space-sm) 10px var(--space-sm) var(--space-sm);
-  background-color: rgba(18, 18, 26, 0.92);
+  background-color: rgba(18, 18, 26, 0.78);
   border-inline-end: 1px solid var(--color-border);
   color: var(--color-text-muted);
   text-align: end;
@@ -1106,4 +1129,95 @@ progress.hl-python-spinner:indeterminate {
   font-size: 0.82rem;
   line-height: 1.4;
   pointer-events: none;
+}
+
+/* --- A11: Nombre de usuario, panel de hallazgos y transparencia accesible --- */
+.hl-unread-badge--warning {
+  background-color: #e3b341;
+  color: #05070c;
+}
+
+.hl-title-form {
+  inline-size: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--space-md);
+}
+
+.hl-title-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  text-align: start;
+}
+
+.hl-title-field__label {
+  font-family: var(--font-mono);
+  font-size: 0.86rem;
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.hl-title-field__rule {
+  font-size: 0.78rem;
+  color: var(--color-text-secondary);
+  line-height: 1.45;
+}
+
+.hl-title-field__input[aria-invalid="true"] {
+  border-color: var(--color-danger);
+}
+
+.hl-title-field__error {
+  margin: 0;
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: var(--color-danger-text);
+}
+
+.hl-finding-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  padding: var(--space-sm) var(--space-md);
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(227, 179, 65, 0.42);
+  background-color: rgba(28, 24, 14, 0.78);
+}
+
+.hl-finding-card__header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-xs);
+}
+
+.hl-finding-keyword {
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #e3b341;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.hl-finding-card__note {
+  margin: 0;
+  font-size: 0.84rem;
+  color: var(--color-text);
+  line-height: 1.45;
+}
+
+@media (forced-colors: active) {
+  .hl-panel,
+  .hl-panel--terminal,
+  .hl-taskbar,
+  .hl-finding-card {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    background-color: Canvas;
+    border: 1px solid CanvasText;
+  }
 }

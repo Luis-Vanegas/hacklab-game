@@ -8,24 +8,50 @@ import type { Contract, PlayerState } from "@/lib/types";
 import {
   useCloseEditor,
   useEditorFile,
+  useFindings,
   usePythonStatus,
   useSaveFile,
+  useShowFindings,
   type PythonStatus,
 } from "@/store";
 import { handleTabListKeyDown } from "../a11y/keyboardTabs";
 import { useSoundMute } from "../feedback/soundEffects";
 import { ReputationBadge } from "../hud/ReputationBadge";
 import { TraceBar } from "../hud/TraceBar";
+import { FindingsPanel } from "../panels/FindingsPanel";
 import { CodeEditor, type EditorFile } from "./CodeEditor";
 
-export type DesktopWindowId = "terminal" | "inbox" | "editor" | "guide" | "map" | "shop";
+export type DesktopWindowId =
+  "terminal" | "inbox" | "editor" | "findings" | "guide" | "map" | "shop";
 
-export type SidePanelTab = "status" | "editor" | "guide" | "map";
+export type SidePanelTab = "status" | "findings" | "editor" | "guide" | "map";
 
-type MobileTabWindow = "terminal" | "inbox" | "editor" | "guide" | "map";
+type MobileTabWindow = "terminal" | "inbox" | "editor" | "findings" | "guide" | "map";
 
-const MOBILE_TABS: readonly MobileTabWindow[] = ["terminal", "inbox", "editor", "guide", "map"];
-const SIDE_TABS: readonly SidePanelTab[] = ["status", "editor", "guide", "map"];
+const MOBILE_TABS_WITH_FINDINGS: readonly MobileTabWindow[] = [
+  "terminal",
+  "inbox",
+  "editor",
+  "findings",
+  "guide",
+  "map",
+];
+const MOBILE_TABS_BASE: readonly MobileTabWindow[] = [
+  "terminal",
+  "inbox",
+  "editor",
+  "guide",
+  "map",
+];
+
+const SIDE_TABS_WITH_FINDINGS: readonly SidePanelTab[] = [
+  "status",
+  "findings",
+  "editor",
+  "guide",
+  "map",
+];
+const SIDE_TABS_BASE: readonly SidePanelTab[] = ["status", "editor", "guide", "map"];
 
 export interface DesktopProps {
   readonly player: PlayerState;
@@ -38,9 +64,12 @@ export interface DesktopProps {
   readonly soundMuted?: boolean;
   readonly onToggleSound?: () => void;
   readonly pythonStatus?: PythonStatus;
+  readonly showFindings?: boolean;
+  readonly findingsCount?: number;
   readonly terminalWindow: ReactNode;
   readonly inboxWindow: ReactNode;
   readonly editorWindow?: ReactNode;
+  readonly findingsWindow?: ReactNode;
   readonly statusWindow?: ReactNode;
   readonly commandGuideWindow?: ReactNode;
   readonly networkMapWindow?: ReactNode;
@@ -182,9 +211,12 @@ export function Desktop({
   soundMuted,
   onToggleSound,
   pythonStatus,
+  showFindings: propShowFindings,
+  findingsCount: propFindingsCount,
   terminalWindow,
   inboxWindow,
   editorWindow,
+  findingsWindow,
   statusWindow,
   commandGuideWindow,
   networkMapWindow,
@@ -204,7 +236,15 @@ export function Desktop({
   const storeSaveFile = useSaveFile();
   const storeCloseEditor = useCloseEditor();
   const storePythonStatus = usePythonStatus();
+  const storeFindings = useFindings();
+  const storeShowFindings = useShowFindings();
+
   const effectivePythonStatus = pythonStatus ?? storePythonStatus;
+  const effectiveShowFindings = propShowFindings ?? storeShowFindings;
+  const effectiveFindingsCount = propFindingsCount ?? storeFindings.length;
+
+  const mobileTabs = effectiveShowFindings ? MOBILE_TABS_WITH_FINDINGS : MOBILE_TABS_BASE;
+  const sideTabs = effectiveShowFindings ? SIDE_TABS_WITH_FINDINGS : SIDE_TABS_BASE;
 
   const [prevEditorFile, setPrevEditorFile] = useState<EditorFile | null>(storeEditorFile);
   if (storeEditorFile !== prevEditorFile) {
@@ -222,10 +262,17 @@ export function Desktop({
     }
   }
 
+  const resolvedSideTab: SidePanelTab =
+    !effectiveShowFindings && sideTab === "findings" ? "status" : sideTab;
+  const resolvedMobileWindow: DesktopWindowId =
+    !effectiveShowFindings && mobileWindow === "findings" ? "terminal" : mobileWindow;
+
   const selectMobileTab = (target: MobileTabWindow) => {
     setMobileWindow(target);
     if (target === "editor") {
       setSideTab("editor");
+    } else if (target === "findings" && effectiveShowFindings) {
+      setSideTab("findings");
     } else if (target === "guide") {
       setSideTab("guide");
     } else if (target === "map") {
@@ -236,6 +283,9 @@ export function Desktop({
   const openWindow = (target: DesktopWindowId) => {
     if (target === "shop") {
       onOpenShop?.();
+      return;
+    }
+    if (target === "findings" && !effectiveShowFindings) {
       return;
     }
     selectMobileTab(target);
@@ -258,17 +308,20 @@ export function Desktop({
   };
 
   const renderSideContent = () => {
-    if (sideTab === "editor") {
+    if (resolvedSideTab === "findings" && effectiveShowFindings) {
+      return findingsWindow ?? <FindingsPanel showFindings={effectiveShowFindings} />;
+    }
+    if (resolvedSideTab === "editor") {
       return (
         editorWindow ?? (
           <CodeEditor file={storeEditorFile} onSave={storeSaveFile} onClose={storeCloseEditor} />
         )
       );
     }
-    if (sideTab === "guide" && commandGuideWindow) {
+    if (resolvedSideTab === "guide" && commandGuideWindow) {
       return commandGuideWindow;
     }
-    if (sideTab === "map") {
+    if (resolvedSideTab === "map") {
       return (
         networkMapWindow ?? (
           <DefaultNetworkMap
@@ -291,8 +344,12 @@ export function Desktop({
   };
 
   const isMobileSideActive =
-    mobileWindow === "editor" || mobileWindow === "guide" || mobileWindow === "map";
-  const activeMobileTab: MobileTabWindow = mobileWindow === "shop" ? "terminal" : mobileWindow;
+    resolvedMobileWindow === "editor" ||
+    resolvedMobileWindow === "findings" ||
+    resolvedMobileWindow === "guide" ||
+    resolvedMobileWindow === "map";
+  const activeMobileTab: MobileTabWindow =
+    resolvedMobileWindow === "shop" ? "terminal" : resolvedMobileWindow;
   const hasOpenEditorFile = storeEditorFile !== null;
 
   return (
@@ -316,26 +373,22 @@ export function Desktop({
           <button
             type="button"
             role="tab"
-            tabIndex={mobileWindow === "terminal" ? 0 : -1}
-            aria-selected={mobileWindow === "terminal"}
-            className={mobileWindow === "terminal" ? "hl-btn hl-btn--primary" : "hl-btn"}
+            tabIndex={resolvedMobileWindow === "terminal" ? 0 : -1}
+            aria-selected={resolvedMobileWindow === "terminal"}
+            className={resolvedMobileWindow === "terminal" ? "hl-btn hl-btn--primary" : "hl-btn"}
             onClick={() => selectMobileTab("terminal")}
-            onKeyDown={(e) =>
-              handleTabListKeyDown(e, MOBILE_TABS, activeMobileTab, selectMobileTab)
-            }
+            onKeyDown={(e) => handleTabListKeyDown(e, mobileTabs, activeMobileTab, selectMobileTab)}
           >
             Terminal
           </button>
           <button
             type="button"
             role="tab"
-            tabIndex={mobileWindow === "inbox" ? 0 : -1}
-            aria-selected={mobileWindow === "inbox"}
-            className={mobileWindow === "inbox" ? "hl-btn hl-btn--primary" : "hl-btn"}
+            tabIndex={resolvedMobileWindow === "inbox" ? 0 : -1}
+            aria-selected={resolvedMobileWindow === "inbox"}
+            className={resolvedMobileWindow === "inbox" ? "hl-btn hl-btn--primary" : "hl-btn"}
             onClick={() => selectMobileTab("inbox")}
-            onKeyDown={(e) =>
-              handleTabListKeyDown(e, MOBILE_TABS, activeMobileTab, selectMobileTab)
-            }
+            onKeyDown={(e) => handleTabListKeyDown(e, mobileTabs, activeMobileTab, selectMobileTab)}
           >
             <span>Bandeja</span>
             {unreadInboxCount > 0 ? (
@@ -354,13 +407,11 @@ export function Desktop({
           <button
             type="button"
             role="tab"
-            tabIndex={mobileWindow === "editor" ? 0 : -1}
-            aria-selected={mobileWindow === "editor"}
-            className={mobileWindow === "editor" ? "hl-btn hl-btn--primary" : "hl-btn"}
+            tabIndex={resolvedMobileWindow === "editor" ? 0 : -1}
+            aria-selected={resolvedMobileWindow === "editor"}
+            className={resolvedMobileWindow === "editor" ? "hl-btn hl-btn--primary" : "hl-btn"}
             onClick={() => selectMobileTab("editor")}
-            onKeyDown={(e) =>
-              handleTabListKeyDown(e, MOBILE_TABS, activeMobileTab, selectMobileTab)
-            }
+            onKeyDown={(e) => handleTabListKeyDown(e, mobileTabs, activeMobileTab, selectMobileTab)}
             data-testid="mobile-tab-editor"
           >
             <span>Editor</span>
@@ -371,29 +422,57 @@ export function Desktop({
               </>
             ) : null}
           </button>
+          {effectiveShowFindings ? (
+            <button
+              type="button"
+              role="tab"
+              tabIndex={resolvedMobileWindow === "findings" ? 0 : -1}
+              aria-selected={resolvedMobileWindow === "findings"}
+              className={resolvedMobileWindow === "findings" ? "hl-btn hl-btn--primary" : "hl-btn"}
+              onClick={() => selectMobileTab("findings")}
+              onKeyDown={(e) =>
+                handleTabListKeyDown(e, mobileTabs, activeMobileTab, selectMobileTab)
+              }
+              data-testid="mobile-tab-findings"
+            >
+              <span>Hallazgos</span>
+              {effectiveFindingsCount > 0 ? (
+                <>
+                  <span
+                    className="hl-unread-badge hl-unread-badge--warning hl-tabular"
+                    aria-hidden="true"
+                    data-testid="mobile-findings-badge"
+                  >
+                    {effectiveFindingsCount}
+                  </span>
+                  <span className="visually-hidden">
+                    {" "}
+                    ({effectiveFindingsCount}{" "}
+                    {effectiveFindingsCount === 1 ? "hallazgo" : "hallazgos"})
+                  </span>
+                </>
+              ) : null}
+            </button>
+          ) : null}
           <button
             type="button"
             role="tab"
-            tabIndex={mobileWindow === "guide" ? 0 : -1}
-            aria-selected={mobileWindow === "guide"}
-            className={mobileWindow === "guide" ? "hl-btn hl-btn--primary" : "hl-btn"}
+            tabIndex={resolvedMobileWindow === "guide" ? 0 : -1}
+            aria-selected={resolvedMobileWindow === "guide"}
+            className={resolvedMobileWindow === "guide" ? "hl-btn hl-btn--primary" : "hl-btn"}
             onClick={() => selectMobileTab("guide")}
-            onKeyDown={(e) =>
-              handleTabListKeyDown(e, MOBILE_TABS, activeMobileTab, selectMobileTab)
-            }
+            onKeyDown={(e) => handleTabListKeyDown(e, mobileTabs, activeMobileTab, selectMobileTab)}
           >
             Guía de comandos
           </button>
           <button
             type="button"
             role="tab"
-            tabIndex={mobileWindow === "map" ? 0 : -1}
-            aria-selected={mobileWindow === "map"}
-            className={mobileWindow === "map" ? "hl-btn hl-btn--primary" : "hl-btn"}
+            tabIndex={resolvedMobileWindow === "map" ? 0 : -1}
+            aria-selected={resolvedMobileWindow === "map"}
+            className={resolvedMobileWindow === "map" ? "hl-btn hl-btn--primary" : "hl-btn"}
             onClick={() => selectMobileTab("map")}
-            onKeyDown={(e) =>
-              handleTabListKeyDown(e, MOBILE_TABS, activeMobileTab, selectMobileTab)
-            }
+            onKeyDown={(e) => handleTabListKeyDown(e, mobileTabs, activeMobileTab, selectMobileTab)}
           >
             Mapa de red
           </button>
@@ -410,7 +489,7 @@ export function Desktop({
         <h1 className="visually-hidden">Escritorio de HackLab OS</h1>
         <div
           className="hl-desktop__window hl-desktop__window--inbox"
-          data-mobile-active={mobileWindow === "inbox" ? "true" : "false"}
+          data-mobile-active={resolvedMobileWindow === "inbox" ? "true" : "false"}
         >
           {inboxWindow}
         </div>
@@ -420,7 +499,7 @@ export function Desktop({
           tabIndex={-1}
           className="hl-desktop__window hl-desktop__window--terminal"
           aria-label="Ventana de terminal"
-          data-mobile-active={mobileWindow === "terminal" ? "true" : "false"}
+          data-mobile-active={resolvedMobileWindow === "terminal" ? "true" : "false"}
           style={{ gap: "var(--space-sm)" }}
         >
           {storyOverlay}
@@ -449,25 +528,56 @@ export function Desktop({
             <button
               type="button"
               role="tab"
-              tabIndex={sideTab === "status" ? 0 : -1}
-              aria-selected={sideTab === "status"}
-              className={sideTab === "status" ? "hl-btn hl-btn--primary" : "hl-btn"}
+              tabIndex={resolvedSideTab === "status" ? 0 : -1}
+              aria-selected={resolvedSideTab === "status"}
+              className={resolvedSideTab === "status" ? "hl-btn hl-btn--primary" : "hl-btn"}
               style={{ flex: "1 1 auto", fontSize: "0.76rem", padding: "4px 8px" }}
               onClick={() => setSideTab("status")}
-              onKeyDown={(e) => handleTabListKeyDown(e, SIDE_TABS, sideTab, setSideTab)}
+              onKeyDown={(e) => handleTabListKeyDown(e, sideTabs, resolvedSideTab, setSideTab)}
               data-testid="side-tab-status"
             >
               Misión
             </button>
+            {effectiveShowFindings ? (
+              <button
+                type="button"
+                role="tab"
+                tabIndex={resolvedSideTab === "findings" ? 0 : -1}
+                aria-selected={resolvedSideTab === "findings"}
+                className={resolvedSideTab === "findings" ? "hl-btn hl-btn--primary" : "hl-btn"}
+                style={{ flex: "1 1 auto", fontSize: "0.76rem", padding: "4px 8px" }}
+                onClick={() => setSideTab("findings")}
+                onKeyDown={(e) => handleTabListKeyDown(e, sideTabs, resolvedSideTab, setSideTab)}
+                data-testid="side-tab-findings"
+              >
+                <span>Hallazgos</span>
+                {effectiveFindingsCount > 0 ? (
+                  <>
+                    <span
+                      className="hl-unread-badge hl-unread-badge--warning hl-tabular"
+                      aria-hidden="true"
+                      data-testid="side-findings-badge"
+                    >
+                      {effectiveFindingsCount}
+                    </span>
+                    <span className="visually-hidden">
+                      {" "}
+                      ({effectiveFindingsCount}{" "}
+                      {effectiveFindingsCount === 1 ? "hallazgo" : "hallazgos"})
+                    </span>
+                  </>
+                ) : null}
+              </button>
+            ) : null}
             <button
               type="button"
               role="tab"
-              tabIndex={sideTab === "editor" ? 0 : -1}
-              aria-selected={sideTab === "editor"}
-              className={sideTab === "editor" ? "hl-btn hl-btn--primary" : "hl-btn"}
+              tabIndex={resolvedSideTab === "editor" ? 0 : -1}
+              aria-selected={resolvedSideTab === "editor"}
+              className={resolvedSideTab === "editor" ? "hl-btn hl-btn--primary" : "hl-btn"}
               style={{ flex: "1 1 auto", fontSize: "0.76rem", padding: "4px 8px" }}
               onClick={() => setSideTab("editor")}
-              onKeyDown={(e) => handleTabListKeyDown(e, SIDE_TABS, sideTab, setSideTab)}
+              onKeyDown={(e) => handleTabListKeyDown(e, sideTabs, resolvedSideTab, setSideTab)}
               data-testid="side-tab-editor"
             >
               <span>Editor</span>
@@ -481,12 +591,12 @@ export function Desktop({
             <button
               type="button"
               role="tab"
-              tabIndex={sideTab === "guide" ? 0 : -1}
-              aria-selected={sideTab === "guide"}
-              className={sideTab === "guide" ? "hl-btn hl-btn--primary" : "hl-btn"}
+              tabIndex={resolvedSideTab === "guide" ? 0 : -1}
+              aria-selected={resolvedSideTab === "guide"}
+              className={resolvedSideTab === "guide" ? "hl-btn hl-btn--primary" : "hl-btn"}
               style={{ flex: "1 1 auto", fontSize: "0.76rem", padding: "4px 8px" }}
               onClick={() => setSideTab("guide")}
-              onKeyDown={(e) => handleTabListKeyDown(e, SIDE_TABS, sideTab, setSideTab)}
+              onKeyDown={(e) => handleTabListKeyDown(e, sideTabs, resolvedSideTab, setSideTab)}
               data-testid="side-tab-guide"
             >
               Guía de comandos
@@ -494,12 +604,12 @@ export function Desktop({
             <button
               type="button"
               role="tab"
-              tabIndex={sideTab === "map" ? 0 : -1}
-              aria-selected={sideTab === "map"}
-              className={sideTab === "map" ? "hl-btn hl-btn--primary" : "hl-btn"}
+              tabIndex={resolvedSideTab === "map" ? 0 : -1}
+              aria-selected={resolvedSideTab === "map"}
+              className={resolvedSideTab === "map" ? "hl-btn hl-btn--primary" : "hl-btn"}
               style={{ flex: "1 1 auto", fontSize: "0.76rem", padding: "4px 8px" }}
               onClick={() => setSideTab("map")}
-              onKeyDown={(e) => handleTabListKeyDown(e, SIDE_TABS, sideTab, setSideTab)}
+              onKeyDown={(e) => handleTabListKeyDown(e, sideTabs, resolvedSideTab, setSideTab)}
               data-testid="side-tab-map"
             >
               Mapa de red
@@ -570,6 +680,33 @@ export function Desktop({
                 </>
               ) : null}
             </button>
+            {effectiveShowFindings ? (
+              <button
+                type="button"
+                className="hl-btn"
+                style={{ fontSize: "0.78rem", padding: "4px 10px" }}
+                onClick={() => openWindow("findings")}
+                data-testid="taskbar-findings-btn"
+              >
+                <span>Hallazgos</span>
+                {effectiveFindingsCount > 0 ? (
+                  <>
+                    <span
+                      className="hl-unread-badge hl-unread-badge--warning hl-tabular"
+                      aria-hidden="true"
+                      data-testid="taskbar-findings-badge"
+                    >
+                      {effectiveFindingsCount}
+                    </span>
+                    <span className="visually-hidden">
+                      {" "}
+                      ({effectiveFindingsCount}{" "}
+                      {effectiveFindingsCount === 1 ? "hallazgo" : "hallazgos"})
+                    </span>
+                  </>
+                ) : null}
+              </button>
+            ) : null}
             <button
               type="button"
               className={hasOpenEditorFile ? "hl-btn hl-btn--primary" : "hl-btn"}
