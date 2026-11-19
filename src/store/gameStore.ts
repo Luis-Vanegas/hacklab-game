@@ -1,7 +1,4 @@
 import { create } from "zustand";
-import tutorial from "@/data/contracts/00-tutorial.json";
-import firstHack from "@/data/contracts/01-first-hack.json";
-import dataHeist from "@/data/contracts/02-data-heist.json";
 import shopData from "@/data/tools/shop.json";
 import {
   acceptContract as acceptInEngine,
@@ -36,7 +33,14 @@ import type { CommandManual } from "@/terminal/commands/shared";
 // (persistencia y eventos). La UI solo habla con este store a través de los hooks.
 
 // Los JSON pasan por tests/data, que valida su estructura contra estos tipos
-export const CONTRACTS: readonly Contract[] = [tutorial, firstHack, dataHeist] as Contract[];
+// Todo JSON en src/data/contracts entra al juego solo; el prefijo numérico define el orden
+const contractModules = import.meta.glob<Contract>("@/data/contracts/*.json", {
+  eager: true,
+  import: "default",
+});
+export const CONTRACTS: readonly Contract[] = Object.keys(contractModules)
+  .sort()
+  .map((path) => contractModules[path] as Contract);
 export const TOOLS: readonly ToolDefinition[] = shopData;
 
 // Manual de cada comando para la guía visual, sin la función que lo ejecuta
