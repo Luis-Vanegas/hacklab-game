@@ -19,7 +19,12 @@
         "args": ["acme.example"]
       },
       "completed": false,
-      "hint": "Compra el visor con buy nmap y escribe nmap acme.example."
+      "hint": "Consulta el inventario que Acme preparó en el escenario ficticio.",
+      "hints": [
+        "Consulta el inventario que Acme preparó en el escenario ficticio.",
+        "Si te falta la herramienta, usa buy nmap. El nombre del escenario es acme.example.",
+        "Ejecuta nmap acme.example."
+      ]
     },
     {
       "id": "acme-02",
@@ -29,7 +34,12 @@
         "args": ["acme.example"]
       },
       "completed": false,
-      "hint": "Compra la sesión virtual con buy ssh. Este escenario usa un acceso de práctica sin ficha."
+      "hint": "Ahora entra en la sesión de práctica que preparó Acme.",
+      "hints": [
+        "Ahora entra en la sesión de práctica que preparó Acme.",
+        "Si te falta la herramienta, usa buy ssh. Este escenario virtual admite el acceso de práctica sin ficha.",
+        "Ejecuta ssh acme.example."
+      ]
     },
     {
       "id": "acme-03",
@@ -40,7 +50,12 @@
         "requiresConnection": true
       },
       "completed": false,
-      "hint": "Desde la sesión virtual usa download /entrega/turno.txt."
+      "hint": "El encargo pide la nota del turno del escenario virtual.",
+      "hints": [
+        "El encargo pide la nota del turno del escenario virtual.",
+        "Usa download desde la sesión de Acme. La nota está en /entrega.",
+        "Ejecuta download /entrega/turno.txt."
+      ]
     }
   ],
   "target": {

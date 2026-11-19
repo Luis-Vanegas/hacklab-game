@@ -248,7 +248,7 @@ export const commands: readonly CommandDefinition[] = [
       "La ayuda de una herramienta permite descubrir funciones y opciones antes de usarla.",
     unlockRank: "script_kiddie",
     usage: "help",
-    description: "Listar los comandos registrados.",
+    description: "Listar los comandos registrados por categoría.",
     example: "help",
     run: help,
   },

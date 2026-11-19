@@ -4,8 +4,7 @@ import { commandError } from "./shared";
 const hintLevels = ["Pista suave", "Pista media", "Solución"];
 
 function hintTexts(objective: Objective): string[] {
-  // Aceptamos el campo nuevo cuando lo publique el motor, además de los contratos anteriores.
-  if ("hints" in objective && Array.isArray(objective.hints)) {
+  if (Array.isArray(objective.hints)) {
     const hints = objective.hints
       .filter((hint): hint is string => typeof hint === "string" && hint.trim() !== "")
       .slice(0, hintLevels.length);
@@ -13,6 +12,7 @@ function hintTexts(objective: Objective): string[] {
     if (hints.length > 0) return hints;
   }
 
+  // Una partida guardada antes de C9 todavía puede tener solo hint.
   return objective.hint?.trim() ? [objective.hint] : [];
 }
 

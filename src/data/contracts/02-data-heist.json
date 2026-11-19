@@ -19,7 +19,12 @@
         "args": ["ficha"]
       },
       "completed": false,
-      "hint": "Compra el lector con buy hydra y escribe crack ficha."
+      "hint": "El simulacro trae una ficha de acceso preparada para este ejercicio.",
+      "hints": [
+        "El simulacro trae una ficha de acceso preparada para este ejercicio.",
+        "Adquiere el lector con buy hydra. El comando crack ficha muestra la ficha fijada por el escenario.",
+        "Ejecuta crack ficha."
+      ]
     },
     {
       "id": "apag-02",
@@ -29,7 +34,12 @@
         "args": ["archivo.example", "FICHA-39"]
       },
       "completed": false,
-      "hint": "Escribe ssh archivo.example y agrega la ficha que mostró el desafío."
+      "hint": "Usa la ficha que mostró el desafío de este simulacro.",
+      "hints": [
+        "Usa la ficha que mostró el desafío de este simulacro.",
+        "Pasa a ssh el servidor virtual archivo.example y la ficha que obtuviste.",
+        "Ejecuta ssh archivo.example FICHA-39 en la terminal del juego."
+      ]
     },
     {
       "id": "apag-03",
@@ -40,7 +50,12 @@
         "requiresConnection": true
       },
       "completed": false,
-      "hint": "Con la sesión abierta, escribe download /archivo/bitacora.txt."
+      "hint": "Busca la bitácora dentro de /archivo en la sesión virtual.",
+      "hints": [
+        "Busca la bitácora dentro de /archivo en la sesión virtual.",
+        "Usa download con la ruta absoluta para crear una copia local.",
+        "Ejecuta download /archivo/bitacora.txt."
+      ]
     },
     {
       "id": "apag-04",
@@ -50,7 +65,12 @@
         "args": ["bitacora.txt"]
       },
       "completed": false,
-      "hint": "Usa cat bitacora.txt en el directorio donde guardaste la copia."
+      "hint": "La bitácora ya debe estar en la carpeta virtual donde guardaste la copia.",
+      "hints": [
+        "La bitácora ya debe estar en la carpeta virtual donde guardaste la copia.",
+        "cat abre el texto sin modificar el archivo.",
+        "Ejecuta cat bitacora.txt."
+      ]
     }
   ],
   "target": {
