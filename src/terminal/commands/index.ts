@@ -31,6 +31,13 @@ import whois from "./whois";
 import pwd from "./pwd";
 import ssh from "./ssh";
 import trace from "./trace";
+import date from "./date";
+import hostname from "./hostname";
+import kill from "./kill";
+import pista from "./pista";
+import ps from "./ps";
+import sudo from "./sudo";
+import uname from "./uname";
 import whoami from "./whoami";
 
 const help = createHelp(() => commands);
@@ -262,6 +269,55 @@ export const commands: readonly CommandDefinition[] = [
     description: "Mostrar el nivel de rastreo del juego.",
     example: "trace",
     run: trace,
+  },
+  {
+    name: "date",
+    usage: "date",
+    description: "Mostrar la fecha del juego.",
+    example: "date",
+    run: date,
+  },
+  {
+    name: "hostname",
+    usage: "hostname [-a]",
+    description: "Identificar la estación virtual y consultar su alias.",
+    example: "hostname -a",
+    run: hostname,
+  },
+  {
+    name: "kill",
+    usage: "kill <pid>",
+    description: "Detener un proceso virtual mediante su identificador.",
+    example: "kill 4444",
+    run: kill,
+  },
+  {
+    name: "pista",
+    usage: "pista",
+    description: "Pedir la siguiente pista del objetivo actual.",
+    example: "pista",
+    run: pista,
+  },
+  {
+    name: "ps",
+    usage: "ps",
+    description: "Listar los procesos activos de la estación virtual.",
+    example: "ps",
+    run: ps,
+  },
+  {
+    name: "sudo",
+    usage: "sudo <comando>",
+    description: "Simular una comprobación de privilegios.",
+    example: "sudo ps",
+    run: sudo,
+  },
+  {
+    name: "uname",
+    usage: "uname [-a]",
+    description: "Identificar el sistema operativo virtual.",
+    example: "uname -a",
+    run: uname,
   },
   {
     name: "whoami",
