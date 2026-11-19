@@ -85,13 +85,13 @@ Datos nuevos: `src/data/machine/workstation.json` (tu equipo: hostname `nodo-ws-
 
 ### C5 — Contenido del primer trabajo · rama `feat/data-day-one` · después de K1
 
-- [ ] `src/data/filesystem/workstation.json`: `~/bienvenida.txt` (carta de Marta), `~/.bash_history`, `/etc/hosts` y `/var/log/auth.log` con un ataque de fuerza bruta desde `203.0.113.45`
-- [ ] Contratos del canal `work`, cada uno con 3 pistas por objetivo y un `story` con briefing:
+- [x] `src/data/filesystem/workstation.json`: `~/bienvenida.txt` (carta de Marta), `~/.bash_history`, `/etc/hosts` y `/var/log/auth.log` con un ataque de fuerza bruta desde `203.0.113.45`
+- [x] Contratos del canal `work`, cada uno con 3 pistas por objetivo y un `story` con briefing:
   - `10-dia-1-bienvenida`: `cat bienvenida.txt`, `ipconfig`, `ping 10.20.0.1` y `nslookup intranet.nodoseguro.test`
   - `11-dia-2-logs`: `tail /var/log/auth.log`, `grep -c Failed /var/log/auth.log` y encontrar la IP atacante
   - `12-dia-3-proceso-raro`: `netstat`, `ps` y `kill 4444`
-- [ ] Balancear la XP para que el jugador llegue a `hacker` (500 XP) combinando trabajo y darknet
-- [ ] Pruebas en `tests/data/` y un recorrido completo de cada contrato nuevo, como `tests/store/tutorialFlow.test.ts`
+- [x] Balancear la XP para que el jugador llegue a `hacker` (500 XP) combinando trabajo y darknet
+- [x] Pruebas en `tests/data/` y un recorrido completo de cada contrato nuevo, como `tests/store/tutorialFlow.test.ts`
 
 ---
 
@@ -153,6 +153,8 @@ Datos nuevos: `src/data/machine/workstation.json` (tu equipo: hostname `nodo-ws-
   - `CHARACTERS`: `{ name, role, channel }` por clave (`MARTA`, `CIPHER`), para retratos y estilos (A5). En `StoryDialog`, muestra `CHARACTERS[line.character].name` en lugar de la clave.
 
 - [2026-11-18] CODEX → LUIS y CLAUDE: git fetch origin devolvió acceso denegado a .git/worktrees/hacklab-game-cmd/FETCH_HEAD. La carpeta compartida de Codex tampoco está disponible para escritura. Los parches de C1 a C5 parten de d65d14b (K2) y se entregan en orden. Crear cada rama en hacklab-game-cmd desde origin/develop una vez fusionada la tarea previa. Claude prepara los commits, el push y los PR hacia develop.
+
+- [2026-11-18] CODEX → CLAUDE: para activar C5 en la interfaz, registrar los tickets 10, 11 y 12 en CONTRACTS, cargar src/data/filesystem/workstation.json al iniciar y sincronizar sus IDs con el rango inicial del motor. Los diálogos usan MARTA según K2. Completar los tres tickets y el tutorial darknet entrega 500 XP.
 
 ---
 

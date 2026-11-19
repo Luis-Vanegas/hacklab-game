@@ -1,0 +1,83 @@
+{
+  "id": "11-dia-2-logs",
+  "channel": "work",
+  "title": "Día 2 · Revisa los intentos de acceso",
+  "description": "Distingue intentos fallidos de accesos aceptados y documenta la dirección que se repite.",
+  "difficulty": "beginner",
+  "requiredReputation": "script_kiddie",
+  "reward": {
+    "credits": 180,
+    "xp": 130,
+    "partialMultiplier": 0.75
+  },
+  "objectives": [
+    {
+      "id": "dia2-01",
+      "description": "Lee las últimas entradas del registro de autenticación.",
+      "trigger": {
+        "command": "tail",
+        "args": ["/var/log/auth.log"]
+      },
+      "completed": false,
+      "hints": [
+        "El registro está dentro de /var/log.",
+        "tail muestra las líneas más recientes de un archivo.",
+        "Ejecuta tail /var/log/auth.log."
+      ]
+    },
+    {
+      "id": "dia2-02",
+      "description": "Cuenta las líneas que registran un acceso fallido.",
+      "trigger": {
+        "command": "grep",
+        "args": ["-c", "Failed", "/var/log/auth.log"]
+      },
+      "completed": false,
+      "hints": [
+        "En el registro, Failed identifica un intento fallido y Accepted identifica uno aceptado.",
+        "grep -c cuenta las líneas que contienen el texto indicado.",
+        "Ejecuta grep -c Failed /var/log/auth.log."
+      ]
+    },
+    {
+      "id": "dia2-03",
+      "description": "Confirma la IP de origen de los intentos repetidos.",
+      "trigger": {
+        "command": "grep",
+        "args": ["203.0.113.45", "/var/log/auth.log"]
+      },
+      "completed": false,
+      "hints": [
+        "Compara lo que aparece después de from en varios intentos fallidos.",
+        "Filtra el registro por la dirección que se repite para reunir la evidencia.",
+        "Ejecuta grep 203.0.113.45 /var/log/auth.log."
+      ]
+    }
+  ],
+  "target": {
+    "hostname": "nodo-ws-07.nodoseguro.test",
+    "ip": "10.20.0.15",
+    "ports": [],
+    "filesystem": {
+      "type": "dir",
+      "name": "/",
+      "permissions": "drwxr-xr-x",
+      "children": {}
+    }
+  },
+  "story": {
+    "intro": [
+      {
+        "character": "MARTA",
+        "text": "Recibimos una alerta por actividad de inicio de sesión. Vas a revisar un registro virtual. Lee los eventos recientes, cuenta los fallos y confirma qué dirección los origina."
+      }
+    ],
+    "onComplete": [
+      {
+        "character": "MARTA",
+        "text": "Buen trabajo. La repetición desde la misma dirección explica la alerta. Conserva el recuento y la IP como evidencia para el equipo."
+      }
+    ],
+    "hints": {}
+  }
+}

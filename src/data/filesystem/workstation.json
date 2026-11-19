@@ -1,0 +1,86 @@
+{
+  "type": "dir",
+  "name": "/",
+  "permissions": "drwxr-xr-x",
+  "children": {
+    "home": {
+      "type": "dir",
+      "name": "home",
+      "permissions": "drwxr-xr-x",
+      "children": {
+        "user": {
+          "type": "dir",
+          "name": "user",
+          "permissions": "drwx------",
+          "children": {
+            ".bashrc": {
+              "type": "file",
+              "name": ".bashrc",
+              "content": "# Configuración de la terminal de HackLab\nexport PS1='hacklab@darknet:~$ '\n",
+              "permissions": "-rw-r--r--",
+              "hidden": true
+            },
+            ".bash_history": {
+              "type": "file",
+              "name": ".bash_history",
+              "content": "pwd\nls\ncat bienvenida.txt\nipconfig\n",
+              "permissions": "-rw-------",
+              "hidden": true
+            },
+            "notes": {
+              "type": "file",
+              "name": "notes",
+              "content": "Bienvenido a la red. Escribe 'help' para empezar.",
+              "permissions": "-rw-r--r--"
+            },
+            "bienvenida.txt": {
+              "type": "file",
+              "name": "bienvenida.txt",
+              "content": "Bienvenido a Nodo Seguro.\n\nSoy Marta Ríos y voy a acompañarte en tu primera semana. Hoy vas a familiarizarte con esta estación de Medellín y con la red de práctica.\n\nEl alcance de los tickets está en la bandeja. Deja constancia de lo que observas antes de proponer cambios.\n\nMarta",
+              "permissions": "-rw-r--r--"
+            }
+          }
+        }
+      }
+    },
+    "etc": {
+      "type": "dir",
+      "name": "etc",
+      "permissions": "drwxr-xr-x",
+      "children": {
+        "passwd": {
+          "type": "file",
+          "name": "passwd",
+          "content": "root:x:0:0:root:/root:/bin/bash\nuser:x:1000:1000:user:/home/user:/bin/bash",
+          "permissions": "-rw-r--r--"
+        },
+        "hosts": {
+          "type": "file",
+          "name": "hosts",
+          "content": "10.20.0.15 nodo-ws-07.nodoseguro.test nodo-ws-07\n10.20.0.1 gateway.nodoseguro.test\n10.20.0.53 dns.nodoseguro.test\n10.20.0.80 intranet.nodoseguro.test\n",
+          "permissions": "-rw-r--r--"
+        }
+      }
+    },
+    "var": {
+      "type": "dir",
+      "name": "var",
+      "permissions": "drwxr-xr-x",
+      "children": {
+        "log": {
+          "type": "dir",
+          "name": "log",
+          "permissions": "drwxr-xr-x",
+          "children": {
+            "auth.log": {
+              "type": "file",
+              "name": "auth.log",
+              "content": "[2026-11-18 08:09:56] sshd: Accepted password for user from 10.20.0.1\n[2026-11-18 08:11:10] sshd: Failed password for user from 203.0.113.45 port 54210\n[2026-11-18 08:11:12] sshd: Failed password for user from 203.0.113.45 port 54211\n[2026-11-18 08:11:14] sshd: Failed password for user from 203.0.113.45 port 54212\n[2026-11-18 08:11:16] sshd: Failed password for user from 203.0.113.45 port 54213\n[2026-11-18 08:12:01] sshd: Accepted password for user from 10.20.0.1\n",
+              "permissions": "-rw-r-----"
+            }
+          }
+        }
+      }
+    }
+  }
+}
