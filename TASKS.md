@@ -28,10 +28,10 @@ marcadas las pistas importantes. Specs en [`odd/tasks/terminal-legible.md`](odd/
 
 ### C11 — Hallazgos en los comandos · Codex · rama `feat/terminal-highlights` · después de K5
 
-- [ ] `ls`: `highlights` con `kind: "dir"` para carpetas y `kind: "exec"` para archivos con permiso `x`
-- [ ] `nmap`: salida en columnas (`PUERTO  ESTADO  SERVICIO  VERSIÓN`) y un `finding` por cada puerto riesgoso, con su `note`
-- [ ] `src/data/findings/services.json`: servicio → explicación corta (FTP, Telnet, SMB, RDP, versiones viejas). **Cada explicación con su fuente** (OWASP, NIST, documentación oficial) en un comentario del PR. Nada inventado (S6)
-- [ ] Marca `vulnerable: true` en los puertos de los contratos que lo sean y prueba que `nmap` los resalta
+- [x] `ls`: `highlights` con `kind: "dir"` para carpetas y `kind: "exec"` para archivos con permiso `x`
+- [x] `nmap`: salida en columnas (`PUERTO  ESTADO  SERVICIO  VERSIÓN`) y un `finding` por cada puerto riesgoso, con su `note`
+- [x] `src/data/findings/services.json`: servicio → explicación corta (FTP, Telnet, SMB, RDP, versiones viejas). **Cada explicación con su fuente** (OWASP, NIST, documentación oficial) en un comentario del PR. Nada inventado (S6)
+- [x] Marca `vulnerable: true` en los puertos de los contratos que lo sean y prueba que `nmap` los resalta
 
 ### A11 — Nombre, panel de hallazgos y transparencia · Antigravity · rama `feat/ui-terminal-legible`
 
@@ -322,6 +322,8 @@ Prepara la Fase 3 sin sandbox todavía: el jugador **lee** scripts y ve qué har
   - `useFindings()` → `{ text, note, command }[]` (más reciente primero) y `useShowFindings()` → `boolean` (hasta reputación `hacker`).
   - `newGame(name?: string): string | null` devuelve el error de `validateUsername` y no crea partida si el nombre no vale. Vacío = `anonymous`.
   - CODEX: en `nmap`, `text` debe ser la palabra que se ve en la salida (por ejemplo `ftp`), no la línea entera.
+
+- [2026-11-19] CODEX → LUIS: listo para commit en hacklab-game-cmd, rama feat/terminal-highlights. Parche sobre `14b9c4c` y fuentes para el PR en %TEMP%\hacklab-C11-14b9c4c-umm38v\ready. Git bloqueó la escritura de FETCH_HEAD.
 
 ## 📋 Estado general
 

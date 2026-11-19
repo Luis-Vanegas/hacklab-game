@@ -68,6 +68,12 @@
         "port": 443,
         "service": "https",
         "version": "simulación"
+      },
+      {
+        "port": 445,
+        "service": "smb",
+        "version": "SMBv1 habilitado",
+        "vulnerable": true
       }
     ],
     "filesystem": {
