@@ -5,6 +5,7 @@
 
 import { useState, type ReactNode } from "react";
 import type { Contract, PlayerState } from "@/lib/types";
+import { useSoundMute } from "../feedback/soundEffects";
 import { ReputationBadge } from "../hud/ReputationBadge";
 import { TraceBar } from "../hud/TraceBar";
 
@@ -20,6 +21,8 @@ export interface DesktopProps {
   readonly activeContract?: Contract | null;
   readonly contracts?: readonly Contract[];
   readonly unreadInboxCount?: number;
+  readonly soundMuted?: boolean;
+  readonly onToggleSound?: () => void;
   readonly terminalWindow: ReactNode;
   readonly inboxWindow: ReactNode;
   readonly statusWindow?: ReactNode;
@@ -160,6 +163,8 @@ export function Desktop({
   activeContract = null,
   contracts = [],
   unreadInboxCount = 0,
+  soundMuted,
+  onToggleSound,
   terminalWindow,
   inboxWindow,
   statusWindow,
@@ -173,6 +178,9 @@ export function Desktop({
 }: DesktopProps) {
   const [sideTab, setSideTab] = useState<SidePanelTab>("status");
   const [mobileWindow, setMobileWindow] = useState<DesktopWindowId>("terminal");
+  const { muted: storedMuted, toggleMute: toggleStoredMute } = useSoundMute();
+  const isMuted = soundMuted ?? storedMuted;
+  const handleToggleSound = onToggleSound ?? toggleStoredMute;
 
   const openWindow = (target: DesktopWindowId) => {
     if (target === "shop") {
@@ -458,6 +466,17 @@ export function Desktop({
             {player.credits} CR
           </span>
           <TraceBar traceLevel={traceLevel} />
+          <button
+            type="button"
+            className="hl-btn"
+            style={{ fontSize: "0.78rem", padding: "4px 10px" }}
+            aria-pressed={isMuted}
+            aria-label={isMuted ? "Activar sonidos" : "Silenciar sonidos"}
+            onClick={handleToggleSound}
+            data-testid="taskbar-mute-btn"
+          >
+            {isMuted ? "Silencio" : "Sonido"}
+          </button>
           <span className="hl-badge hl-tabular" data-testid="taskbar-clock">
             {gameClock}
           </span>

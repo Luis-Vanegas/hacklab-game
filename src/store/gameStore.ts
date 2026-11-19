@@ -1,7 +1,5 @@
 import { create } from "zustand";
-import tutorial from "@/data/contracts/00-tutorial.json";
-import firstHack from "@/data/contracts/01-first-hack.json";
-import dataHeist from "@/data/contracts/02-data-heist.json";
+import machine from "@/data/machine/workstation.json";
 import shopData from "@/data/tools/shop.json";
 import {
   acceptContract as acceptInEngine,
@@ -36,7 +34,17 @@ import type { CommandManual } from "@/terminal/commands/shared";
 // (persistencia y eventos). La UI solo habla con este store a través de los hooks.
 
 // Los JSON pasan por tests/data, que valida su estructura contra estos tipos
-export const CONTRACTS: readonly Contract[] = [tutorial, firstHack, dataHeist] as Contract[];
+// Todo JSON en src/data/contracts entra al juego solo; el prefijo numérico define el orden
+const contractModules = import.meta.glob<Contract>("@/data/contracts/*.json", {
+  eager: true,
+  import: "default",
+});
+// Equipo del jugador en Nodo Seguro: es el host del prompt mientras no esté conectado a otro
+export const LOCAL_HOST: string = machine.hostname;
+
+export const CONTRACTS: readonly Contract[] = Object.keys(contractModules)
+  .sort()
+  .map((path) => contractModules[path] as Contract);
 export const TOOLS: readonly ToolDefinition[] = shopData;
 
 // Manual de cada comando para la guía visual, sin la función que lo ejecuta
@@ -164,7 +172,7 @@ function buildContext(session: GameSession): CommandContext {
     currentDir: session.currentDir,
     filesystem: session.filesystem,
     user: session.game.player.username,
-    hostname: session.game.connectedTo ?? "darknet",
+    hostname: session.game.connectedTo ?? LOCAL_HOST,
     connectedTo: session.game.connectedTo,
     difficulty: session.game.difficulty,
     history: session.history,

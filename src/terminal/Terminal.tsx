@@ -7,6 +7,7 @@ import { FitAddon } from "@xterm/addon-fit";
 import { Terminal as XTerm } from "@xterm/xterm";
 import "@xterm/xterm/css/xterm.css";
 import type { CommandResult, GameDifficulty } from "@/lib/types";
+import { LOCAL_HOST } from "@/store";
 import {
   useConnectedTo,
   useCurrentDir,
@@ -14,6 +15,7 @@ import {
   usePlayer,
   useRunCommand,
 } from "@/store/hooks";
+import { playSound } from "@/ui/feedback/soundEffects";
 import { getTerminalTheme } from "./themes";
 
 export interface TerminalProps {
@@ -53,8 +55,8 @@ const DIFFICULTY_LABELS: Record<GameDifficulty, string> = {
 };
 
 const DEFAULT_WELCOME: readonly string[] = [
-  "HACKLAB OS v2.6 // ENTORNO TÁCTICO DE TERMINAL",
-  "Escribe 'help' para ver los comandos o elige un contrato en el tablero.",
+  `NODO SEGURO // ESTACIÓN ${LOCAL_HOST} // HACKLAB OS v2.6`,
+  "Escribe 'help' para ver los comandos o abre la Bandeja para ver tus tickets.",
 ];
 
 export function formatPrompt(username: string, host: string, currentDir: string): string {
@@ -88,7 +90,7 @@ export function Terminal({
   const storeRunCommand = useRunCommand();
 
   const username = propUsername ?? storePlayer.username;
-  const host = (propConnectedTo !== undefined ? propConnectedTo : storeConnectedTo) ?? "darknet";
+  const host = (propConnectedTo !== undefined ? propConnectedTo : storeConnectedTo) ?? LOCAL_HOST;
   const currentDir = propCurrentDir ?? storeCurrentDir;
   const difficulty = propDifficulty ?? storeDifficulty;
   const runCommand = propOnRunCommand ?? storeRunCommand;
@@ -171,6 +173,7 @@ export function Terminal({
         if (!term) return;
 
         if (data === "\r") {
+          playSound("key");
           const line = inputBufferRef.current;
           inputBufferRef.current = "";
           historyIndexRef.current = -1;
@@ -198,7 +201,7 @@ export function Terminal({
               : promptStateRef.current.currentDir;
           const nextHost =
             result.error === undefined && result.stateChanges?.connectedTo !== undefined
-              ? (result.stateChanges.connectedTo ?? "darknet")
+              ? (result.stateChanges.connectedTo ?? LOCAL_HOST)
               : promptStateRef.current.host;
 
           term.write(formatPrompt(promptStateRef.current.username, nextHost, nextDir));
@@ -225,6 +228,7 @@ export function Terminal({
         // Backspace
         if (data === "\u007f" || data === "\b") {
           if (inputBufferRef.current.length > 0) {
+            playSound("key");
             inputBufferRef.current = inputBufferRef.current.slice(0, -1);
             term.write("\b \b");
           }
@@ -267,6 +271,7 @@ export function Terminal({
         // Caracteres imprimibles (incluyendo pegado de texto en una sola línea)
         const printable = data.replace(/[\r\n]+/g, "");
         if (printable.length > 0) {
+          playSound("key");
           inputBufferRef.current += printable;
           term.write(printable);
         }

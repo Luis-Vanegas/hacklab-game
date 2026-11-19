@@ -63,21 +63,26 @@ Pantalla de título ─► Intro narrativa (texto tipo máquina de escribir, 5 v
 
 ## Tasks
 
-| ID  | Specs          | Agente      | Ruta                       | Estado                                          |
-| --- | -------------- | ----------- | -------------------------- | ----------------------------------------------- |
-| K1  | S1, S2, S4, S8 | Claude      | `feat/engine-game-events`  | listo: c150616, 41ee7e9                         |
-| K2  | S1, S2         | Claude      | `feat/engine-story-intro`  | intro y diálogos listos; filesystem espera a C5 |
-| K3  | todas          | Claude      | integración y revisión     | pendiente                                       |
-| C1  | S5             | Codex       | `feat/terminal-network`    | pendiente                                       |
-| C2  | S5             | Codex       | `feat/terminal-files`      | pendiente                                       |
-| C3  | S5             | Codex       | `feat/terminal-system`     | pendiente                                       |
-| C4  | S4             | Codex       | `feat/terminal-guide-data` | pendiente                                       |
-| C5  | S1, S5         | Codex       | `feat/data-day-one`        | pendiente                                       |
-| A1  | S2, S6         | Antigravity | `feat/ui-title-intro`      | pendiente                                       |
-| A2  | S3, S7         | Antigravity | `feat/scenes-office`       | pendiente                                       |
-| A3  | S2, S7         | Antigravity | `feat/ui-desktop-os`       | pendiente                                       |
-| A4  | S4             | Antigravity | `feat/ui-command-guide`    | pendiente                                       |
-| A5  | S8             | Antigravity | `feat/ui-game-feedback`    | pendiente                                       |
+| ID    | Specs          | Agente                         | Ruta                                       | Estado                       |
+| ----- | -------------- | ------------------------------ | ------------------------------------------ | ---------------------------- |
+| K1    | S1, S2, S4, S8 | Claude                         | `feat/engine-game-events`                  | listo: c150616, 41ee7e9      |
+| K2    | S1, S2         | Claude                         | `feat/engine-story-intro`                  | listo: PR #12, 1cfa006       |
+| K3    | todas          | Claude                         | integración y revisión                     | listo: ffb5eb7 (A8), c7daa05 |
+| C1    | S5             | Codex                          | `feat/terminal-network`                    | listo: PR #13–#17            |
+| C2    | S5             | Codex                          | `feat/terminal-files`                      | listo: PR #13–#17            |
+| C3    | S5             | Codex                          | `feat/terminal-system`                     | listo: PR #13–#17            |
+| C4    | S4             | Codex                          | `feat/terminal-guide-data`                 | listo: PR #13–#17            |
+| C5    | S1, S5         | Codex                          | `feat/data-day-one`                        | listo: PR #13–#17            |
+| A1    | S2, S6         | Antigravity                    | `feat/ui-title-intro`                      | listo: PR #18–#22            |
+| A2    | S3, S7         | Antigravity                    | `feat/scenes-office`                       | listo: PR #18–#22            |
+| A3    | S2, S7         | Antigravity                    | `feat/ui-desktop-os`                       | listo: PR #18–#22            |
+| A4    | S4             | Antigravity                    | `feat/ui-command-guide`                    | listo: PR #18–#22            |
+| A5    | S8             | Antigravity                    | `feat/ui-game-feedback`                    | listo: PR #18–#22            |
+| C6–C8 | S1, S5         | Codex                          | `feat/data-*`, `feat/terminal-python-read` | listo: PR #25–#27            |
+| C9    | S4, S5         | Codex                          | `feat/data-hints-qa`                       | pendiente                    |
+| A7    | S2             | Antigravity                    | `feat/ui-inbox`                            | listo: PR #24                |
+| A8    | S8             | Claude (tomada de Antigravity) | `feat/game-flow`                           | listo: ffb5eb7               |
+| A9    | S6, S7         | Antigravity                    | accesibilidad y capturas                   | pendiente                    |
 
 El detalle de cada tarea, con criterios de aceptación, está en `TASKS.md`.
 
@@ -94,4 +99,6 @@ El detalle de cada tarea, con criterios de aceptación, está en `TASKS.md`.
 - **L3** (2026-11-18, Luis): "La cosa es como mirar, usar las opciones que tienen algunos juegos como Hacker Simulator, pero más a la vida real, más a lo que se vivía ahora. También mirar Light Hack y cosas así como para Python, para hacer seguridad, ser alguien que está comenzando a trabajar y es nuevo y le toca esto y comienza a evolucionar, a mejorar, conseguir una pista, no sé, mirando cómo podemos mejorar todo eso."
 - **L4** (2026-11-18, Luis): "No sé, sería mejor que lo combinemos, miremos cómo utilizar eso que ya hicimos. Lo otro sería que se vea un poquito bien, no sé, comenzar con la historia al principio, con un texto o algo y pum, ya sale la terminal con el computador. La cosa es como que pensemos cómo sería el inicio, cómo se vería todo, no sé, como un cuadrito pixelado o algo de un cuadrito donde están los muñequitos andando por ahí, mirando qué hacer. Eh, Mostrar también cosas que nos pueden ayudar y explicarle mejor a la persona, eh, todo ese tema, cómo se mueve todo eso. Lo otro es, pues puedes investigar otros tipos de juegos, solamente además de Hacker Simulator, otros juegos que podemos usar, que se puede ayudar. La cosa es crear como una página donde esté todo eso liviano y rápido en un navegador. Y explicar, también necesito que hagan más comandos, el ipconfi para ver el IP, cosas así, principiantes, faltan más comandos, muy básico lo que me pusiste. Porfa, piensa, ponlo a trabajar, déjale tareas largas a los dos agentes para que creen las cosas, reaten las cosas, o que pongan a sus agentes a trabajar también ellos. Puedes que les deje las tareas planeadas de una vez para hacer la construcción, después tú ya combinas, revisas y metes todo. Cosas que mires bien la construcción de esto, piensa más, investiga, revisa."
 - **L5** (2026-11-18): Decisión de Claude: "Light Hack" no apareció en la búsqueda, así que el diseño se basa en Hacker Simulator, OverTheWire Bandit, simuladores de SOC, Terminus y bashcrawl. La escena pixelada se logra con 3D a baja resolución, sin librerías nuevas (ver ADR-005). Python con sandbox queda para la Fase 3.
-- **Siguiente paso:** K1 (eventos, canal de contratos, `COMMAND_GUIDE`, flag de intro).
+- **L6** (2026-11-18, Luis): "Termina el trabajo que le faltó el T-Gravity, termínalo tú, organízalo, revísalo y funciona. Termina de hacer todo lo que falte. Si es muy grande, ahí sí repártelo a codes y ponlo a hacer lo que lo pueda hacer."
+- **L7** (2026-11-18): Claude terminó A8 y K3 en `feat/game-flow`. `npm run check` pasó (166 pruebas) y `npm run build` también. C9 queda para Codex y A9 para Antigravity.
+- **Siguiente paso:** probar el recorrido en el navegador y abrir el PR de `feat/game-flow` a `develop`.

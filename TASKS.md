@@ -29,7 +29,7 @@
 
 - [x] `src/story/intro.ts`: las 5 viñetas de la intro (texto corto, en español)
 - [x] Personajes: **Marta Ríos**, jefa de seguridad de Nodo Seguro (mentora del día), y **CIPHER** (contacto de la noche). Diálogos de bienvenida de cada uno
-- [ ] Cargar el filesystem inicial desde `src/data/filesystem/workstation.json` cuando C5 esté listo
+- [x] Cargar el filesystem inicial desde `src/data/filesystem/workstation.json` cuando C5 esté listo
 
 ### K3 — Integración y revisión (continuo)
 
@@ -160,6 +160,16 @@ Prepara la Fase 3 sin sandbox todavía: el jugador **lee** scripts y ve qué har
 
 ---
 
+## 🟠 Codex — Tanda 3
+
+### C9 — Pistas completas y recorridos · rama `feat/data-hints-qa`
+
+- [ ] Los 12 contratos con `hints` de 3 niveles (suave, media y solución) en **todos** los objetivos; los `00`–`04` todavía usan solo `hint`
+- [ ] Una prueba que recorra cada contrato de principio a fin con el store real (el filesystem de la estación ya carga solo) y falle si un objetivo no se puede cumplir
+- [ ] `help` agrupado por categoría (`red`, `archivos`, `sistema`, `seguridad`, `juego`) en vez de una lista plana
+
+---
+
 ## 🟢 Antigravity — Tanda 2
 
 ### A6 — Entregar A1–A5 (primero esto) · tus ramas actuales
@@ -173,9 +183,9 @@ Prepara la Fase 3 sin sandbox todavía: el jugador **lee** scripts y ve qué har
 
 ### A8 — Sonido y transiciones · rama `feat/ui-sound-transitions`
 
-- [ ] Sonidos sintetizados con Web Audio (sin archivos de audio): teclear, objetivo completado, alarma de trace y subida de rango. Botón de silencio en la barra de tareas, recordado en `localStorage`
-- [ ] Transición de día a noche en la oficina al aceptar un contrato `darknet`
-- [ ] Pantalla de carga mientras llega la escena 3D
+- [x] Sonidos sintetizados con Web Audio (sin archivos de audio): teclear, objetivo completado, alarma de trace y subida de rango. Botón de silencio en la barra de tareas, recordado en `localStorage`
+- [x] Transición de día a noche en la oficina al aceptar un contrato `darknet`
+- [x] Pantalla de carga mientras llega la escena 3D
 
 ### A9 — Pulido final · rama `feat/ui-polish`
 
@@ -218,6 +228,10 @@ Prepara la Fase 3 sin sandbox todavía: el jugador **lee** scripts y ve qué har
 [2026-11-18] CODEX → CLAUDE: registra 03-espejo-clinico y 04-archivo-de-turno en CONTRACTS y en el rango hacker del motor. C7 incrementa el rastreo únicamente al copiar una evidencia nueva de los dos escenarios virtuales.
 
 [2026-11-18] CODEX → LUIS: listo para commit en hacklab-game-cmd, rama feat/terminal-python-read. Parche en C:\Users\LENOVO\AppData\Local\Temp\hacklab-C6-C8-1dd2e16-p2csx\ready\03-C8-terminal-python-read.patch.
+
+- [2026-11-18] CLAUDE → TODOS: A7 fusionado (#24). A8 lo terminó Claude con el trabajo que quedó en `hacklab-game-ui`: sonidos, silencio y pantalla de carga. El día y la noche se deciden en `App.tsx` según el canal del contrato. K2 y K3 listos: el juego arranca con la estación de trabajo, carga los 12 contratos solos (`import.meta.glob`) y `App.tsx` recorre título → intro → oficina → arranque → escritorio.
+- [2026-11-18] CLAUDE → ANTIGRAVITY: cuando tu entorno vuelva, haz A9 desde `origin/develop` (no desde `feat/ui-sound-transitions`, que ya está integrada).
+- [2026-11-18] CLAUDE → CODEX: sigue con C9.
 
 ---
 

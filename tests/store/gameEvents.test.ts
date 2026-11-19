@@ -65,7 +65,18 @@ describe("datos públicos para la UI", () => {
     expect(COMMAND_GUIDE.every((c) => !("run" in c))).toBe(true);
   });
 
-  it("todo contrato tiene canal", () => {
-    expect(CONTRACTS.map((c) => c.channel)).toEqual(["darknet", "darknet", "darknet"]);
+  it("el juego carga todos los contratos de src/data, en orden y con canal", () => {
+    const ids = CONTRACTS.map((c) => c.id);
+    expect(ids).toEqual([...ids].sort());
+    expect(ids).toContain("10-dia-1-bienvenida");
+    expect(ids).toContain("04-archivo-de-turno");
+    expect(CONTRACTS.filter((c) => c.channel === "work").length).toBeGreaterThanOrEqual(7);
+    expect(CONTRACTS.every((c) => c.channel === "work" || c.channel === "darknet")).toBe(true);
+  });
+
+  it("una partida nueva arranca con los archivos de la estación de trabajo", () => {
+    store().newGame();
+    expect(store().runCommand("cat bienvenida.txt").error).toBeUndefined();
+    expect(store().runCommand("cat /var/log/auth.log").error).toBeUndefined();
   });
 });

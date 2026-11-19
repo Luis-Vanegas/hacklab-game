@@ -1,81 +1,16 @@
+import workstation from "@/data/filesystem/workstation.json";
 import type { FileSystemNode, FileSystemChange } from "@/lib/types";
 
 // Filesystem virtual en memoria.
 // Inmutable: cada operación retorna un árbol nuevo.
 // Idempotente: crear un archivo que ya existe retorna el mismo árbol.
 
+// El disco inicial es la estación de trabajo del jugador en Nodo Seguro.
+// Vive en src/data para que Codex agregue archivos sin tocar el engine.
 export function createRootFS(): FileSystemNode {
-  return {
-    type: "dir",
-    name: "/",
-    permissions: "drwxr-xr-x",
-    children: {
-      home: {
-        type: "dir",
-        name: "home",
-        permissions: "drwxr-xr-x",
-        children: {
-          user: {
-            type: "dir",
-            name: "user",
-            permissions: "drwx------",
-            children: {
-              ".bashrc": {
-                type: "file",
-                name: ".bashrc",
-                content: "# HackLab shell config\nexport PS1='hacklab@darknet:~$ '",
-                permissions: "-rw-r--r--",
-                hidden: true,
-              },
-              notes: {
-                type: "file",
-                name: "notes",
-                content: "Bienvenido a la red. Escribe 'help' para empezar.",
-                permissions: "-rw-r--r--",
-              },
-            },
-          },
-        },
-      },
-      etc: {
-        type: "dir",
-        name: "etc",
-        permissions: "drwxr-xr-x",
-        children: {
-          passwd: {
-            type: "file",
-            name: "passwd",
-            content: "root:x:0:0:root:/root:/bin/bash\nuser:x:1000:1000:user:/home/user:/bin/bash",
-            permissions: "-rw-r--r--",
-          },
-        },
-      },
-      var: {
-        type: "dir",
-        name: "var",
-        permissions: "drwxr-xr-x",
-        children: {
-          log: {
-            type: "dir",
-            name: "log",
-            permissions: "drwxr-xr-x",
-            children: {
-              "auth.log": {
-                type: "file",
-                name: "auth.log",
-                content:
-                  "[2026-11-18 03:42:01] sshd: Failed password for root from 192.168.1.100\n[2026-11-18 03:42:05] sshd: Accepted password for user from 10.0.0.1",
-                permissions: "-rw-r-----",
-              },
-            },
-          },
-        },
-      },
-    },
-  };
+  return workstation as FileSystemNode;
 }
 
-// Resuelve una ruta absoluta a un nodo del filesystem
 export function resolve(root: FileSystemNode, path: string): FileSystemNode | null {
   if (path === "/" || path === "") return root;
 
