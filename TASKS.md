@@ -70,12 +70,12 @@ Datos nuevos: `src/data/machine/workstation.json` (tu equipo: hostname `nodo-ws-
 
 ### C3 — Sistema y ayuda en el juego · rama `feat/terminal-system` · sin dependencias
 
-- [ ] `hostname` y `uname`, con `-a`
-- [ ] `ps`: procesos de tu equipo desde `workstation.json`, incluido uno sospechoso (`svch0st`, PID 4444)
-- [ ] `kill <pid>`: marca el proceso como detenido en `storyFlags`; si no existe, da error
-- [ ] `sudo <comando>`: enseña permisos y responde "`user` no está en el grupo sudoers. Este incidente será reportado."
-- [ ] `date`: hora del juego tomada de los datos, no del reloj real, para que el comando sea puro
-- [ ] `pista`: muestra la siguiente pista del objetivo actual (suave, luego media, luego la solución). Registra cuántas pidió en `storyFlags`. Depende de `Objective.hints` de K1; mientras tanto usa el campo `hint`
+- [x] `hostname` y `uname`, con `-a`
+- [x] `ps`: procesos de tu equipo desde `workstation.json`, incluido uno sospechoso (`svch0st`, PID 4444)
+- [x] `kill <pid>`: marca el proceso como detenido en `storyFlags`; si no existe, da error
+- [x] `sudo <comando>`: enseña permisos y responde "`user` no está en el grupo sudoers. Este incidente será reportado."
+- [x] `date`: hora del juego tomada de los datos, no del reloj real, para que el comando sea puro
+- [x] `pista`: muestra la siguiente pista del objetivo actual (suave, luego media, luego la solución). Registra cuántas pidió en `storyFlags`. Depende de `Objective.hints` de K1; mientras tanto usa el campo `hint`
 
 ### C4 — Datos de la guía de comandos · rama `feat/terminal-guide-data` · después de K1
 
