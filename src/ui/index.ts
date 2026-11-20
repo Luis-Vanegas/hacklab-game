@@ -3,6 +3,8 @@
 export { HUD, type HUDProps } from "./hud/HUD";
 export { ReputationBadge, type ReputationBadgeProps } from "./hud/ReputationBadge";
 export { TraceBar, type TraceBarProps } from "./hud/TraceBar";
+export { AttackView, type AttackViewProps, type PlaybackSpeed } from "./panels/AttackView";
+export { PacketDiagram, type PacketDiagramProps } from "./panels/PacketDiagram";
 export { DarknetBoard, type DarknetBoardProps } from "./panels/DarknetBoard";
 export { FindingsPanel, type FindingsPanelProps } from "./panels/FindingsPanel";
 export { StatusPanel, type StatusPanelProps } from "./panels/StatusPanel";
