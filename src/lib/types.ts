@@ -44,6 +44,34 @@ export interface CommandResult {
   // Textos de la salida que la terminal pinta (carpetas, ejecutables, hallazgos).
   // La salida sigue en texto plano para que objetivos y pruebas la comparen tal cual.
   readonly highlights?: readonly Highlight[];
+  // Paquetes simulados que el comando "envió", para la vista de ataques (K6).
+  // Se arman con los constructores de `@/lib/packets`; nada sale a la red real.
+  readonly packets?: readonly Packet[];
+}
+
+export type PacketProtocol = "TCP" | "UDP" | "ICMP" | "DNS" | "HTTP" | "SSH";
+export type TcpFlag = "SYN" | "ACK" | "RST" | "FIN" | "PSH";
+
+// Un paquete de la captura, al estilo de una fila de Wireshark. `from` y `to` son IPs.
+export interface Packet {
+  readonly from: string;
+  readonly to: string;
+  readonly protocol: PacketProtocol;
+  readonly info: string;
+  // Bytes en el cable: aproximados, para comparar paquetes entre sí
+  readonly size: number;
+  readonly flags?: readonly TcpFlag[];
+  // Explicación corta con fuente (S4); la agrega el comando
+  readonly note?: string;
+  // Este paquete subió el rastreo (S6)
+  readonly traced?: boolean;
+}
+
+// Equipo del diagrama de red (useTopology)
+export interface NetworkNode {
+  readonly ip: string;
+  readonly name: string;
+  readonly role: "local" | "router" | "dns" | "target";
 }
 
 // "dir" y "exec" son colores de Linux (siempre); "finding" es una pista para

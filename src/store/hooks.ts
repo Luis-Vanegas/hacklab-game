@@ -1,5 +1,6 @@
+import { useMemo } from "react";
 import { marksFindings } from "@/engine/reputation";
-import { useGameStore } from "./gameStore";
+import { buildTopology, useGameStore } from "./gameStore";
 
 // Hooks públicos para la UI. Cada uno se suscribe solo a su porción del estado,
 // así un cambio de créditos no vuelve a renderizar la barra de rastreo.
@@ -39,3 +40,11 @@ export function useGameEvents() {
 // Terminal legible: hallazgos de la partida y si todavía se marcan (S3/S4)
 export const useFindings = () => useGameStore((s) => s.findings);
 export const useShowFindings = () => useGameStore((s) => marksFindings(s.game.player.reputation));
+
+// Vista de ataques (K6): paquetes del último comando que envió alguno y equipos del diagrama
+export const useCapture = () => useGameStore((s) => s.capture);
+export const useTopology = () => {
+  const contract = useActiveContract();
+  // useMemo: el selector armaría un arreglo nuevo en cada render y React no pararía de redibujar
+  return useMemo(() => buildTopology(contract), [contract]);
+};

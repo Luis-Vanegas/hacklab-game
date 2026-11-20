@@ -1,7 +1,7 @@
 # Vista de ataques: ver los paquetes de cada comando
 
 Objetivo: que el jugador vea en un diagrama qué paquetes envía cada comando, entre qué equipos y qué significa cada uno.
-Rama base: `develop`. Entrega: una rama por tarea, PR a `develop`. Pruebas: Vitest (`npm run check`). Empieza cuando C11 y A11 estén en `develop`.
+Rama base: `develop`. Entrega: una rama por tarea, PR a `develop`. Pruebas: Vitest (`npm run check`). Terminal legible ya está en `develop`.
 
 ## Specs
 
@@ -14,24 +14,25 @@ Rama base: `develop`. Entrega: una rama por tarea, PR a `develop`. Pruebas: Vite
 
 ## Contrato entre capas (K6)
 
-| Pieza                    | Forma                                                                                                                                                             | La usan |
-| ------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
-| `CommandResult.packets?` | `readonly Packet[]` con `{ from, to, protocol, info, size, flags?, note?, traced? }`. `from` y `to` son IPs                                                       | C12     |
-| `src/lib/packets.ts`     | Constructores puros: `tcpHandshake(from, to, port)`, `synScan(from, to, ports)`, `icmpEcho`, `dnsQuery`, `httpRequest`. Los comandos los usan sin tocar el engine | C12     |
-| `useCapture()`           | Los paquetes del último comando que envió alguno: `{ command, packets }` o `null`                                                                                 | A12     |
-| `useTopology()`          | Equipos del diagrama: estación local, router y hosts del contrato activo, con IP, nombre y rol                                                                    | A12     |
+| Pieza                    | Forma                                                                                                                                                                        | La usan |
+| ------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `CommandResult.packets?` | `readonly Packet[]` con `{ from, to, protocol, info, size, flags?, note?, traced? }`. `from` y `to` son IPs; `note` y `traced` los pone el comando                           | C12     |
+| `src/lib/packets.ts`     | Constructores puros: `tcpHandshake(from, to, port)`, `synScan(from, to, [{ port, open }])`, `icmpEcho`, `dnsQuery`, `httpRequest`. Los comandos los usan sin tocar el engine | C12     |
+| `useCapture()`           | Los paquetes del último comando que envió alguno: `{ command, packets }` o `null`                                                                                            | A12     |
+| `useTopology()`          | Equipos del diagrama: estación local, router, DNS y el objetivo del contrato activo: `{ ip, name, role }`, `role` en `local                                                  | router  | dns | target` | A12 |
 
 ## Tasks
 
-| ID  | Specs                                 | Quién       | Rama                    | Estado                           |
-| --- | ------------------------------------- | ----------- | ----------------------- | -------------------------------- |
-| K6  | S2–S6 (contrato)                      | Claude      | `feat/engine-packets`   | pendiente (después de C11 y A11) |
-| C12 | S5, S4 (explicaciones con fuente), S6 | Codex       | `feat/terminal-packets` | pendiente (espera K6)            |
-| A12 | S2, S3, S4                            | Antigravity | `feat/ui-attack-view`   | pendiente (espera K6)            |
+| ID  | Specs                                 | Quién       | Rama                    | Estado                |
+| --- | ------------------------------------- | ----------- | ----------------------- | --------------------- |
+| K6  | S2–S6 (contrato)                      | Claude      | `feat/engine-packets`   | listo                 |
+| C12 | S5, S4 (explicaciones con fuente), S6 | Codex       | `feat/terminal-packets` | pendiente (espera K6) |
+| A12 | S2, S3, S4                            | Antigravity | `feat/ui-attack-view`   | pendiente (espera K6) |
 
 ## Log
 
 - **L1** (2026-11-19, Luis): "Pregunta, que tan posible es tambien mostrarles de forma grafica como va todo que pasa en un atanque y todo eso te dare un ekmeplo: https://protocol-explorer-alpha.vercel.app/"
 - **L2** (2026-11-19, Luis): "planea y miremos para terminer c11 y a11"
 - **L3** (2026-11-19): mapa. El «Mapa de red» (`DefaultNetworkMap` en `src/ui/desktop/Desktop.tsx`) es una lista de equipos; `NetworkGraph` y `MatrixRain` son fondos 3D decorativos. El contrato `highlights` de K5 es el modelo a seguir: el comando devuelve datos puros y la UI los dibuja. La referencia muestra diagrama de red, tabla de paquetes, reproducción paso a paso y una ficha del protocolo.
-- **Siguiente paso:** terminar C11 y A11; luego K6.
+- **L4** (2026-11-20): K6 listo. `Packet` y `NetworkNode` en `src/lib/types.ts`; constructores puros en `src/lib/packets.ts` (puerto de origen 49152 fijo para que la misma orden dé la misma captura). Store: `capture` (no se guarda, se borra con partida nueva, un error no la cambia), `addCapture`, `buildTopology`, `useCapture()`, `useTopology()`. Se agregó el DNS a la topología porque `nslookup` le habla a él. Pruebas: `tests/lib/packets.test.ts`, `tests/store/capture.test.ts`.
+- **Siguiente paso:** C12 (Codex) y A12 (Antigravity), en paralelo.

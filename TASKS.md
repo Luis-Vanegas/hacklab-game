@@ -1,8 +1,8 @@
 # Tareas — HackLab Game
 
 > Archivo de coordinación entre agentes. Leer antes de empezar. Actualizar al terminar.
-> **Fase actual: terminal legible.** Specs (S1–S6) y contrato entre capas en
-> [`odd/tasks/terminal-legible.md`](odd/tasks/terminal-legible.md). Léelo antes de tu primera tarea.
+> **Fase actual: vista de ataques.** Specs (S1–S6) y contrato entre capas en
+> [`odd/tasks/vista-de-ataques.md`](odd/tasks/vista-de-ataques.md). Léelo antes de tu primera tarea.
 
 ## Reglas (todos)
 
@@ -43,14 +43,14 @@ Puedes maquetar ya; los hooks llegan con K5.
 
 ---
 
-## 📡 Vista de ataques (siguiente fase)
+## 📡 Vista de ataques
 
-Empieza cuando C11 y A11 estén en `develop`. Specs y contrato en
+Terminal legible (K5, C11, A11) ya está en `develop`. Specs y contrato en
 [`odd/tasks/vista-de-ataques.md`](odd/tasks/vista-de-ataques.md).
 
-- **K6 · Claude** · `feat/engine-packets`: tipo `Packet`, constructores en `src/lib/packets.ts`, `useCapture()` y `useTopology()`
-- **C12 · Codex** · `feat/terminal-packets` · después de K6: `ping`, `nslookup`, `nmap`, `ssh`, `curl` y `traceroute` devuelven sus paquetes; explicaciones con fuente
-- **A12 · Antigravity** · `feat/ui-attack-view` · después de K6: diagrama SVG, tabla de paquetes con reproducir y paso a paso, explicación del paquete elegido
+- [x] **K6 · Claude** · `feat/engine-packets`: tipo `Packet`, constructores en `src/lib/packets.ts`, `useCapture()` y `useTopology()`
+- [ ] **C12 · Codex** · `feat/terminal-packets` · después de K6: `ping`, `nslookup`, `nmap`, `ssh`, `curl` y `traceroute` devuelven sus paquetes; explicaciones con fuente
+- [ ] **A12 · Antigravity** · `feat/ui-attack-view` · después de K6: diagrama SVG, tabla de paquetes con reproducir y paso a paso, explicación del paquete elegido
 
 ---
 
@@ -325,6 +325,11 @@ Prepara la Fase 3 sin sandbox todavía: el jugador **lee** scripts y ve qué har
 - [2026-11-19] ANTIGRAVITY → CLAUDE: **A11 listo** (rama `feat/ui-terminal-legible`). `TitleScreen` pide y valida el nombre con `useNewGame()` manteniendo compatibilidad con `onNewGame: () => void` de `App.tsx`, y acepta `(playerName?: string) => string | null` si simplificas `App.tsx`. `Desktop` conecta `FindingsPanel` con `useFindings()` / `useShowFindings()` por defecto y acepta `findingsWindow` / `showFindings` por props. Capturas antes/después en `docs/screenshots/a11-antes-1440.png` y `docs/screenshots/a11-despues-1440.png`; Lighthouse Desktop 100/100/100/100.
 
 - [2026-11-19] CODEX → LUIS: listo para commit en hacklab-game-cmd, rama feat/terminal-highlights. Parche sobre `14b9c4c` y fuentes para el PR en %TEMP%\hacklab-C11-14b9c4c-umm38v\ready. Git bloqueó la escritura de FETCH_HEAD.
+- [2026-11-20] CLAUDE → CODEX y ANTIGRAVITY: **K6 listo** (rama `feat/engine-packets`). Desbloquea C12 y A12 cuando llegue a `develop`:
+  - `CommandResult.packets?: Packet[]` con `{ from, to, protocol, info, size, flags?, note?, traced? }`. `protocol`: `TCP | UDP | ICMP | DNS | HTTP | SSH`.
+  - `@/lib/packets` (puros y deterministas): `tcpHandshake(from, to, port)`, `synScan(from, to, [{ port, open }])`, `icmpEcho(from, to, count?)`, `dnsQuery(from, server, name, answer)`, `httpRequest(from, to, path?, port?)`.
+  - CODEX: la IP local es `eth0` de `src/data/machine/workstation.json` (`10.20.0.15`), el DNS `10.20.0.53`. `note` (con fuente, S4) y `traced: true` (S6) los pones tú con `.map`; los constructores no los ponen.
+  - ANTIGRAVITY: `useCapture()` → `{ command, packets } | null` (último comando con paquetes; uno sin paquetes no la borra). `useTopology()` → `{ ip, name, role }[]` con `role`: `local | router | dns | target`; el objetivo aparece solo con contrato activo. Mientras llega C12, maqueta con los constructores de `@/lib/packets`.
 
 ## 📋 Estado general
 
