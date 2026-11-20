@@ -6,6 +6,7 @@
 import { useState, type ReactNode } from "react";
 import type { Contract, PlayerState } from "@/lib/types";
 import {
+  useCapture,
   useCloseEditor,
   useEditorFile,
   useFindings,
@@ -18,6 +19,7 @@ import { handleTabListKeyDown } from "../a11y/keyboardTabs";
 import { useSoundMute } from "../feedback/soundEffects";
 import { ReputationBadge } from "../hud/ReputationBadge";
 import { TraceBar } from "../hud/TraceBar";
+import { AttackView } from "../panels/AttackView";
 import { FindingsPanel } from "../panels/FindingsPanel";
 import { CodeEditor, type EditorFile } from "./CodeEditor";
 
@@ -80,133 +82,10 @@ export interface DesktopProps {
   readonly shopModal?: ReactNode;
 }
 
-function DefaultNetworkMap({
-  connectedTo,
-  activeContract,
-  contracts = [],
-}: {
-  readonly connectedTo: string | null;
-  readonly activeContract: Contract | null;
-  readonly contracts: readonly Contract[];
-}) {
-  return (
-    <section
-      className="hl-panel"
-      aria-label="Mapa de red"
-      style={{ flex: "1 1 auto" }}
-      data-testid="desktop-network-map"
-    >
-      <div className="hl-panel__header">
-        <h2 className="hl-panel__title">MAPA DE RED // TOPOLOGÍA</h2>
-        <span className="hl-badge hl-tabular">
-          {connectedTo ? `ENLACE: ${connectedTo}` : "LOCAL"}
-        </span>
-      </div>
-
-      <div className="hl-panel__body">
-        <div
-          style={{
-            padding: "var(--space-sm) var(--space-md)",
-            borderRadius: "var(--radius-sm)",
-            border: "1px solid var(--color-border-strong)",
-            backgroundColor: "var(--color-surface-elevated)",
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-          }}
-        >
-          <div>
-            <strong style={{ fontFamily: "var(--font-mono)", color: "var(--color-primary)" }}>
-              nodo-ws-07 (Tu estación)
-            </strong>
-            <div
-              className="hl-tabular"
-              style={{ fontSize: "0.78rem", color: "var(--color-text-secondary)" }}
-            >
-              IP: 10.20.0.15/24 · GW: 10.20.0.1
-            </div>
-          </div>
-          <span className="hl-badge hl-badge--primary">ACTIVO</span>
-        </div>
-
-        {activeContract ? (
-          <div
-            style={{
-              padding: "var(--space-sm) var(--space-md)",
-              borderRadius: "var(--radius-sm)",
-              border: "1px solid var(--color-accent)",
-              backgroundColor: "rgba(0, 191, 255, 0.08)",
-              display: "flex",
-              flexDirection: "column",
-              gap: "var(--space-xs)",
-            }}
-          >
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-              <strong style={{ fontFamily: "var(--font-mono)", color: "var(--color-accent)" }}>
-                OBJETIVO // {activeContract.target.hostname}
-              </strong>
-              <span className="hl-badge hl-badge--accent">
-                {connectedTo === activeContract.target.ip ||
-                connectedTo === activeContract.target.hostname
-                  ? "CONECTADO"
-                  : "DETECTADO"}
-              </span>
-            </div>
-            <span
-              className="hl-tabular"
-              style={{ fontSize: "0.8rem", color: "var(--color-text-secondary)" }}
-            >
-              IP: {activeContract.target.ip} · Puertos conocidos:{" "}
-              {activeContract.target.ports.length}
-            </span>
-          </div>
-        ) : null}
-
-        {contracts.length > 0 ? (
-          <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-xs)" }}>
-            <h3
-              style={{
-                margin: 0,
-                fontFamily: "var(--font-mono)",
-                fontSize: "0.82rem",
-                color: "var(--color-text-secondary)",
-              }}
-            >
-              NODOS REGISTRADOS
-            </h3>
-            {contracts.map((contract) => (
-              <div
-                key={contract.id}
-                className="hl-tabular"
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                  padding: "6px 10px",
-                  borderRadius: "var(--radius-sm)",
-                  backgroundColor: "var(--color-surface-elevated)",
-                  border: "1px solid var(--color-border)",
-                  fontSize: "0.78rem",
-                }}
-              >
-                <span>{contract.target.hostname}</span>
-                <span style={{ color: "var(--color-text-muted)" }}>{contract.target.ip}</span>
-              </div>
-            ))}
-          </div>
-        ) : null}
-      </div>
-    </section>
-  );
-}
-
 export function Desktop({
   player,
   traceLevel,
-  connectedTo = null,
   gameClock = "08:00 // TURNO ACTIVO",
-  activeContract = null,
-  contracts = [],
   unreadInboxCount = 0,
   soundMuted,
   onToggleSound,
@@ -238,10 +117,12 @@ export function Desktop({
   const storePythonStatus = usePythonStatus();
   const storeFindings = useFindings();
   const storeShowFindings = useShowFindings();
+  const storeCapture = useCapture();
 
   const effectivePythonStatus = pythonStatus ?? storePythonStatus;
   const effectiveShowFindings = propShowFindings ?? storeShowFindings;
   const effectiveFindingsCount = propFindingsCount ?? storeFindings.length;
+  const capturedPacketsCount = storeCapture?.packets.length ?? 0;
 
   const mobileTabs = effectiveShowFindings ? MOBILE_TABS_WITH_FINDINGS : MOBILE_TABS_BASE;
   const sideTabs = effectiveShowFindings ? SIDE_TABS_WITH_FINDINGS : SIDE_TABS_BASE;
@@ -322,25 +203,9 @@ export function Desktop({
       return commandGuideWindow;
     }
     if (resolvedSideTab === "map") {
-      return (
-        networkMapWindow ?? (
-          <DefaultNetworkMap
-            connectedTo={connectedTo}
-            activeContract={activeContract}
-            contracts={contracts}
-          />
-        )
-      );
+      return networkMapWindow ?? <AttackView />;
     }
-    return (
-      statusWindow ?? (
-        <DefaultNetworkMap
-          connectedTo={connectedTo}
-          activeContract={activeContract}
-          contracts={contracts}
-        />
-      )
-    );
+    return statusWindow ?? <AttackView />;
   };
 
   const isMobileSideActive =
@@ -473,8 +338,24 @@ export function Desktop({
             className={resolvedMobileWindow === "map" ? "hl-btn hl-btn--primary" : "hl-btn"}
             onClick={() => selectMobileTab("map")}
             onKeyDown={(e) => handleTabListKeyDown(e, mobileTabs, activeMobileTab, selectMobileTab)}
+            data-testid="mobile-tab-map"
           >
-            Mapa de red
+            <span>Mapa de red</span>
+            {capturedPacketsCount > 0 ? (
+              <>
+                <span
+                  className="hl-unread-badge hl-tabular"
+                  aria-hidden="true"
+                  data-testid="mobile-map-badge"
+                >
+                  {capturedPacketsCount}
+                </span>
+                <span className="visually-hidden">
+                  {" "}
+                  ({capturedPacketsCount} {capturedPacketsCount === 1 ? "paquete" : "paquetes"})
+                </span>
+              </>
+            ) : null}
           </button>
         </div>
         {onOpenShop ? (
@@ -612,7 +493,22 @@ export function Desktop({
               onKeyDown={(e) => handleTabListKeyDown(e, sideTabs, resolvedSideTab, setSideTab)}
               data-testid="side-tab-map"
             >
-              Mapa de red
+              <span>Mapa de red</span>
+              {capturedPacketsCount > 0 ? (
+                <>
+                  <span
+                    className="hl-unread-badge hl-tabular"
+                    aria-hidden="true"
+                    data-testid="side-map-badge"
+                  >
+                    {capturedPacketsCount}
+                  </span>
+                  <span className="visually-hidden">
+                    {" "}
+                    ({capturedPacketsCount} {capturedPacketsCount === 1 ? "paquete" : "paquetes"})
+                  </span>
+                </>
+              ) : null}
             </button>
           </div>
 
@@ -735,8 +631,24 @@ export function Desktop({
               className="hl-btn"
               style={{ fontSize: "0.78rem", padding: "4px 10px" }}
               onClick={() => openWindow("map")}
+              data-testid="taskbar-map-btn"
             >
-              Mapa de red
+              <span>Mapa de red</span>
+              {capturedPacketsCount > 0 ? (
+                <>
+                  <span
+                    className="hl-unread-badge hl-tabular"
+                    aria-hidden="true"
+                    data-testid="taskbar-map-badge"
+                  >
+                    {capturedPacketsCount}
+                  </span>
+                  <span className="visually-hidden">
+                    {" "}
+                    ({capturedPacketsCount} {capturedPacketsCount === 1 ? "paquete" : "paquetes"})
+                  </span>
+                </>
+              ) : null}
             </button>
             {onOpenShop ? (
               <button

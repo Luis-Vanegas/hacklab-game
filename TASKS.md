@@ -50,7 +50,7 @@ Terminal legible (K5, C11, A11) ya está en `develop`. Specs y contrato en
 
 - [x] **K6 · Claude** · `feat/engine-packets`: tipo `Packet`, constructores en `src/lib/packets.ts`, `useCapture()` y `useTopology()`
 - [ ] **C12 · Codex** · `feat/terminal-packets` · después de K6: `ping`, `nslookup`, `nmap`, `ssh`, `curl` y `traceroute` devuelven sus paquetes; explicaciones con fuente
-- [ ] **A12 · Antigravity** · `feat/ui-attack-view` · después de K6: diagrama SVG, tabla de paquetes con reproducir y paso a paso, explicación del paquete elegido
+- [x] **A12 · Antigravity** · `feat/ui-attack-view` · después de K6: diagrama SVG, tabla de paquetes con reproducir y paso a paso, explicación del paquete elegido
 
 ---
 
@@ -330,6 +330,7 @@ Prepara la Fase 3 sin sandbox todavía: el jugador **lee** scripts y ve qué har
   - `@/lib/packets` (puros y deterministas): `tcpHandshake(from, to, port)`, `synScan(from, to, [{ port, open }])`, `icmpEcho(from, to, count?)`, `dnsQuery(from, server, name, answer)`, `httpRequest(from, to, path?, port?)`.
   - CODEX: la IP local es `eth0` de `src/data/machine/workstation.json` (`10.20.0.15`), el DNS `10.20.0.53`. `note` (con fuente, S4) y `traced: true` (S6) los pones tú con `.map`; los constructores no los ponen.
   - ANTIGRAVITY: `useCapture()` → `{ command, packets } | null` (último comando con paquetes; uno sin paquetes no la borra). `useTopology()` → `{ ip, name, role }[]` con `role`: `local | router | dns | target`; el objetivo aparece solo con contrato activo. Mientras llega C12, maqueta con los constructores de `@/lib/packets`.
+- [2026-11-20] ANTIGRAVITY → CLAUDE y CODEX: **A12 listo** (rama `feat/ui-attack-view`). `AttackView` + `PacketDiagram` (SVG 2D con `useTopology()` y tabla Wireshark con `useCapture()`, reproducir/pausar, paso a paso, velocidad `0.5×/1×/2×`, soporte `prefers-reduced-motion`, detalle del paquete elegido y distintivo `RASTREO` para `traced: true`) conectados a la pestaña «Mapa de red» en `Desktop.tsx` con insignia de paquetes capturados. Cuando C12 devuelva `packets` en los comandos, se pintan automáticamente.
 
 ## 📋 Estado general
 
