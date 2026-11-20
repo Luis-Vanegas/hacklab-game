@@ -10,6 +10,8 @@ export type PlaybackSpeed = 0.5 | 1 | 2;
 
 const SPEEDS: readonly PlaybackSpeed[] = [0.5, 1, 2];
 const BASE_STEP_MS = 750;
+// Constante fija: un `[]` nuevo en cada render haría que useMemo recalcule siempre
+const NO_PACKETS: readonly Packet[] = [];
 
 export interface AttackViewProps {
   readonly capture?: Capture | null;
@@ -75,7 +77,7 @@ export function AttackView({
 
   const capture = propCapture !== undefined ? propCapture : storeCapture;
   const topology = propTopology ?? storeTopology;
-  const packets = capture?.packets ?? [];
+  const packets = capture?.packets ?? NO_PACKETS;
 
   const captionId = useId();
   const detailHeadingId = useId();
