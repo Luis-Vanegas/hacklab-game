@@ -27,6 +27,8 @@ import type {
   GameDifficulty,
   GamePhase,
   GameState,
+  NetworkNode,
+  Packet,
   QueuedGameAlert,
   ReputationTier,
   ToolDefinition,
@@ -89,6 +91,33 @@ export function addFindings(
   return [...fresh, ...current.filter((f) => !seen.has(f.text))].slice(0, MAX_FINDINGS);
 }
 
+// Paquetes del último comando que envió alguno, para la vista de ataques (K6)
+export interface Capture {
+  readonly command: string;
+  readonly packets: readonly Packet[];
+}
+
+// Un comando sin paquetes deja la captura anterior: la vista sigue mostrando el último ataque
+export function addCapture(
+  current: Capture | null,
+  result: CommandResult,
+  command: string,
+): Capture | null {
+  if (result.error !== undefined || !result.packets?.length) return current;
+  return { command, packets: result.packets };
+}
+
+// Equipos del diagrama: la estación, su router y su DNS, más el objetivo del contrato activo
+export function buildTopology(contract: Contract | null): readonly NetworkNode[] {
+  const local: NetworkNode[] = [
+    { ip: machine.interfaces[0]?.ipv4 ?? "", name: machine.hostname, role: "local" },
+    { ip: machine.gateway, name: "router", role: "router" },
+    { ip: machine.dns[0] ?? "", name: "dns", role: "dns" },
+  ];
+  if (!contract) return local;
+  return [...local, { ip: contract.target.ip, name: contract.target.hostname, role: "target" }];
+}
+
 // Deben declararse antes de crear el store: create() llama a loadSession() al importar
 // el módulo, y con una partida guardada isGameState las usa en ese mismo momento.
 const PHASES: readonly GamePhase[] = ["boot", "menu", "playing", "in_contract", "game_over"];
@@ -103,6 +132,8 @@ export interface GameStore extends GameSession {
   readonly editorFile: { readonly path: string; readonly content: string } | null;
   // Hallazgos marcados en esta partida (S3). No se guardan: son de la sesión en curso.
   readonly findings: readonly Finding[];
+  // Último ataque visto (K6). No se guarda: es de la sesión en curso.
+  readonly capture: Capture | null;
   runCommand(input: string): CommandResult;
   // Igual que runCommand, pero `python` espera al intérprete. `onNotice` avisa mientras carga.
   runCommandAsync(input: string, onNotice?: (message: string) => void): Promise<CommandResult>;
@@ -145,6 +176,8 @@ export const useGameStore = create<GameStore>()((set, get) => {
     if (result.openEditor && result.error === undefined) set({ editorFile: result.openEditor });
     const findings = addFindings(get().findings, result, input);
     if (findings !== get().findings) set({ findings });
+    const capture = addCapture(get().capture, result, input);
+    if (capture !== get().capture) set({ capture });
   };
 
   return {
@@ -153,6 +186,7 @@ export const useGameStore = create<GameStore>()((set, get) => {
     pythonStatus: "idle",
     editorFile: null,
     findings: [],
+    capture: null,
 
     runCommand(input) {
       const parsed = parseCommand(input);
@@ -276,7 +310,7 @@ export const useGameStore = create<GameStore>()((set, get) => {
       const session = createSession();
       commit({ ...session, game: setUsername(session.game, username) }, "game.new", { username });
       // Los avisos, el editor y los hallazgos de la partida anterior ya no aplican
-      set({ events: [], editorFile: null, findings: [] });
+      set({ events: [], editorFile: null, findings: [], capture: null });
       return null;
     },
 
